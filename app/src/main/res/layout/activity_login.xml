@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_login"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -11,7 +13,7 @@
     tools:context="comquintonj.github.atlantastreetartproject.LoginActivity">
 
     <TextView
-        android:text="Not a member? Register now."
+        android:text="@string/not_a_member_register_now"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/loginButton"
@@ -28,17 +30,16 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:ems="10"
-                android:id="@+id/password"
-                android:hint="Password"
-                android:backgroundTint="@android:color/background_dark"
-                android:layout_below="@+id/username"
+                android:id="@+id/loginPassword"
+                android:hint="@string/password"
+            android:layout_below="@+id/loginUsername"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="120dp" />
+                android:layout_marginTop="60dp" />
 
     </android.support.design.widget.TextInputLayout>
 
     <TextView
-        android:text="Continue as guest"
+        android:text="@string/continue_as_guest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -46,36 +47,37 @@
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true" />
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textInputLayout"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="60dp">
-        <EditText
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/username"
-            android:hint="Username"
-            android:textAlignment="viewStart"
-            android:fontFamily="sans-serif"
-            android:textColorHighlight="@android:color/background_dark"
-            android:layout_below="@+id/textInputLayout7"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="60dp" />
-    </android.support.design.widget.TextInputLayout>
-
     <Button
-        android:text="Login"
+        android:text="@string/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/loginButton"
         android:background="@color/colorAccent"
         android:textColor="@android:color/background_light"
         android:layout_marginTop="240dp"
-        android:layout_below="@+id/textInputLayout10"
+        android:layout_below="@+id/textInputLayout"
         android:layout_alignParentStart="true" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="29dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/loginUsername"
+            android:hint="@string/username"
+            android:textAlignment="viewStart"
+            android:fontFamily="sans-serif"
+            android:layout_marginTop="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1" />
+    </android.support.design.widget.TextInputLayout>
 
 </RelativeLayout>

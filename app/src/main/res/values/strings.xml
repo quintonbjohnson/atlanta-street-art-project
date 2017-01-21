@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Atlanta Street Art Project</string>
+    <string name="not_a_member_register_now">Not a member? Register now</string>
+    <string name="password">Password</string>
+    <string name="continue_as_guest">Continue as guest</string>
+    <string name="username">Username</string>
+    <string name="login">Login</string>
 </resources>

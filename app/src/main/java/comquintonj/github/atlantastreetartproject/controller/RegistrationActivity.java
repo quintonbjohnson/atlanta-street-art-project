@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject;
+package comquintonj.github.atlantastreetartproject.controller;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -12,12 +12,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+
+import comquintonj.github.atlantastreetartproject.R;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -28,6 +28,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText confirmInfo;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private Intent loginIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class RegistrationActivity extends AppCompatActivity {
         };
 
         // Set up intent to go to login screen upon successful registration
-        final Intent loginIntent = new Intent(this,LoginActivity.class);
+        loginIntent = new Intent(this,LoginActivity.class);
 
         // Set up registration button to add User with the edited text fields
         Button registerButton = (Button) findViewById(R.id.registrationButton);
@@ -72,7 +73,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
                 createAccount(emailInfo.getText().toString(),
                         confirmInfo.getText().toString());
-
 
             }
         });
@@ -109,12 +109,10 @@ public class RegistrationActivity extends AppCompatActivity {
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Log.d(TAG, "onComplete: Failed=" + task.getException().getMessage());
                             Toast.makeText(RegistrationActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-
-
+                        startActivity(loginIntent);
                     }
                 });
 
@@ -141,6 +139,4 @@ public class RegistrationActivity extends AppCompatActivity {
 
         return valid;
     }
-
-
 }

@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject;
+package comquintonj.github.atlantastreetartproject.controller;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -18,6 +18,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import comquintonj.github.atlantastreetartproject.R;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,6 +36,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
 
+        discoverIntent = new Intent(this, DiscoverActivity.class);
+
         // Views
         emailText = (EditText) findViewById(R.id.loginUsername);
         passwordText = (EditText) findViewById(R.id.loginPassword);
@@ -45,22 +49,20 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    startActivity(discoverIntent);
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
 
         // Login Button
-        discoverIntent = new Intent(this, DiscoverActivity.class);
         Button loginBut = (Button) findViewById(R.id.loginButton);
         loginBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signIn(emailText.getText().toString(), passwordText.getText().toString());
-
             }
         });
 
@@ -71,6 +73,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 signInAnonymously();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    startActivity(discoverIntent);
+                }
             }
         });
 
@@ -99,12 +105,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // Sign in with a regular email and password
     private void signIn(String email, String password) {
         Log.d(TAG, "signIn:" + email);
         if (!validateForm()) {
             return;
         }
-
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -119,18 +125,11 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithEmail", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-
                     }
                 });
     }
 
+    // Continue as a guest and use an anonymous account
     private void signInAnonymously() {
         mAuth.signInAnonymously()
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -150,6 +149,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    // Taken from Firebase Assistance
     private boolean validateForm() {
         boolean valid = true;
 

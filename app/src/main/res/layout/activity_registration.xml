@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="comquintonj.github.atlantastreetartproject.RegistrationActivity">
+    tools:context="comquintonj.github.atlantastreetartproject.controller.RegistrationActivity">
 
     <Button
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
         android:id="@+id/registrationButton"
         android:background="@color/colorAccent"
         android:textColor="@android:color/background_light"
-        android:text="Register"
+        android:text="@string/register"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="93dp"
@@ -32,12 +32,9 @@
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
             android:ems="10"
-            android:layout_alignParentTop="true"
             android:layout_marginTop="49dp"
             android:id="@+id/emailInput"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:hint="email@example.com"
+            android:hint="@string/emailRegister"
             android:fontFamily="sans-serif" />
 
         <EditText
@@ -47,21 +44,17 @@
             android:ems="10"
             android:layout_marginTop="38dp"
             android:id="@+id/passwordInput"
-            android:hint="password"
-            android:fontFamily="sans-serif"
-            android:layout_below="@+id/emailInput"
-            android:layout_alignParentStart="true" />
+            android:hint="@string/passwordRegister"
+            android:fontFamily="sans-serif" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:layout_below="@+id/passwordInput"
-            android:layout_alignEnd="@+id/passwordInput"
             android:layout_marginTop="33dp"
             android:id="@+id/confirmInput"
-            android:hint="confirm password"
+            android:hint="@string/confirm_password"
             android:fontFamily="sans-serif" />
 
     </LinearLayout>

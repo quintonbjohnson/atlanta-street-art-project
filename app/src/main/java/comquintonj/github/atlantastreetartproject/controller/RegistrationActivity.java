@@ -32,6 +32,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Initialization
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         mAuth = FirebaseAuth.getInstance();
@@ -41,6 +42,8 @@ public class RegistrationActivity extends AppCompatActivity {
         passwordInfo = (EditText ) findViewById(R.id.passwordInput);
         confirmInfo = (EditText ) findViewById(R.id.confirmInput);
 
+        // Listener to check when the user signs in. If the user signs in, the user object will
+        // not be null.
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -52,7 +55,6 @@ public class RegistrationActivity extends AppCompatActivity {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
 
@@ -92,13 +94,14 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
+    // Called when a user presses the "register" button. Creates an account
+    // using Firebase authorization.
     private void createAccount(String email, String password) {
         Log.d(TAG, "createAccount:" + email);
         if (!validateForm()) {
             return;
         }
 
-        // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -118,6 +121,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
+    // Taken from Firebase support
     private boolean validateForm() {
         boolean valid = true;
 

@@ -20,7 +20,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import comquintonj.github.atlantastreetartproject.R;
 
-
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -32,16 +31,18 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Initialization
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
-
         discoverIntent = new Intent(this, DiscoverActivity.class);
 
         // Views
         emailText = (EditText) findViewById(R.id.loginUsername);
         passwordText = (EditText) findViewById(R.id.loginPassword);
 
+        // Listener to check when the user signs in. If the user signs in, the user object will
+        // not be null, and they can be taken to the discover page.
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -149,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    // Taken from Firebase Assistance
+    // Taken from Firebase Support
     private boolean validateForm() {
         boolean valid = true;
 

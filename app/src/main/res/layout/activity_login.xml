@@ -19,33 +19,20 @@
         android:layout_below="@+id/loginButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        android:id="@+id/textView2" />
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="120dp">
-        <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/loginPassword"
-                android:hint="@string/password"
-            android:layout_below="@+id/loginUsername"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="60dp" />
-
-    </android.support.design.widget.TextInputLayout>
+        android:id="@+id/registerView"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif" />
 
     <TextView
         android:text="@string/continue_as_guest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:id="@+id/textView"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="34dp"
+        android:id="@+id/guestTextView"
+        android:layout_below="@+id/registerView"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif"
+        android:textSize="18sp" />
 
     <Button
         android:text="@string/login"
@@ -54,30 +41,37 @@
         android:id="@+id/loginButton"
         android:background="@color/colorAccent"
         android:textColor="@android:color/background_light"
-        android:layout_marginTop="240dp"
-        android:layout_below="@+id/textInputLayout"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="42dp"
+        android:textSize="18sp"
+        android:layout_below="@+id/loginPassword"
+        android:layout_alignParentStart="true"
+        android:fontFamily="sans-serif-medium" />
 
-    <android.support.design.widget.TextInputLayout
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/loginPassword"
+        android:hint="@string/password"
+        android:layout_marginTop="39dp"
+        android:textSize="20sp"
+        android:layout_below="@+id/loginUsername"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="29dp">
+        android:fontFamily="sans-serif" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/loginUsername"
-            android:hint="@string/username"
-            android:textAlignment="viewStart"
-            android:fontFamily="sans-serif"
-            android:layout_marginTop="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_weight="1" />
-    </android.support.design.widget.TextInputLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/loginUsername"
+        android:hint="@string/username"
+        android:textAlignment="viewStart"
+        android:fontFamily="sans-serif"
+        android:textSize="20sp"
+        android:layout_marginTop="61dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

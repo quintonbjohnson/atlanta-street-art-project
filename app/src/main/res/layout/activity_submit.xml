@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_submit"
     android:layout_width="match_parent"
@@ -78,8 +79,30 @@
         android:textColor="@android:color/background_light"
         android:textSize="18sp"
         android:fontFamily="sans-serif-medium"
-        android:layout_marginTop="31dp"
-        android:layout_below="@+id/tagText"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="11dp" />
+
+    <Button
+        android:text="@string/chooseFile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/chooseButton"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-medium"
+        android:layout_above="@+id/submitButton"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="13dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/common_full_open_on_phone"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true" />
+
 
 </RelativeLayout>

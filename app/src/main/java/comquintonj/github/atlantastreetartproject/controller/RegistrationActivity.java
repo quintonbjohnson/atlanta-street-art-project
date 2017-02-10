@@ -51,6 +51,16 @@ public class RegistrationActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    // The user has successfully registered and the email verification can be sent
+                    user.sendEmailVerification()
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d(TAG, "Email sent.");
+                                    }
+                                }
+                            });
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -73,9 +83,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     Toast.makeText(RegistrationActivity.this, "Passwords do not match.",
                             Toast.LENGTH_SHORT).show();
                 }
-                createAccount(emailInfo.getText().toString(),
-                        confirmInfo.getText().toString());
-
+                createAccount(emailText, confirmText);
             }
         });
     }

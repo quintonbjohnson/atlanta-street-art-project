@@ -20,7 +20,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         android:id="@+id/registerView"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:fontFamily="sans-serif" />
 
     <TextView
@@ -32,7 +32,7 @@
         android:layout_below="@+id/registerView"
         android:layout_centerHorizontal="true"
         android:fontFamily="sans-serif"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
 
     <Button
         android:text="@string/login"
@@ -42,7 +42,7 @@
         android:background="@color/colorAccent"
         android:textColor="@android:color/background_light"
         android:layout_marginTop="42dp"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:layout_below="@+id/loginPassword"
         android:layout_alignParentStart="true"
         android:fontFamily="sans-serif-medium" />

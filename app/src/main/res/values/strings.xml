@@ -6,9 +6,9 @@
     <string name="username">Username</string>
     <string name="login">Login</string>
     <string name="email">Email</string>
-    <string name="emailRegister">email</string>
-    <string name="passwordRegister">password</string>
-    <string name="confirm_password">confirm password</string>
+    <string name="emailRegister">Email</string>
+    <string name="passwordRegister">Password</string>
+    <string name="confirm_password">Confirm password</string>
     <string name="register">Register</string>
     <string name="sign_out">Sign Out</string>
     <string name="submit">Submit</string>

@@ -39,6 +39,16 @@ public class DiscoverActivity extends AppCompatActivity {
             }
         });
 
+        Button addArtButton = (Button) findViewById(R.id.addArtButton);
+        addArtButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                // Start SubmitActivity.class
+                Intent myIntent = new Intent(DiscoverActivity.this,
+                        SubmitActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="comquintonj.github.atlantastreetartproject">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,6 +19,7 @@
         </activity>
         <activity android:name=".controller.RegistrationActivity" />
         <activity android:name=".controller.DiscoverActivity" />
+        <activity android:name=".controller.SubmitActivity"></activity>
     </application>
 
 </manifest>

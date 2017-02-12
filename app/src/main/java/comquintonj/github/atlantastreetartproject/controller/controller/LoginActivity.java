@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject.controller;
+package comquintonj.github.atlantastreetartproject.controller.controller;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;

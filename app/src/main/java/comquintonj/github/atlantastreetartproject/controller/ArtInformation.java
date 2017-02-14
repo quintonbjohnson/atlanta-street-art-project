@@ -6,22 +6,20 @@ package comquintonj.github.atlantastreetartproject.controller;
 
 public class ArtInformation {
 
-//will set these private and getters and setters in the future
+//might set these to private and make getters and setters in the future as needed
         public String title;
         public String address;
         public String artist;
-        public String description;
         public String tag;
 
         public ArtInformation(){
 
         }
 
-        public ArtInformation(String title, String address, String artist, String description, String tag) {
+        public ArtInformation(String title, String address, String artist, String tag) {
             this.title = title;
             this.address = address;
             this.artist = artist;
-            this.description = description;
             this.tag = tag;
         }
 

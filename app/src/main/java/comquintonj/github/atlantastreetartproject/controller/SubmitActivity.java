@@ -12,19 +12,18 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import android.content.Intent;
-
-
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 //import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 import java.io.IOException;
-
 import comquintonj.github.atlantastreetartproject.R;
 
 public class SubmitActivity extends AppCompatActivity {
@@ -62,10 +61,6 @@ public class SubmitActivity extends AppCompatActivity {
                                             public void onClick(View v) {
                                                 if(v == submitButton){
                                                     submitArtInformation();
-                                                    uploadFile();
-                                                    Intent myIntent = new Intent(SubmitActivity.this,
-                                                            DiscoverActivity.class);
-                                                    startActivity(myIntent);
                                                 }
                                             }
                                         }
@@ -89,15 +84,33 @@ public class SubmitActivity extends AppCompatActivity {
         String artist = artistText.getText().toString().trim();
         String tag = tagText.getText().toString().trim();
 
-        ArtInformation userInformation = new ArtInformation(name, add, artist, tag );
+        final ArtInformation userInformation = new ArtInformation(name, add, artist, tag );
 
         //Current logged in user
         //FirebaseUser user = firebaseAuth.getCurrentUser();
 
         //saving data to firebase database
-        databaseReference.child(userInformation.title).setValue(userInformation);
-
-        Toast.makeText(this, "Art information saved.", Toast.LENGTH_LONG).show();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.hasChild(userInformation.title)) {
+                    // run some code
+                    Toast.makeText(getApplicationContext(), "Title already exists. Please edit title.", Toast.LENGTH_LONG).show();
+                }else{
+                    databaseReference.child(userInformation.title).setValue(userInformation);
+                    Toast.makeText(getApplicationContext(), "Art information saved.", Toast.LENGTH_LONG).show();
+                    uploadFile();
+                    Intent myIntent = new Intent(SubmitActivity.this,
+                            DiscoverActivity.class);
+                    startActivity(myIntent);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError err){
+                Toast.makeText(getApplicationContext(), err.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
     public void showFileChooser() {
         Intent intent = new Intent();

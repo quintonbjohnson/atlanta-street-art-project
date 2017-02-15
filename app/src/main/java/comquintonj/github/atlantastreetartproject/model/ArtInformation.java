@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject.controller.controller;
+package comquintonj.github.atlantastreetartproject.model;
 
 import com.google.firebase.auth.FirebaseUser;
 

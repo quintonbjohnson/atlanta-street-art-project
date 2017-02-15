@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject.controller.controller;
+package comquintonj.github.atlantastreetartproject.controller;
 
 import android.content.Intent;
 
@@ -12,9 +12,7 @@ import android.widget.Button;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import comquintonj.github.atlantastreetartproject.LoginActivity;
 import comquintonj.github.atlantastreetartproject.R;
-import comquintonj.github.atlantastreetartproject.SubmitActivity;
 
 public class DiscoverActivity extends AppCompatActivity {
 

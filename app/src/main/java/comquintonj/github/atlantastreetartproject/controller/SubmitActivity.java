@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject.controller.controller;
+package comquintonj.github.atlantastreetartproject.controller;
 
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
@@ -25,6 +25,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 
+import comquintonj.github.atlantastreetartproject.model.ArtInformation;
 import comquintonj.github.atlantastreetartproject.R;
 
 public class SubmitActivity extends AppCompatActivity {

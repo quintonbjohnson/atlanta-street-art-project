@@ -53,7 +53,7 @@ public class SubmitActivity extends BaseDrawerActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit);
-        setTitle("Explore");
+        setTitle("Submit");
         mAuth = FirebaseAuth.getInstance();
 
         // Set up Toolbar

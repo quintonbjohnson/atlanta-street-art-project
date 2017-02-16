@@ -19,7 +19,7 @@ public class ExploreActivity extends BaseDrawerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
-        setTitle("Explore");
+        setTitle("Submit");
         mAuth = FirebaseAuth.getInstance();
 
         // Set up Toolbar

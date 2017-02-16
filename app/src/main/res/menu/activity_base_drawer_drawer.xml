@@ -21,13 +21,12 @@
             android:title="Submit" />
     </group>
 
-    <item
-        android:title="" />
-        <menu>
-            <item
-                android:id="@+id/nav_sign_out"
-                android:icon="@android:drawable/ic_menu_close_clear_cancel"
-                android:title="Sign Out" />
-        </menu>
-    />
+    <item> <menu>
+        <item
+            android:id="@+id/nav_sign_out"
+            android:icon="@android:drawable/ic_menu_close_clear_cancel"
+            android:title="Sign Out" />
+    </menu>
+    </item>
+
 </menu>

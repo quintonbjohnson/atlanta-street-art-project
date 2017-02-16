@@ -37,6 +37,6 @@ public class ExploreActivity extends BaseDrawerActivity {
         View header = navigationView.getHeaderView(0);
         FirebaseUser user = mAuth.getCurrentUser();
         TextView headerName = (TextView)header.findViewById(R.id.profileNameText);
-        headerName.setText(user.getDisplayName());
+        headerName.setText(user.getEmail());
     }
 }

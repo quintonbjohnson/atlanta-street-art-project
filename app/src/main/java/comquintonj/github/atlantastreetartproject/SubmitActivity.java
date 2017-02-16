@@ -3,6 +3,7 @@ package comquintonj.github.atlantastreetartproject;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +34,8 @@ public class SubmitActivity extends BaseDrawerActivity {
 
     private DatabaseReference databaseReference;
     private EditText titleText, addressText, descriptionText, tagText, artistText;
-    private Button submitButton, buttonChoose;
+    private Button submitButton;
+    private ImageButton imageSelectButton;
     private FirebaseAuth mAuth;
 
     // A constant to track the file chooser intent
@@ -74,12 +77,10 @@ public class SubmitActivity extends BaseDrawerActivity {
 
         // Instantiate resources
         titleText = (EditText) findViewById(R.id.titleText);
-        addressText = (EditText) findViewById(R.id.addressText);
-        descriptionText = (EditText) findViewById(R.id.descriptionText);
         tagText = (EditText) findViewById(R.id.tagText);
         artistText = (EditText) findViewById(R.id.artistTag);
         submitButton = (Button) findViewById(R.id.submitButton);
-        buttonChoose = (Button) findViewById(R.id.chooseButton);
+        imageSelectButton = (ImageButton) findViewById(R.id.imageSelect);
         storageReference = FirebaseStorage.getInstance().getReference();
 
         // Set on click listener for the submit button
@@ -94,10 +95,10 @@ public class SubmitActivity extends BaseDrawerActivity {
         });
 
         // Set on click listener for choosing the image button
-        buttonChoose.setOnClickListener(new View.OnClickListener() {
+        imageSelectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(v == buttonChoose){
+                if(v == imageSelectButton){
                     showFileChooser();
                 }
             }
@@ -150,7 +151,8 @@ public class SubmitActivity extends BaseDrawerActivity {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 // TODO Change UI to where it shows the image after being uploaded
-//                imageView.setImageBitmap(bitmap);
+                imageSelectButton.setScaleType(ImageView.ScaleType.CENTER);
+                imageSelectButton.setImageBitmap(bitmap);
                 Toast.makeText(this, "Set", Toast.LENGTH_SHORT).show();
 
             } catch (IOException e) {

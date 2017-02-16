@@ -10,6 +10,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="comquintonj.github.atlantastreetartproject.RegistrationActivity">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:id="@+id/focusDummy" />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

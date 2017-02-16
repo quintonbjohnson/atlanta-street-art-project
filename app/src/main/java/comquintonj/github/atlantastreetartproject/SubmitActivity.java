@@ -1,15 +1,20 @@
-package comquintonj.github.atlantastreetartproject.controller;
+package comquintonj.github.atlantastreetartproject;
 
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
 
@@ -25,15 +30,12 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 
-import comquintonj.github.atlantastreetartproject.model.ArtInformation;
-import comquintonj.github.atlantastreetartproject.R;
-
-public class SubmitActivity extends AppCompatActivity {
+public class SubmitActivity extends BaseDrawerActivity {
 
     private DatabaseReference databaseReference;
     private EditText titleText, addressText, descriptionText, tagText, artistText;
     private Button submitButton, buttonChoose;
-    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth mAuth;
 
     // A constant to track the file chooser intent
     private static final int PICK_IMAGE_REQUEST = 234;
@@ -51,7 +53,26 @@ public class SubmitActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit);
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        setTitle("Explore");
+        mAuth = FirebaseAuth.getInstance();
+
+        // Set up Toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0);
+        FirebaseUser user = mAuth.getCurrentUser();
+        TextView headerName = (TextView)header.findViewById(R.id.profileNameText);
+        assert user != null;
+        headerName.setText(user.getEmail());
 
         // Instantiate resources
         titleText = (EditText) findViewById(R.id.titleText);
@@ -62,7 +83,6 @@ public class SubmitActivity extends AppCompatActivity {
         submitButton = (Button) findViewById(R.id.submitButton);
         buttonChoose = (Button) findViewById(R.id.chooseButton);
         storageReference = FirebaseStorage.getInstance().getReference();
-        imageView = (ImageView) findViewById(R.id.imageView);
 
         // Set on click listener for the submit button
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +115,7 @@ public class SubmitActivity extends AppCompatActivity {
         String description = descriptionText.getText().toString().trim();
 
         // Get current user
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+        FirebaseUser user = mAuth.getCurrentUser();
 
         // Check if address field is empty
         if (add.isEmpty()) {
@@ -131,7 +151,9 @@ public class SubmitActivity extends AppCompatActivity {
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imageView.setImageBitmap(bitmap);
+                // TODO Change UI to where it shows the image after being uploaded
+//                imageView.setImageBitmap(bitmap);
+                Toast.makeText(this, "Set", Toast.LENGTH_SHORT).show();
 
             } catch (IOException e) {
                 e.printStackTrace();

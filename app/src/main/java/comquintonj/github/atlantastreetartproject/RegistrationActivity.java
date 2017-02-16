@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject.controller;
+package comquintonj.github.atlantastreetartproject;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -17,8 +17,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import comquintonj.github.atlantastreetartproject.R;
-
 public class RegistrationActivity extends AppCompatActivity {
 
     // Instance variables
@@ -35,6 +33,7 @@ public class RegistrationActivity extends AppCompatActivity {
         // Initialization
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        setTitle("Registration");
         mAuth = FirebaseAuth.getInstance();
 
         // Find views by ID for the text fields

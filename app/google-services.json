@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "487494581666-k0ae98cutrfe2j13i65825dfl8ss7rf4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "comquintonj.github.atlantastreetartproject",
+            "certificate_hash": "1C1EAA57F6488F5BFBFA6043744A702634F22DAE"
+          }
+        },
+        {
+          "client_id": "487494581666-nabneg1jptq2l9v67p7p5gddvaebo4ba.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "comquintonj.github.atlantastreetartproject",
+            "certificate_hash": "1DCDC7B6CED0A0D70EAD0B52A77A8F9FC73B4301"
+          }
+        },
+        {
           "client_id": "487494581666-1algrak4q5b7qhbc2j32nnqdt6cfi0jm.apps.googleusercontent.com",
           "client_type": 3
         }

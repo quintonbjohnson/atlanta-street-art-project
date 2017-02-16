@@ -30,13 +30,13 @@ public class RegistrationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Initialization
+        // Create layout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         setTitle("Registration");
         mAuth = FirebaseAuth.getInstance();
 
-        // Find views by ID for the text fields
+        // Instantiate resources
         emailInfo = (EditText) findViewById(R.id.emailInput);
         passwordInfo = (EditText ) findViewById(R.id.passwordInput);
         confirmInfo = (EditText ) findViewById(R.id.confirmInput);
@@ -121,8 +121,9 @@ public class RegistrationActivity extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             Toast.makeText(RegistrationActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                        } else {
+                            startActivity(loginIntent);
                         }
-                        startActivity(loginIntent);
                     }
                 });
 

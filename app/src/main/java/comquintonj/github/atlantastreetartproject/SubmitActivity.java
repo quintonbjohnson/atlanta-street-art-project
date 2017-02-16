@@ -3,7 +3,7 @@ package comquintonj.github.atlantastreetartproject;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,12 +23,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+
+import static java.lang.System.out;
 
 public class SubmitActivity extends BaseDrawerActivity {
 
@@ -51,16 +54,20 @@ public class SubmitActivity extends BaseDrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        // Create layout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit);
         setTitle("Submit");
+
+        // Get Instance of Firebase
         mAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         // Set up Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Create drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -69,6 +76,8 @@ public class SubmitActivity extends BaseDrawerActivity {
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Set profile name
         View header = navigationView.getHeaderView(0);
         FirebaseUser user = mAuth.getCurrentUser();
         TextView headerName = (TextView)header.findViewById(R.id.profileNameText);
@@ -105,32 +114,24 @@ public class SubmitActivity extends BaseDrawerActivity {
         });
     }
 
+    // Submit art information to the database
     private void submitArtInformation() {
         // Getting values from database
         String name = titleText.getText().toString().trim();
-        String add = addressText.getText().toString().trim();
         String artist = artistText.getText().toString().trim();
         String tag = tagText.getText().toString().trim();
-        String description = descriptionText.getText().toString().trim();
 
         // Get current user
         FirebaseUser user = mAuth.getCurrentUser();
 
-        // Check if address field is empty
-        if (add.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Please enter a valid address",
-                    Toast.LENGTH_LONG).show();
-        } else {
-            // Creating an ArtInformation object
-            ArtInformation artSubmission = new ArtInformation(name, add, artist,
-                    description, tag, user);
+        // Creating an ArtInformation object
+        ArtInformation artSubmission = new ArtInformation(name, artist, tag, user);
 
-            // Saving data to Firebase database
-            databaseReference.child(artSubmission.title).setValue(artSubmission);
+        // Saving data to Firebase database
+        databaseReference.child(artSubmission.title).setValue(artSubmission);
 
-            // Success
-            Toast.makeText(this, "Information Saved...", Toast.LENGTH_LONG).show();
-        }
+        // Success
+        Toast.makeText(this, "Information Saved...", Toast.LENGTH_LONG).show();
     }
 
     // Method to show file chooser
@@ -150,9 +151,12 @@ public class SubmitActivity extends BaseDrawerActivity {
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                // TODO Change UI to where it shows the image after being uploaded
                 imageSelectButton.setScaleType(ImageView.ScaleType.CENTER);
                 imageSelectButton.setImageBitmap(bitmap);
+
+                // TODO: Incorporate location data
+                ExifInterface exif = new ExifInterface(filePath.getPath());
+
                 Toast.makeText(this, "Set", Toast.LENGTH_SHORT).show();
 
             } catch (IOException e) {
@@ -182,6 +186,9 @@ public class SubmitActivity extends BaseDrawerActivity {
                             //and displaying a success toast
                             Toast.makeText(getApplicationContext(), "File Uploaded ",
                                     Toast.LENGTH_LONG).show();
+                            Intent exploreIntent = new Intent(SubmitActivity.this,
+                                    ExploreActivity.class);
+                            startActivity(exploreIntent);
                         }
                     })
 
@@ -203,4 +210,6 @@ public class SubmitActivity extends BaseDrawerActivity {
             Toast.makeText(getApplicationContext(), "No file selected", Toast.LENGTH_LONG).show();
         }
     }
+
+
 }

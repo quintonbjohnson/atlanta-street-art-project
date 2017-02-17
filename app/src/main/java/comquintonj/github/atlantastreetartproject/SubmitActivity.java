@@ -60,13 +60,14 @@ import static java.lang.System.out;
 
 public class SubmitActivity extends BaseDrawerActivity {
 
-    private DatabaseReference databaseReference;
+    private DatabaseReference mDatabase;
     private EditText titleText, locationText, artistText;
     private Button submitButton;
     private ImageButton imageSelectButton;
     private FirebaseAuth mAuth;
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
     private static final String TAG = "MyActivity";
+    private String placeId;
 
     // A constant to track the file chooser intent
     private static final int PICK_IMAGE_REQUEST = 234;
@@ -88,7 +89,7 @@ public class SubmitActivity extends BaseDrawerActivity {
 
         // Get Instance of Firebase
         mAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Set up Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -167,19 +168,24 @@ public class SubmitActivity extends BaseDrawerActivity {
 
     // Submit art information to the database
     private void submitArtInformation() {
-        // Getting values from database
-        String name = titleText.getText().toString().trim();
-        String artist = artistText.getText().toString().trim();
-        String location = locationText.getText().toString().trim();
-
         // Get current user
         FirebaseUser user = mAuth.getCurrentUser();
 
-        // Creating an ArtInformation object
-        ArtInformation artSubmission = new ArtInformation(name, location, artist, user);
+        // Getting values from database
+        final String title = titleText.getText().toString().trim();
+        String artist = artistText.getText().toString().trim();
+        String location = placeId;
+        assert user != null;
+        String photoPath = titleText.getText().toString().trim() + artistText.getText().toString();
+        String email = user.getEmail();
+
+        ArtInformation pieceOfArt = new ArtInformation(title, artist, location, photoPath, email);
 
         // Saving data to Firebase database
-        databaseReference.child(artSubmission.title).setValue(artSubmission);
+        mDatabase.child(photoPath).child("Artist").setValue(pieceOfArt.getArtist());
+        mDatabase.child(photoPath).child("Location").setValue(pieceOfArt.getLocation());
+        String username = getUserName(pieceOfArt.getUserName());
+        mDatabase.child(photoPath).child("Username").setValue(username);
 
         // Success
         Toast.makeText(this, "Information Saved...", Toast.LENGTH_LONG).show();
@@ -203,12 +209,13 @@ public class SubmitActivity extends BaseDrawerActivity {
             if (resultCode == RESULT_OK) {
                 // Get the user's selected place from the Intent.
                 final Place place = PlaceAutocomplete.getPlace(this, data);
-                final String placeAddress = place.getAddress().toString();
+                placeId = place.getId();
+                final String placeName = place.getName().toString();
                 Log.i(TAG, "Place Selected: " + place.getName());
 
                 Runnable thRead = new Runnable(){
                     public void run() {
-                        locationText.setText(placeAddress);
+                        locationText.setText(placeName);
                     }
                 };
                 runOnUiThread(thRead);
@@ -228,13 +235,15 @@ public class SubmitActivity extends BaseDrawerActivity {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 Bitmap resizedImage = resizeImage(bitmap);
-                imageSelectButton.setImageBitmap(resizedImage);
-                imageSelectButton.setBackgroundColor(255);
+                if (resizedImage != null) {
+                    imageSelectButton.setImageBitmap(resizedImage);
+                    imageSelectButton.setBackgroundColor(255);
 
-                // TODO: Incorporate location data
-                ExifInterface exif = new ExifInterface(filePath.getPath());
-
-                Toast.makeText(this, "Set", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Set", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Please try again with a different image.",
+                            Toast.LENGTH_SHORT).show();
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -252,7 +261,8 @@ public class SubmitActivity extends BaseDrawerActivity {
             progressDialog.show();
 
             StorageReference riversRef = storageReference.child("image/"
-                    + titleText.getText().toString().trim());
+                    + titleText.getText().toString().trim()
+                    + artistText.getText().toString());
             riversRef.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -292,35 +302,38 @@ public class SubmitActivity extends BaseDrawerActivity {
     // Credits: http://stackoverflow.com/
     // questions/15124179/resizing-a-bitmap-to-a-fixed-value-but-without-changing-the-aspect-ratio
     private Bitmap resizeImage(Bitmap bm) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int maxWidth = size.x;
-        int maxHeight = 500;
-        Log.v("Pictures", "Width and height are " + width + "--" + height);
+        if (bm != null) {
+            int width = bm.getWidth();
+            int height = bm.getHeight();
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int maxWidth = size.x;
+            int maxHeight = 500;
+            Log.v("Pictures", "Width and height are " + width + "--" + height);
 
-        if (width > height) {
-            // landscape
-            float ratio = (float) width / maxWidth;
-            width = maxWidth;
-            height = (int) (height / ratio);
-        } else if (height > width) {
-            // portrait
-            float ratio = (float) height / maxHeight;
-            height = maxHeight;
-            width = (int) (width / ratio);
-        } else {
-            // square
-            height = maxHeight;
-            width = maxWidth;
+            if (width > height) {
+                // landscape
+                float ratio = (float) width / maxWidth;
+                width = maxWidth;
+                height = (int) (height / ratio);
+            } else if (height > width) {
+                // portrait
+                float ratio = (float) height / maxHeight;
+                height = maxHeight;
+                width = (int) (width / ratio);
+            } else {
+                // square
+                height = maxHeight;
+                width = maxWidth;
+            }
+
+            Log.v("Pictures", "after scaling Width and height are " + width + "--" + height);
+
+            bm = Bitmap.createScaledBitmap(bm, width, height, true);
+            return bm;
         }
-
-        Log.v("Pictures", "after scaling Width and height are " + width + "--" + height);
-
-        bm = Bitmap.createScaledBitmap(bm, width, height, true);
-        return bm;
+        return null;
     }
 
     // Google Places API used to find a location and store it in the location text field
@@ -334,6 +347,16 @@ public class SubmitActivity extends BaseDrawerActivity {
                 | GooglePlayServicesNotAvailableException e) {
             Log.d(TAG, "PlacesError");
         }
+    }
+
+    private String getUserName(String email) {
+        String returnValue = "";
+        for (char ch : email.toCharArray()) {
+            if (ch != '@') {
+                returnValue = returnValue + ch;
+            }
+        }
+        return returnValue;
     }
 
 }

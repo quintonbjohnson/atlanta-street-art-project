@@ -1,14 +1,17 @@
 package comquintonj.github.atlantastreetartproject;
 
+import android.graphics.Bitmap;
+
 import com.google.firebase.auth.FirebaseUser;
 
 public class ArtInformation {
 
     // Instance Variables
-    public String title;
-    private String artist;
+    private String title;
     private String location;
-    private FirebaseUser user;
+    private String artist;
+    private String photoPath;
+    private String userName;
 
     /**
      * No args constructor
@@ -22,12 +25,35 @@ public class ArtInformation {
      * @param title The title of the art piece.
      * @param artist Who created the art.
      * @param location Any necessary tags for the art.
-     * @param user Who submitted the piece.
+     * @param userName Who submitted the piece.
      */
-    public ArtInformation(String title, String location, String artist, FirebaseUser user) {
+    public ArtInformation(String title, String location, String artist,
+                          String photoPath, String userName) {
         this.title = title;
         this.location = location;
         this.artist = artist;
-        this.user = user;
+        this.photoPath = photoPath;
+        this.userName = userName;
+
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }

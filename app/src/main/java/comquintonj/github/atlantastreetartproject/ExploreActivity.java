@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ExploreActivity extends BaseDrawerActivity {
@@ -32,7 +34,7 @@ public class ExploreActivity extends BaseDrawerActivity {
     private FirebaseAuth mAuth;
     private StorageReference storageRef;
     private DatabaseReference mRef;
-    private HashMap<String, Pair<String, String>> pathAndDataMap;
+    private HashMap<String, ArrayList<String>> pathAndDataMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class ExploreActivity extends BaseDrawerActivity {
         FirebaseUser user = mAuth.getCurrentUser();
         TextView headerName = (TextView) header.findViewById(R.id.profileNameText);
         assert user != null;
-        headerName.setText(user.getEmail());
+        headerName.setText(user.getDisplayName());
 
         // Initiate Recycler View
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -79,14 +81,19 @@ public class ExploreActivity extends BaseDrawerActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 pathAndDataMap =
-                        new HashMap<String, Pair<String, String>>();
+                        new HashMap<String, ArrayList<String>>();
 
                 // Result will be holded Here
-                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                for (DataSnapshot dsp : dataSnapshot.child("Art").getChildren()) {
                     String path = "image/" + String.valueOf(dsp.getKey());
                     String artist = String.valueOf(dsp.child("Artist").getValue());
                     String location = String.valueOf(dsp.child("Location").getValue());
-                    pathAndDataMap.put(path, new Pair(artist, location));
+                    String username = String.valueOf(dsp.child("Username").getValue());
+                    ArrayList<String> imageData = new ArrayList<String>();
+                    imageData.add(artist);
+                    imageData.add(location);
+                    imageData.add(username);
+                    pathAndDataMap.put(path, imageData);
                 }
                 populateAdapter(pathAndDataMap);
 
@@ -99,7 +106,7 @@ public class ExploreActivity extends BaseDrawerActivity {
         });
     }
 
-    public void populateAdapter(HashMap<String, Pair<String, String>> pathAndDataMap) {
+    public void populateAdapter(HashMap<String, ArrayList<String>> pathAndDataMap) {
         // Populate Adapter
         MyAdapter adapter = new MyAdapter(this.getApplicationContext(), pathAndDataMap);
         mRecyclerView.setAdapter(adapter);

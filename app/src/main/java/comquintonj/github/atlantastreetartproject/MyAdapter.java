@@ -20,7 +20,7 @@ import java.util.HashMap;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     private Context mContext;
-    private HashMap<String, Pair<String, String>> pathAndDataMap;
+    private HashMap<String, ArrayList<String>> pathAndDataMap;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView pictureOfArt;
@@ -34,7 +34,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     public MyAdapter(Context mContext,
-                     HashMap<String, Pair<String, String>> pathAndDataMap) {
+                     HashMap<String, ArrayList<String>> pathAndDataMap) {
         this.mContext = mContext;
         this.pathAndDataMap = pathAndDataMap;
     }
@@ -70,7 +70,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 .into(holder.pictureOfArt);
 
         // Using same position, set proper artist name
-        String submitter = pathAndDataMap.get(imagePaths.get(position)).first;
+        String submitter = pathAndDataMap.get(imagePaths.get(position)).get(2);
         holder.userSubmitted.setText(submitter);
 
     }

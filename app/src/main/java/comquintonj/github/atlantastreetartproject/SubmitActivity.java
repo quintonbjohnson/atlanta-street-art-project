@@ -54,6 +54,7 @@ public class SubmitActivity extends BaseDrawerActivity {
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
     private static final String TAG = "MyActivity";
     private String placeId;
+    private FirebaseUser user;
 
     // A constant to track the file chooser intent
     private static final int PICK_IMAGE_REQUEST = 234;
@@ -93,10 +94,10 @@ public class SubmitActivity extends BaseDrawerActivity {
 
         // Set profile name
         View header = navigationView.getHeaderView(0);
-        FirebaseUser user = mAuth.getCurrentUser();
+        user = mAuth.getCurrentUser();
         TextView headerName = (TextView) header.findViewById(R.id.profileNameText);
         assert user != null;
-        headerName.setText(user.getEmail());
+        headerName.setText(user.getDisplayName());
 
         // Instantiate resources
         titleText = (EditText) findViewById(R.id.titleText);
@@ -155,23 +156,22 @@ public class SubmitActivity extends BaseDrawerActivity {
     // Submit art information to the database
     private void submitArtInformation() {
         // Get current user
-        FirebaseUser user = mAuth.getCurrentUser();
+        user = mAuth.getCurrentUser();
 
         // Getting values from database
         final String title = titleText.getText().toString().trim();
         String artist = artistText.getText().toString().trim();
         String location = placeId;
         assert user != null;
-        String photoPath = titleText.getText().toString().trim() + artistText.getText().toString();
-        String email = user.getEmail();
+        String photoPath = titleText.getText().toString().trim() + user.getDisplayName();
+        String displayName = user.getDisplayName();
 
-        ArtInformation pieceOfArt = new ArtInformation(title, location, artist, photoPath, email);
+        ArtInformation pieceOfArt = new ArtInformation(title, location, artist, photoPath, displayName);
 
         // Saving data to Firebase database
-        mDatabase.child(photoPath).child("Artist").setValue(pieceOfArt.getArtist());
-        mDatabase.child(photoPath).child("Location").setValue(pieceOfArt.getLocation());
-        String username = getUserName(pieceOfArt.getUserName());
-        mDatabase.child(photoPath).child("Username").setValue(username);
+        mDatabase.child("Art").child(photoPath).child("Artist").setValue(pieceOfArt.getArtist());
+        mDatabase.child("Art").child(photoPath).child("Location").setValue(pieceOfArt.getLocation());
+        mDatabase.child("Art").child(photoPath).child("Username").setValue(pieceOfArt.getDisplayName());
     }
 
     // Method to show file chooser
@@ -245,7 +245,7 @@ public class SubmitActivity extends BaseDrawerActivity {
 
             StorageReference riversRef = storageReference.child("image/"
                     + titleText.getText().toString().trim()
-                    + artistText.getText().toString());
+                    + user.getDisplayName());
             riversRef.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override

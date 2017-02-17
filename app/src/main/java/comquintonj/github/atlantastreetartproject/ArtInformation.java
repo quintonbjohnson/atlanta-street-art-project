@@ -7,7 +7,7 @@ public class ArtInformation {
     private String location;
     private String artist;
     private String photoPath;
-    private String userName;
+    private String displayName;
 
     /**
      * No args constructor
@@ -21,15 +21,15 @@ public class ArtInformation {
      * @param title The title of the art piece.
      * @param artist Who created the art.
      * @param location Any necessary tags for the art.
-     * @param userName Who submitted the piece.
+     * @param displayName Who submitted the piece.
      */
     public ArtInformation(String title, String location, String artist,
-                          String photoPath, String userName) {
+                          String photoPath, String displayName) {
         this.title = title;
         this.location = location;
         this.artist = artist;
         this.photoPath = photoPath;
-        this.userName = userName;
+        this.displayName = displayName;
 
     }
 
@@ -49,7 +49,7 @@ public class ArtInformation {
         return photoPath;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getDisplayName() {
+        return displayName;
     }
 }

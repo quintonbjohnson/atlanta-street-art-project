@@ -1,6 +1,7 @@
 package comquintonj.github.atlantastreetartproject;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,24 +14,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<ArtInformation> artList;
+    private List<StorageReference> artList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView nameOfArt;
+        public ImageView pictureOfArt;
 
         public MyViewHolder(View view) {
             super(view);
-            nameOfArt = (TextView) view.findViewById(R.id.nameOfArt);
+            pictureOfArt = (ImageView) view.findViewById(R.id.artPicture);
         }
     }
 
 
-    public MyAdapter(Context mContext, List<ArtInformation> artList) {
+    public MyAdapter(Context mContext, List<StorageReference> artList) {
         this.mContext = mContext;
         this.artList = artList;
     }
@@ -45,8 +50,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        ArtInformation pieceOfArt = artList.get(position);
-//        holder.nameOfArt.setText(artTitle);
+        StorageReference pieceOfArt = artList.get(position);
+        Glide.with(mContext)
+                .using(new FirebaseImageLoader())
+                .load(pieceOfArt)
+                .into(holder.pictureOfArt);
     }
 
     @Override

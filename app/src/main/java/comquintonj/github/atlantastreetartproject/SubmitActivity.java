@@ -349,6 +349,7 @@ public class SubmitActivity extends BaseDrawerActivity {
         }
     }
 
+    // Gets the first part of a user's email; ignores everything starting at '@'
     private String getUserName(String email) {
         String returnValue = "";
         for (char ch : email.toCharArray()) {

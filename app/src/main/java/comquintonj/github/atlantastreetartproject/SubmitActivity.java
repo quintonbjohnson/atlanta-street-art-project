@@ -2,13 +2,8 @@ package comquintonj.github.atlantastreetartproject;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Point;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,9 +12,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.Spanned;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -36,8 +28,6 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import android.support.v4.app.FragmentActivity;
-
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
@@ -53,10 +43,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-
-import static android.R.attr.width;
-import static comquintonj.github.atlantastreetartproject.R.attr.height;
-import static java.lang.System.out;
 
 public class SubmitActivity extends BaseDrawerActivity {
 
@@ -179,16 +165,13 @@ public class SubmitActivity extends BaseDrawerActivity {
         String photoPath = titleText.getText().toString().trim() + artistText.getText().toString();
         String email = user.getEmail();
 
-        ArtInformation pieceOfArt = new ArtInformation(title, artist, location, photoPath, email);
+        ArtInformation pieceOfArt = new ArtInformation(title, location, artist, photoPath, email);
 
         // Saving data to Firebase database
         mDatabase.child(photoPath).child("Artist").setValue(pieceOfArt.getArtist());
         mDatabase.child(photoPath).child("Location").setValue(pieceOfArt.getLocation());
         String username = getUserName(pieceOfArt.getUserName());
         mDatabase.child(photoPath).child("Username").setValue(username);
-
-        // Success
-        Toast.makeText(this, "Information Saved...", Toast.LENGTH_LONG).show();
     }
 
     // Method to show file chooser
@@ -353,7 +336,9 @@ public class SubmitActivity extends BaseDrawerActivity {
     private String getUserName(String email) {
         String returnValue = "";
         for (char ch : email.toCharArray()) {
-            if (ch != '@') {
+            if (ch == '@') {
+                return returnValue;
+            } else {
                 returnValue = returnValue + ch;
             }
         }

@@ -1,25 +1,20 @@
 package comquintonj.github.atlantastreetartproject;
 
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,22 +23,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-import static comquintonj.github.atlantastreetartproject.R.id.imageView;
-
+import java.util.HashMap;
 
 public class ExploreActivity extends BaseDrawerActivity {
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private FirebaseAuth mAuth;
     private StorageReference storageRef;
     private DatabaseReference mRef;
-    private static final String TAG = "MyActivity";
-    private ArrayList<String> imagePaths = new ArrayList<>();
+    private HashMap<String, Pair<String, String>> pathAndDataMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,13 +78,17 @@ public class ExploreActivity extends BaseDrawerActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                imagePaths = new ArrayList<String>();
+                pathAndDataMap =
+                        new HashMap<String, Pair<String, String>>();
 
                 // Result will be holded Here
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                    imagePaths.add(String.valueOf(dsp.getKey())); //add result into array list
+                    String path = "image/" + String.valueOf(dsp.getKey());
+                    String artist = String.valueOf(dsp.child("Artist").getValue());
+                    String location = String.valueOf(dsp.child("Location").getValue());
+                    pathAndDataMap.put(path, new Pair(artist, location));
                 }
-                populateAdapter(imagePaths);
+                populateAdapter(pathAndDataMap);
 
             }
 
@@ -104,22 +97,35 @@ public class ExploreActivity extends BaseDrawerActivity {
 
             }
         });
-
-
-
-
-
     }
-    public void populateAdapter(ArrayList<String> imagePaths) {
-        // Populate Adapter
-        ArrayList<StorageReference> images = new ArrayList<>();
-        for (String pathName : imagePaths) {
-            StorageReference pathReference = storageRef.child("image/" + pathName);
-            images.add(pathReference);
-        }
 
-        MyAdapter adapter = new MyAdapter(this.getApplicationContext(), images);
+    public void populateAdapter(HashMap<String, Pair<String, String>> pathAndDataMap) {
+        // Populate Adapter
+        MyAdapter adapter = new MyAdapter(this.getApplicationContext(), pathAndDataMap);
         mRecyclerView.setAdapter(adapter);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.base_drawer, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.distance_setting) {
+            populateAdapter(pathAndDataMap);
+        } else if (id == R.id.popularity_setting) {
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

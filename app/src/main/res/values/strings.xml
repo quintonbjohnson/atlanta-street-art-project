@@ -14,6 +14,7 @@
     <string name="submit">Submit</string>
     <string name="chooseFile">Choose File</string>
     <string name="title_activity_base_drawer">BaseDrawerActivity</string>
+    <string name="submitted_by">Submitted By:</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

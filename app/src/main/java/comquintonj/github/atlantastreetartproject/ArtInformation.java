@@ -1,9 +1,5 @@
 package comquintonj.github.atlantastreetartproject;
 
-import android.graphics.Bitmap;
-
-import com.google.firebase.auth.FirebaseUser;
-
 public class ArtInformation {
 
     // Instance Variables

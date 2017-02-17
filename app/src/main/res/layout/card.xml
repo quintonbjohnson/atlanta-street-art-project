@@ -12,9 +12,11 @@
         android:elevation="3dp"
         android:scaleType="fitXY"
         android:layout_weight="4.98"
-        android:layout_width="370dp"
         android:layout_marginTop="15dp"
-        android:layout_height="250dp">
+        android:layout_height="250dp"
+        android:layout_width="381dp"
+        card_view:cardBackgroundColor="@color/cardview_light_background"
+        card_view:cardCornerRadius="6dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -27,7 +29,27 @@
                 android:scaleType="centerCrop"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"
-                android:layout_height="200dp" />
+                android:layout_height="200dp"
+                android:background="@color/com_facebook_button_login_silver_background_color_pressed" />
+
+            <TextView
+                android:text="@string/submitted_by"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="15dp"
+                android:id="@+id/textView"
+                android:layout_marginLeft="15dp" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textView"
+                android:layout_toEndOf="@+id/textView"
+                android:id="@+id/user_submitted"
+                android:layout_marginLeft="7dp" />
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

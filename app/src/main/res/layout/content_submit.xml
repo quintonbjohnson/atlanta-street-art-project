@@ -55,7 +55,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:weightSum="1"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:layout_height="wrap_content"
@@ -65,12 +65,12 @@
                 android:hint="Title"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginLeft="35dp"
                 android:layout_width="match_parent"
                 android:layout_weight="0.40"
-                android:layout_marginRight="35dp"
                 android:textSize="18sp"
-                android:layout_marginTop="30dp" />
+                android:layout_marginTop="45dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -79,11 +79,11 @@
                 android:ems="10"
                 android:id="@+id/locationTextView"
                 android:hint="Location"
-                android:layout_marginLeft="35dp"
                 android:layout_weight="0.40"
-                android:layout_marginRight="35dp"
                 android:textSize="18sp"
-                android:layout_marginTop="30dp" />
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp" />
 
             <EditText
                 android:layout_height="wrap_content"
@@ -95,11 +95,11 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="35dp"
                 android:layout_weight="0.40"
-                android:layout_marginRight="35dp"
                 android:textSize="18sp"
-                android:layout_marginTop="30dp" />
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp" />
 
             <Button
                 android:text="@string/submit"
@@ -115,8 +115,7 @@
                 android:layout_weight="0.40"
                 android:layout_marginLeft="35dp"
                 android:layout_marginRight="35dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="60dp" />
+                android:layout_marginTop="30dp" />
 
         </LinearLayout>
 

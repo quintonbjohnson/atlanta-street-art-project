@@ -43,11 +43,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class SubmitActivity extends BaseDrawerActivity {
 
     private DatabaseReference mDatabase;
-    private EditText titleText, locationText, artistText;
+    private EditText titleText, locationText, artistText, ratingText;
     private Button submitButton;
     private ImageButton imageSelectButton;
     private FirebaseAuth mAuth;
@@ -165,13 +166,17 @@ public class SubmitActivity extends BaseDrawerActivity {
         assert user != null;
         String photoPath = titleText.getText().toString().trim() + user.getDisplayName();
         String displayName = user.getDisplayName();
+        Random rand = new Random();
+        String rating = String.valueOf(rand.nextInt(100));
 
-        ArtInformation pieceOfArt = new ArtInformation(title, location, artist, photoPath, displayName);
+        ArtInformation pieceOfArt = new ArtInformation(artist, displayName,
+                location, photoPath, rating, title);
 
         // Saving data to Firebase database
         mDatabase.child("Art").child(photoPath).child("Artist").setValue(pieceOfArt.getArtist());
         mDatabase.child("Art").child(photoPath).child("Location").setValue(pieceOfArt.getLocation());
-        mDatabase.child("Art").child(photoPath).child("Username").setValue(pieceOfArt.getDisplayName());
+        mDatabase.child("Art").child(photoPath).child("Display Name").setValue(pieceOfArt.getDisplayName());
+        mDatabase.child("Art").child(photoPath).child("Rating").setValue(pieceOfArt.getRating());
     }
 
     // Method to show file chooser

@@ -2,7 +2,6 @@ package comquintonj.github.atlantastreetartproject;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.util.Pair;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,6 +23,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class ExploreActivity extends BaseDrawerActivity {
@@ -85,14 +85,19 @@ public class ExploreActivity extends BaseDrawerActivity {
 
                 // Result will be holded Here
                 for (DataSnapshot dsp : dataSnapshot.child("Art").getChildren()) {
+                    String title = String.valueOf(dsp.child("Title").getValue());
                     String path = "image/" + String.valueOf(dsp.getKey());
                     String artist = String.valueOf(dsp.child("Artist").getValue());
                     String location = String.valueOf(dsp.child("Location").getValue());
-                    String username = String.valueOf(dsp.child("Username").getValue());
+                    String displayName = String.valueOf(dsp.child("Display Name").getValue());
+                    String rating = String.valueOf(dsp.child("Rating").getValue());
                     ArrayList<String> imageData = new ArrayList<String>();
                     imageData.add(artist);
+                    imageData.add(displayName);
                     imageData.add(location);
-                    imageData.add(username);
+                    imageData.add(path);
+                    imageData.add(rating);
+                    imageData.add(title);
                     pathAndDataMap.put(path, imageData);
                 }
                 populateAdapter(pathAndDataMap);
@@ -130,7 +135,51 @@ public class ExploreActivity extends BaseDrawerActivity {
         if (id == R.id.distance_setting) {
             populateAdapter(pathAndDataMap);
         } else if (id == R.id.popularity_setting) {
+            // Sort by popularity
 
+            // Get the array lists of data from the hash map
+            ArrayList<ArrayList<String>> dataList =
+                    new ArrayList<ArrayList<String>>(pathAndDataMap.values());
+
+            // Create a list that will hold ArtInformation objects
+            ArrayList<ArtInformation> art = new ArrayList<ArtInformation>();
+
+            // Iterate through the data for each key from the hash map,
+            // and create ArtInformation objects from that
+            for (ArrayList<String> data : dataList) {
+                art.add(new ArtInformation(data.get(0), data.get(1),
+                        data.get(2), data.get(3), data.get(4), data.get(5)));
+            }
+
+            // Pass in custom comparator to sort based on rating
+            Collections.sort(art, new Comparator<ArtInformation>() {
+                @Override
+                public int compare(ArtInformation o1, ArtInformation o2) {
+                    if (Integer.parseInt(o1.getRating()) > Integer.parseInt(o2.getRating())) {
+                        return 1;
+                    } else if (Integer.parseInt(o1.getRating()) < Integer.parseInt(o2.getRating())) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+
+            // Prepare to put sorted art back into a hash map
+            HashMap<String, ArrayList<String>> resultMap = new HashMap<String, ArrayList<String>>();
+            for (ArtInformation product : art) {
+                ArrayList<String> resultData = new ArrayList<String>();
+                resultData.add(product.getArtist());
+                resultData.add(product.getDisplayName());
+                resultData.add(product.getLocation());
+                resultData.add(product.getPhotoPath());
+                resultData.add(product.getRating());
+                resultData.add(product.getTitle());
+                resultMap.put(product.getPhotoPath(), resultData);
+            }
+
+            // Populate adapter with sorted map
+            populateAdapter(resultMap);
         }
 
         return super.onOptionsItemSelected(item);

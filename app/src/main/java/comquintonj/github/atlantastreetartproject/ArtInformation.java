@@ -3,11 +3,12 @@ package comquintonj.github.atlantastreetartproject;
 public class ArtInformation {
 
     // Instance Variables
-    private String title;
-    private String location;
     private String artist;
-    private String photoPath;
     private String displayName;
+    private String location;
+    private String photoPath;
+    private String rating;
+    private String title;
 
     /**
      * No args constructor
@@ -23,14 +24,14 @@ public class ArtInformation {
      * @param location Any necessary tags for the art.
      * @param displayName Who submitted the piece.
      */
-    public ArtInformation(String title, String location, String artist,
-                          String photoPath, String displayName) {
-        this.title = title;
-        this.location = location;
+    public ArtInformation(String artist, String displayName, String location,
+                          String photoPath, String rating, String title) {
         this.artist = artist;
-        this.photoPath = photoPath;
         this.displayName = displayName;
-
+        this.location = location;
+        this.photoPath = photoPath;
+        this.rating = rating;
+        this.title = title;
     }
 
     public String getTitle() {
@@ -52,4 +53,10 @@ public class ArtInformation {
     public String getDisplayName() {
         return displayName;
     }
+
+    public String getRating() {
+        return rating;
+    }
+
+
 }

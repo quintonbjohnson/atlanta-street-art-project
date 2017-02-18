@@ -1,7 +1,6 @@
 package comquintonj.github.atlantastreetartproject;
 
 import android.content.Context;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,7 +69,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 .into(holder.pictureOfArt);
 
         // Using same position, set proper artist name
-        String submitter = pathAndDataMap.get(imagePaths.get(position)).get(2);
+        String submitter = pathAndDataMap.get(imagePaths.get(position)).get(1);
         holder.userSubmitted.setText(submitter);
 
     }

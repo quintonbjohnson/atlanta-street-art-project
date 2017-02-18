@@ -12,12 +12,12 @@
         android:elevation="3dp"
         android:scaleType="fitXY"
         android:layout_weight="4.98"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_height="250dp"
         android:layout_width="381dp"
         card_view:cardBackgroundColor="@color/cardview_light_background"
         card_view:cardCornerRadius="6dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="15dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp">
 

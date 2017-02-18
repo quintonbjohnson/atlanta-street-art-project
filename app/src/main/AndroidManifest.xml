@@ -20,7 +20,9 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".RegistrationActivity" />
+        <activity
+            android:name=".RegistrationActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SubmitActivity"
             android:theme="@style/AppTheme.NoActionBar"

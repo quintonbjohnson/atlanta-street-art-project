@@ -225,7 +225,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(RegistrationActivity.this, "Email is already in use",
+                            Toast.makeText(RegistrationActivity.this, "Please check fields",
                                     Toast.LENGTH_SHORT).show();
                         } else {
 

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class ExploreActivity extends BaseDrawerActivity {
 
@@ -35,6 +36,7 @@ public class ExploreActivity extends BaseDrawerActivity {
     private StorageReference storageRef;
     private DatabaseReference mRef;
     private HashMap<String, ArrayList<String>> pathAndDataMap;
+    private MyAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +115,7 @@ public class ExploreActivity extends BaseDrawerActivity {
 
     public void populateAdapter(HashMap<String, ArrayList<String>> pathAndDataMap) {
         // Populate Adapter
-        MyAdapter adapter = new MyAdapter(this.getApplicationContext(), pathAndDataMap);
+        adapter = new MyAdapter(this.getApplicationContext(), pathAndDataMap);
         mRecyclerView.setAdapter(adapter);
     }
 
@@ -165,8 +167,11 @@ public class ExploreActivity extends BaseDrawerActivity {
                 }
             });
 
+            // Reverse array list to put data into the new LinkedHashMap in correct order
+            Collections.reverse(art);
+
             // Prepare to put sorted art back into a hash map
-            HashMap<String, ArrayList<String>> resultMap = new HashMap<String, ArrayList<String>>();
+            HashMap<String, ArrayList<String>> resultMap = new LinkedHashMap<>();
             for (ArtInformation product : art) {
                 ArrayList<String> resultData = new ArrayList<String>();
                 resultData.add(product.getArtist());
@@ -180,6 +185,7 @@ public class ExploreActivity extends BaseDrawerActivity {
 
             // Populate adapter with sorted map
             populateAdapter(resultMap);
+            adapter.notifyDataSetChanged();
         }
 
         return super.onOptionsItemSelected(item);

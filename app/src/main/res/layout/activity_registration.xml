@@ -30,7 +30,7 @@
             android:ems="10"
             android:id="@+id/usernameInput"
             android:hint="Username"
-            android:digits="abcdefghijklmnopqrstuvwxyz012345789"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345789"
             android:layout_marginTop="30dp" />
 
         <EditText

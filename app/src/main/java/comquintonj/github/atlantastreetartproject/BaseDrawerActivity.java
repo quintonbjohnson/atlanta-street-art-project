@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,6 +21,7 @@ public class BaseDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class BaseDrawerActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
-        FirebaseUser user = mAuth.getCurrentUser();
+        user = mAuth.getCurrentUser();
         TextView headerName = (TextView)header.findViewById(R.id.profileNameText);
         assert user != null;
         headerName.setText(user.getEmail());
@@ -82,6 +84,9 @@ public class BaseDrawerActivity extends AppCompatActivity
             // Check to make sure the user is not currently in the Submit Activity
             if (this.getClass().equals(SubmitActivity.class)) {
                 onBackPressed();
+            } else if (user.getDisplayName() == null) {
+                Toast.makeText(this, "Please create an account to use this feature.",
+                        Toast.LENGTH_SHORT).show();
             } else {
                 Intent submitIntent = new Intent(this, SubmitActivity.class);
                 startActivity(submitIntent);

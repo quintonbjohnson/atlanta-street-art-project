@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject;
+package comquintonj.github.atlantastreetartproject.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import comquintonj.github.atlantastreetartproject.R;
 
 public class BaseDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,9 +44,12 @@ public class BaseDrawerActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        // Set navigation drawer
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
+
+        // Set profile name in navigation drawer
         user = mAuth.getCurrentUser();
         TextView headerName = (TextView)header.findViewById(R.id.profileNameText);
         assert user != null;

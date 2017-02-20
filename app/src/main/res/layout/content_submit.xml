@@ -7,7 +7,7 @@
     android:id="@+id/activity_submit"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="comquintonj.github.atlantastreetartproject.SubmitActivity"
+    tools:context="comquintonj.github.atlantastreetartproject.view.SubmitActivity"
     android:layout_marginTop="50dp">
 
     <RelativeLayout

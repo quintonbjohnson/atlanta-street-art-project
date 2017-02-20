@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject;
+package comquintonj.github.atlantastreetartproject.view;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -44,6 +44,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.Random;
+
+import comquintonj.github.atlantastreetartproject.R;
+import comquintonj.github.atlantastreetartproject.model.ArtInformation;
 
 public class SubmitActivity extends BaseDrawerActivity {
 

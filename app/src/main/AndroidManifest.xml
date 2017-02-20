@@ -11,7 +11,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCO3GOTKGg-mU_DZrI4lwJ5Bbj_1DekNuA"/>
-        <activity android:name=".LoginActivity"
+        <activity android:name=".view.LoginActivity"
             android:screenOrientation="portrait">
 
             <intent-filter>
@@ -21,19 +21,20 @@
 
         </activity>
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".view.RegistrationActivity"
+            android:theme="@style/AppTheme"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".SubmitActivity"
+            android:name=".view.SubmitActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".BaseDrawerActivity"
+            android:name=".view.BaseDrawerActivity"
             android:label="@string/title_activity_base_drawer"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ExploreActivity"
+            android:name=".view.ExploreActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
 

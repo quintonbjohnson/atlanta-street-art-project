@@ -16,7 +16,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
 
     private Context mContext;
     private HashMap<String, ArrayList<String>> pathAndDataMap;
@@ -32,8 +32,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         }
     }
 
-    public MyAdapter(Context mContext,
-                     HashMap<String, ArrayList<String>> pathAndDataMap) {
+    public ExploreAdapter(Context mContext,
+                          HashMap<String, ArrayList<String>> pathAndDataMap) {
         this.mContext = mContext;
         this.pathAndDataMap = pathAndDataMap;
     }

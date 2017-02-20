@@ -1,11 +1,14 @@
-package comquintonj.github.atlantastreetartproject;
+package comquintonj.github.atlantastreetartproject.view;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +26,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import comquintonj.github.atlantastreetartproject.R;
+import comquintonj.github.atlantastreetartproject.model.User;
+
 public class RegistrationActivity extends AppCompatActivity {
 
     // Instance variables
@@ -36,6 +42,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private Intent loginIntent;
     private FirebaseUser user;
     private DatabaseReference mDatabase;
+    private Toolbar appbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,8 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         setTitle("Registration");
+        appbar = (Toolbar) findViewById(R.id.toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -80,6 +89,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         // Set up intent to go to login screen upon successful registration
         loginIntent = new Intent(this,LoginActivity.class);
+
 
         // Set up registration button to add User with the edited text fields
         Button registerButton = (Button) findViewById(R.id.registrationButton);
@@ -134,6 +144,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
             }
         };
+
+
     }
 
     @Override
@@ -237,5 +249,18 @@ public class RegistrationActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(loginIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

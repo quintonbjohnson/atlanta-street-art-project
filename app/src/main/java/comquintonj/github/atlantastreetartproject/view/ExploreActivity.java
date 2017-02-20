@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject;
+package comquintonj.github.atlantastreetartproject.view;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -28,6 +28,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import comquintonj.github.atlantastreetartproject.ExploreAdapter;
+import comquintonj.github.atlantastreetartproject.R;
+import comquintonj.github.atlantastreetartproject.model.ArtInformation;
+
 public class ExploreActivity extends BaseDrawerActivity {
 
     private RecyclerView mRecyclerView;
@@ -36,7 +40,7 @@ public class ExploreActivity extends BaseDrawerActivity {
     private StorageReference storageRef;
     private DatabaseReference mRef;
     private HashMap<String, ArrayList<String>> pathAndDataMap;
-    private MyAdapter adapter;
+    private ExploreAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,14 +89,17 @@ public class ExploreActivity extends BaseDrawerActivity {
                 pathAndDataMap =
                         new HashMap<String, ArrayList<String>>();
 
-                // Result will be holded Here
+                // Get the data of the art from each individual piece of art
                 for (DataSnapshot dsp : dataSnapshot.child("Art").getChildren()) {
+                    // Get the data of an individual piece of art
                     String title = String.valueOf(dsp.child("Title").getValue());
                     String path = "image/" + String.valueOf(dsp.getKey());
                     String artist = String.valueOf(dsp.child("Artist").getValue());
                     String location = String.valueOf(dsp.child("Location").getValue());
                     String displayName = String.valueOf(dsp.child("Display Name").getValue());
                     String rating = String.valueOf(dsp.child("Rating").getValue());
+
+                    // Create an array list to hold the data for an individual piece of art
                     ArrayList<String> imageData = new ArrayList<String>();
                     imageData.add(artist);
                     imageData.add(displayName);
@@ -115,7 +122,7 @@ public class ExploreActivity extends BaseDrawerActivity {
 
     public void populateAdapter(HashMap<String, ArrayList<String>> pathAndDataMap) {
         // Populate Adapter
-        adapter = new MyAdapter(this.getApplicationContext(), pathAndDataMap);
+        adapter = new ExploreAdapter(this.getApplicationContext(), pathAndDataMap);
         mRecyclerView.setAdapter(adapter);
     }
 

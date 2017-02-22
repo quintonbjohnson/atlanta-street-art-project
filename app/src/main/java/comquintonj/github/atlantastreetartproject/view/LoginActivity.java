@@ -1,9 +1,9 @@
-package comquintonj.github.atlantastreetartproject.controller;
+package comquintonj.github.atlantastreetartproject.view;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -24,25 +24,26 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private static final String TAG = "MyActivity";
-    private Intent discoverIntent;
+    private Intent exploreIntent;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private EditText emailText;
     private EditText passwordText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Initialization
+        // Create layout
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
+        setTitle("Login");
         mAuth = FirebaseAuth.getInstance();
-        discoverIntent = new Intent(this, DiscoverActivity.class);
+        exploreIntent = new Intent(this, ExploreActivity.class);
 
-        // Views
+        // Instantiate resources
         emailText = (EditText) findViewById(R.id.loginUsername);
         passwordText = (EditText) findViewById(R.id.loginPassword);
 
         // Listener to check when the user signs in. If the user signs in, the user object will
-        // not be null, and they can be taken to the discover page.
+        // not be null, and they can be taken to the explore page.
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -50,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    startActivity(discoverIntent);
+                    startActivity(exploreIntent);
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -67,16 +68,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Allow text view for guest to send user to discover screen
+        // Allow text view for guest to send user to explore screen
         TextView guestView = (TextView) findViewById(R.id.guestTextView);
-        final Intent guestIntent = new Intent(this, DiscoverActivity.class);
+        final Intent guestIntent = new Intent(this, ExploreActivity.class);
         guestView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signInAnonymously();
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
-                    startActivity(discoverIntent);
+                    startActivity(exploreIntent);
                 }
             }
         });

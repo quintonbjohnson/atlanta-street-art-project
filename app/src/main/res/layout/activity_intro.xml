@@ -35,12 +35,12 @@
         android:layout_alignParentBottom="false"
         android:background="@color/colorAccent"
         android:textColor="@android:color/white"
-        android:layout_width="360dp"
         android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
         android:elevation="13dp"
         android:layout_marginTop="60dp"
-        android:layout_alignTop="@+id/layoutDots" />
+        android:layout_alignTop="@+id/layoutDots"
+        android:layout_width="375dp" />
 
     <TextView
         android:text="@string/log_in"

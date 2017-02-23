@@ -26,14 +26,14 @@
     <string name="start">DONE</string>
     <string name="log_in">Log in</string>
 
-    <string name="slide_1_title">Explore Art</string>
-    <string name="slide_1_desc">Find street art around atlanta.</string>
+    <string name="intro_1_title">Explore Art</string>
+    <string name="intro_1_tag">Find street art around Atlanta.</string>
 
-    <string name="slide_2_title">Submit Art</string>
-    <string name="slide_2_desc">Upload photos of art that you find on your adventures.</string>
+    <string name="intro_2_title">Submit Art</string>
+    <string name="intro_2_tag">Upload photos of art that you find on your adventures.</string>
 
-    <string name="slide_3_title">Tour Art</string>
-    <string name="slide_3_desc">Take an urban hike and see street art around you.</string>
+    <string name="intro_3_title">Tour Art</string>
+    <string name="intro_3_tag">Take an urban hike and see street art around you.</string>
 
     <string name="play_again">Play Again</string>
 

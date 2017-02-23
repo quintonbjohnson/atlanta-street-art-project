@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,6 +41,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private Intent introIntent;
     private Intent loginIntent;
+    private Intent exploreIntent;
     private FirebaseUser user;
     private DatabaseReference mDatabase;
     private Toolbar appbar;
@@ -90,6 +92,7 @@ public class RegistrationActivity extends AppCompatActivity {
         // Set up intent to go to login screen upon successful registration
         introIntent = new Intent(this, IntroActivity.class);
         loginIntent = new Intent(this, LoginActivity.class);
+        exploreIntent = new Intent(this, ExploreActivity.class);
 
 
         // Set up registration button to add User with the edited text fields
@@ -119,25 +122,29 @@ public class RegistrationActivity extends AppCompatActivity {
 
                     // Update display name of the user that just registered to match username text
                     String displayName = usernameInfo.getText().toString();
-                    UserProfileChangeRequest profileUpdates =
-                            new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(displayName)
-                                    .build();
+                    if (displayName.equals("")) {
+                        startActivity(exploreIntent);
+                    } else {
+                        UserProfileChangeRequest profileUpdates =
+                                new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(displayName)
+                                        .build();
 
-                    user.updateProfile(profileUpdates)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Log.d(TAG, "User profile updated.");
-                                        mAuth.signOut();
-                                        startActivity(loginIntent);
+                        user.updateProfile(profileUpdates)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "User profile updated.");
+                                            mAuth.signOut();
+                                            startActivity(loginIntent);
+                                        }
                                     }
-                                }
-                            });
+                                });
 
-                    Toast.makeText(RegistrationActivity.this, "Account created",
-                            Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegistrationActivity.this, "Account created",
+                                Toast.LENGTH_SHORT).show();
+                    }
 
                 } else {
                     // User is signed out
@@ -146,7 +153,19 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         };
 
-
+        // Allow text view for guest to send user to explore screen
+        TextView guestView = (TextView) findViewById(R.id.guest_text_view);
+        final Intent guestIntent = new Intent(this, ExploreActivity.class);
+        guestView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signInAnonymously();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    startActivity(exploreIntent);
+                }
+            }
+        });
     }
 
     @Override
@@ -263,5 +282,25 @@ public class RegistrationActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // Continue as a guest and use an anonymous account
+    private void signInAnonymously() {
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInAnonymously", task.getException());
+                            Toast.makeText(RegistrationActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }

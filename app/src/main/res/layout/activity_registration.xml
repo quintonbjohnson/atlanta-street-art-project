@@ -76,6 +76,18 @@
             android:textSize="16sp"
             android:layout_marginTop="30dp" />
 
+        <TextView
+            android:text="@string/continue_as_guest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:id="@+id/guest_text_view"
+            android:layout_below="@+id/loginButton"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="sans-serif"
+            android:textSize="16sp"
+            android:textAlignment="center" />
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -91,7 +91,7 @@ public class IntroActivity extends AppCompatActivity {
                 R.layout.intro_screen3};
 
         // Add the indicator dots
-        addBottomDots(0);
+        addIndicators(0);
 
         // Make the notification bar transparent
         changeStatusBarColor();
@@ -122,7 +122,7 @@ public class IntroActivity extends AppCompatActivity {
      * Creates the indicator dots found at the bottom of the page.
      * @param currentPage The page that the slider is currently on.
      */
-    private void addBottomDots(int currentPage) {
+    private void addIndicators(int currentPage) {
         dots = new TextView[layouts.length];
 
         int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
@@ -150,7 +150,7 @@ public class IntroActivity extends AppCompatActivity {
 
         @Override
         public void onPageSelected(int position) {
-            addBottomDots(position);
+            addIndicators(position);
         }
 
         @Override

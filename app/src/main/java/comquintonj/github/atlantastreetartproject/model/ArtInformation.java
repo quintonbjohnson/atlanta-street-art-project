@@ -18,11 +18,11 @@ public class ArtInformation {
     }
 
     /**
-     * Art information object used to store necessary info for Firebase
-     * @param title The title of the art piece.
-     * @param artist Who created the art.
-     * @param location Any necessary tags for the art.
-     * @param displayName Who submitted the piece.
+     * Art information object used to store necessary info for Firebase.
+     * @param title The title of the art piece
+     * @param artist Who created the art
+     * @param location Any necessary tags for the art
+     * @param displayName Who submitted the piece
      */
     public ArtInformation(String artist, String displayName, String location,
                           String photoPath, String rating, String title) {

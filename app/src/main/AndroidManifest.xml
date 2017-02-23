@@ -10,34 +10,38 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCO3GOTKGg-mU_DZrI4lwJ5Bbj_1DekNuA"/>
-        <activity android:name=".view.LoginActivity"
+            android:value="AIzaSyCO3GOTKGg-mU_DZrI4lwJ5Bbj_1DekNuA" />
+        <activity android:name=".controller.IntroActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
 
+        <activity
+            android:name=".controller.LoginActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".view.RegistrationActivity"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"/>
+            android:name=".controller.RegistrationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-            android:name=".view.SubmitActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:name=".controller.SubmitActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".view.BaseDrawerActivity"
+            android:name=".controller.BaseDrawerActivity"
             android:label="@string/title_activity_base_drawer"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".view.ExploreActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
-
+            android:name=".controller.ExploreActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

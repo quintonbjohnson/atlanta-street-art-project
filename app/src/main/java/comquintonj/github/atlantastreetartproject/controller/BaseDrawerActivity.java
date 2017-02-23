@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject.view;
+package comquintonj.github.atlantastreetartproject.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -99,8 +99,8 @@ public class BaseDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_sign_out) {
             // Sign out the User
             mAuth.signOut();
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
+            Intent introIntent = new Intent(this, IntroActivity.class);
+            startActivity(introIntent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

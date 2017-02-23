@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject;
+package comquintonj.github.atlantastreetartproject.controller;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +15,8 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import comquintonj.github.atlantastreetartproject.R;
 
 public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
 
@@ -69,8 +71,9 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
                 .into(holder.pictureOfArt);
 
         // Using same position, set proper artist name
-        String submitter = pathAndDataMap.get(imagePaths.get(position)).get(1);
-        holder.userSubmitted.setText(submitter);
+        String userOfArt = "Submitter: "
+                + pathAndDataMap.get(imagePaths.get(position)).get(1);
+        holder.userSubmitted.setText(userOfArt);
 
     }
 

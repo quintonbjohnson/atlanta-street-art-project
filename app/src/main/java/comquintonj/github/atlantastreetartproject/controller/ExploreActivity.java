@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject.view;
+package comquintonj.github.atlantastreetartproject.controller;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -28,7 +28,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import comquintonj.github.atlantastreetartproject.ExploreAdapter;
 import comquintonj.github.atlantastreetartproject.R;
 import comquintonj.github.atlantastreetartproject.model.ArtInformation;
 

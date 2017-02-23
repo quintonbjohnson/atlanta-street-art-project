@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject.view;
+package comquintonj.github.atlantastreetartproject.controller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -48,10 +49,15 @@ import java.util.Random;
 import comquintonj.github.atlantastreetartproject.R;
 import comquintonj.github.atlantastreetartproject.model.ArtInformation;
 
+/**
+ * Submission page used to submit pieces of art
+ */
 public class SubmitActivity extends BaseDrawerActivity {
 
     private DatabaseReference mDatabase;
-    private EditText titleText, locationText, artistText, ratingText;
+    private EditText titleText;
+    private EditText locationText;
+    private EditText artistText;
     private Button submitButton;
     private ImageButton imageSelectButton;
     private FirebaseAuth mAuth;
@@ -116,6 +122,9 @@ public class SubmitActivity extends BaseDrawerActivity {
             @Override
             public void onClick(View v) {
                 if (v == submitButton) {
+                    if (!validateForm()) {
+                        return;
+                    }
                     submitArtInformation();
                     uploadFile();
                 }
@@ -157,7 +166,9 @@ public class SubmitActivity extends BaseDrawerActivity {
         });
     }
 
-    // Submit art information to the database
+    /**
+     * Called when a user decides to submit the art.
+     */
     private void submitArtInformation() {
         // Get current user
         user = mAuth.getCurrentUser();
@@ -182,7 +193,9 @@ public class SubmitActivity extends BaseDrawerActivity {
         mDatabase.child("Art").child(photoPath).child("Rating").setValue(pieceOfArt.getRating());
     }
 
-    // Method to show file chooser
+    /**
+     * Shows the file chooser to select an image from the user's device.
+     */
     public void showFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -190,7 +203,13 @@ public class SubmitActivity extends BaseDrawerActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
-    // Handling the image chooser activity result
+    /**
+     * On the result of the activity for the Google Places API location chooser
+     * and for the image selection screen.
+     * @param requestCode The request code used to decide which screen the user has completed.
+     * @param resultCode The result code to decide if there has been an error.
+     * @param data Data to include for the result.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -229,8 +248,6 @@ public class SubmitActivity extends BaseDrawerActivity {
                 if (resizedImage != null) {
                     imageSelectButton.setImageBitmap(resizedImage);
                     imageSelectButton.setBackgroundColor(255);
-
-                    Toast.makeText(this, "Set", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Please try again with a different image.",
                             Toast.LENGTH_SHORT).show();
@@ -340,17 +357,34 @@ public class SubmitActivity extends BaseDrawerActivity {
         }
     }
 
-    // Gets the first part of a user's email; ignores everything starting at '@'
-    private String getUserName(String email) {
-        String returnValue = "";
-        for (char ch : email.toCharArray()) {
-            if (ch == '@') {
-                return returnValue;
-            } else {
-                returnValue = returnValue + ch;
-            }
+    private boolean validateForm() {
+        boolean valid = true;
+
+        String title = titleText.getText().toString();
+        if (TextUtils.isEmpty(title)) {
+            titleText.setError("Required.");
+            valid = false;
+        } else {
+            titleText.setError(null);
         }
-        return returnValue;
+
+        String artist = artistText.getText().toString();
+        if (TextUtils.isEmpty(artist)) {
+            artistText.setError("Required.");
+            valid = false;
+        } else {
+            artistText.setError(null);
+        }
+
+        String location = locationText.getText().toString();
+        if (TextUtils.isEmpty(location)) {
+            locationText.setError("Required.");
+            valid = false;
+        } else {
+            locationText.setError(null);
+        }
+
+        return valid;
     }
 
 }

@@ -1,6 +1,5 @@
-package comquintonj.github.atlantastreetartproject.view;
+package comquintonj.github.atlantastreetartproject.controller;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -39,6 +38,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText confirmInfo;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private Intent introIntent;
     private Intent loginIntent;
     private FirebaseUser user;
     private DatabaseReference mDatabase;
@@ -88,7 +88,8 @@ public class RegistrationActivity extends AppCompatActivity {
         };
 
         // Set up intent to go to login screen upon successful registration
-        loginIntent = new Intent(this,LoginActivity.class);
+        introIntent = new Intent(this, IntroActivity.class);
+        loginIntent = new Intent(this, LoginActivity.class);
 
 
         // Set up registration button to add User with the edited text fields
@@ -256,8 +257,8 @@ public class RegistrationActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // app icon in action bar clicked; go home
-                loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(loginIntent);
+                introIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(introIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

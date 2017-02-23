@@ -10,26 +10,15 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="comquintonj.github.atlantastreetartproject.view.LoginActivity">
-
-    <TextView
-        android:text="@string/not_a_member_register_now"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/loginButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:id="@+id/registerView"
-        android:textSize="16sp"
-        android:fontFamily="sans-serif" />
+    tools:context="comquintonj.github.atlantastreetartproject.controller.LoginActivity">
 
     <TextView
         android:text="@string/continue_as_guest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="40dp"
         android:id="@+id/guestTextView"
-        android:layout_below="@+id/registerView"
+        android:layout_below="@+id/loginButton"
         android:layout_centerHorizontal="true"
         android:fontFamily="sans-serif"
         android:textSize="16sp" />

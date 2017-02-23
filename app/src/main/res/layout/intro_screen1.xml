@@ -25,7 +25,8 @@
             android:text="@string/intro_1_title"
             android:textColor="@android:color/white"
             android:textSize="@dimen/slide_title"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:fontFamily="sans-serif" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,7 +37,8 @@
             android:text="@string/intro_1_tag"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/slide_desc" />
+            android:textSize="@dimen/slide_desc"
+            android:fontFamily="sans-serif" />
 
     </LinearLayout>
 

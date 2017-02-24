@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject.controller;
+package comquintonj.github.atlantastreetartproject.model;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -18,9 +18,19 @@ import java.util.HashMap;
 
 import comquintonj.github.atlantastreetartproject.R;
 
+/**
+ * The adapter for the explore activity for the RecyclerView
+ */
 public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
 
+    /**
+     * The current context of the application
+     */
     private Context mContext;
+
+    /**
+     * The HashMap that stores the path to the image and data
+     */
     private HashMap<String, ArrayList<String>> pathAndDataMap;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -34,6 +44,11 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
         }
     }
 
+    /**
+     * Constructor for the adapter
+     * @param mContext the current context of the application
+     * @param pathAndDataMap the HashMap that stores the path to the image and data
+     */
     public ExploreAdapter(Context mContext,
                           HashMap<String, ArrayList<String>> pathAndDataMap) {
         this.mContext = mContext;

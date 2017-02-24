@@ -1,26 +1,16 @@
 package comquintonj.github.atlantastreetartproject.controller;
 
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,16 +20,28 @@ import java.util.LinkedHashMap;
 
 import comquintonj.github.atlantastreetartproject.R;
 import comquintonj.github.atlantastreetartproject.model.ArtInformation;
+import comquintonj.github.atlantastreetartproject.model.ExploreAdapter;
 
+/**
+ * Home page of the application that users will see when they log in.
+ * Shows a list of the art that has been uploaded.
+ */
 public class ExploreActivity extends BaseDrawerActivity {
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private FirebaseAuth mAuth;
-    private StorageReference storageRef;
-    private DatabaseReference mRef;
-    private HashMap<String, ArrayList<String>> pathAndDataMap;
+    /**
+     * Adapter for the recycler view that allows it to show the art
+     */
     private ExploreAdapter adapter;
+
+    /**
+     * Hash map used to store where the art is located and information about the art
+     */
+    private HashMap<String, ArrayList<String>> pathAndDataMap;
+
+    /**
+     * Recycler view that shows the list of cards which contain information about art
+     */
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,37 +50,20 @@ public class ExploreActivity extends BaseDrawerActivity {
         setContentView(R.layout.activity_explore);
         setTitle("Explore");
 
-        // Get Instance of Firebase
-        mAuth = FirebaseAuth.getInstance();
-        storageRef = FirebaseStorage.getInstance().getReference();
-        mRef = FirebaseDatabase.getInstance().getReference();
+        // Set up toolbar at top of activity
+        createToolbar();
 
-        // Set up Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        // Create the navigation drawer
+        createDrawer();
 
-        // Create drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        // Set profile name
-        View header = navigationView.getHeaderView(0);
-        FirebaseUser user = mAuth.getCurrentUser();
-        TextView headerName = (TextView) header.findViewById(R.id.profileNameText);
-        assert user != null;
-        headerName.setText(user.getDisplayName());
+        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
         // Initiate Recycler View
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
         // Use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -117,12 +102,6 @@ public class ExploreActivity extends BaseDrawerActivity {
 
             }
         });
-    }
-
-    public void populateAdapter(HashMap<String, ArrayList<String>> pathAndDataMap) {
-        // Populate Adapter
-        adapter = new ExploreAdapter(this.getApplicationContext(), pathAndDataMap);
-        mRecyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -195,5 +174,14 @@ public class ExploreActivity extends BaseDrawerActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Populates the adapter with art found in the pathAndDataMap.
+     * @param pathAndDataMap the HashMap that contains the image path and data for all art
+     */
+    public void populateAdapter(HashMap<String, ArrayList<String>> pathAndDataMap) {
+        adapter = new ExploreAdapter(this.getApplicationContext(), pathAndDataMap);
+        mRecyclerView.setAdapter(adapter);
     }
 }

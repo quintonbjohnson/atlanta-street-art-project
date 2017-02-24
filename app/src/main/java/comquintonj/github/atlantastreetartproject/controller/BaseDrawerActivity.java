@@ -19,41 +19,34 @@ import com.google.firebase.auth.FirebaseUser;
 
 import comquintonj.github.atlantastreetartproject.R;
 
+/**
+ * Base navigation drawer activity that other activities extend in order to provide navigation
+ * drawer functionality across multiple activities
+ */
 public class BaseDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    /**
+     * Authentication instance of the FireabseAuth
+     */
     private FirebaseAuth mAuth;
-    private FirebaseUser user;
+
+    /**
+     * Status bar at the top of the Activity
+     */
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_drawer);
-
-        // Get instance of Firebase
         mAuth = FirebaseAuth.getInstance();
 
-        // Set up Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        // Set up toolbar at top of activity
+        createToolbar();
 
-        // Create drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        // Set navigation drawer
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View header = navigationView.getHeaderView(0);
-
-        // Set profile name in navigation drawer
-        user = mAuth.getCurrentUser();
-        TextView headerName = (TextView)header.findViewById(R.id.profileNameText);
-        assert user != null;
-        headerName.setText(user.getEmail());
+        // Create the navigation drawer
+        createDrawer();
     }
 
     @Override
@@ -89,7 +82,7 @@ public class BaseDrawerActivity extends AppCompatActivity
             // Check to make sure the user is not currently in the Submit Activity
             if (this.getClass().equals(SubmitActivity.class)) {
                 onBackPressed();
-            } else if (user.getDisplayName() == null) {
+            } else if (mAuth.getCurrentUser().getDisplayName() == null) {
                 Toast.makeText(this, "Please create an account to use this feature.",
                         Toast.LENGTH_SHORT).show();
             } else {
@@ -106,5 +99,38 @@ public class BaseDrawerActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * Creates the status bar at the top of the screen
+     */
+    public void createToolbar() {
+        // Set up Toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+    /**
+     * Creates and populates the navigation drawer
+     */
+    public void createDrawer() {
+        // Create drawer
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        // Set navigation drawer
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0);
+
+        // Set profile name in navigation drawer
+        TextView headerName = (TextView)header.findViewById(R.id.profileNameText);
+        FirebaseUser user = mAuth.getCurrentUser();
+        assert user != null;
+        headerName.setText(user.getDisplayName());
     }
 }

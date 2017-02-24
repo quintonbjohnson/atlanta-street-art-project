@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,14 +20,44 @@ import com.google.firebase.auth.FirebaseUser;
 
 import comquintonj.github.atlantastreetartproject.R;
 
+/**
+ * Activity used to log in users.
+ */
 public class LoginActivity extends AppCompatActivity {
 
+    /**
+     * Authentication instance of the FireabseAuth
+     */
     private FirebaseAuth mAuth;
+
+    /**
+     * TAG used for error messages
+     */
     private static final String TAG = "MyActivity";
+
+    /**
+     * Intent to go to the explore activity
+     */
     private Intent exploreIntent;
+
+    /**
+     * AuthStateListener for Firebase to determine if a user is already signed in
+     */
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+    /**
+     * EditText for the email field
+     */
     private EditText emailText;
+
+    /**
+     * EditText for the password field
+     */
     private EditText passwordText;
+
+    /**
+     * Intent to go to the intro screen
+     */
     private Intent introIntent;
 
     @Override
@@ -88,31 +116,23 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // Sign in with a regular email and password
-    private void signIn(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
-        if (!validateForm()) {
-            return;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                introIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(introIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
-
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithEmail:failed", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
     }
 
-    // Taken from Firebase Support
+    /**
+     * Validates the form to ensure that no fields are left empty
+     * @return true if the form is ready to be submitted, false otherwise
+     */
     private boolean validateForm() {
         boolean valid = true;
 
@@ -135,17 +155,32 @@ public class LoginActivity extends AppCompatActivity {
         return valid;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // app icon in action bar clicked; go home
-                introIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(introIntent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+    /**
+     * Used to sign in a user.
+     * @param email the email the user used to sign in
+     * @param password the password the user used to sign in
+     */
+    private void signIn(String email, String password) {
+        Log.d(TAG, "signIn:" + email);
+        if (!validateForm()) {
+            return;
         }
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInWithEmail:failed", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }
 

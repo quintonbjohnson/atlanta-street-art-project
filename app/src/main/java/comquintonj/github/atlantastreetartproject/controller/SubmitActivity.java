@@ -8,10 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -20,8 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -54,27 +48,74 @@ import comquintonj.github.atlantastreetartproject.model.ArtInformation;
  */
 public class SubmitActivity extends BaseDrawerActivity {
 
+    /**
+     * A reference to the Firebase database to store information about the art
+     */
     private DatabaseReference mDatabase;
+
+    /**
+     * EditText for the title field
+     */
     private EditText titleText;
+
+    /**
+     * EditText for the location field
+     */
     private EditText locationText;
+
+    /**
+     * EditText for the artist field
+     */
     private EditText artistText;
+
+    /**
+     * The submit Button
+     */
     private Button submitButton;
+
+    /**
+     * The ImageButton that takes the user to the image picker
+     */
     private ImageButton imageSelectButton;
+
+    /**
+     * Authentication instance of the FireabseAuth
+     */
     private FirebaseAuth mAuth;
+
+    /**
+     * Request code to decide where to take the user upon an action
+     */
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
+
+    /**
+     * TAG used for error messages
+     */
     private static final String TAG = "MyActivity";
+
+    /**
+     * The ID of the place the user selects as the location
+     */
     private String placeId;
+
+    /**
+     * The current user
+     */
     private FirebaseUser user;
 
-    // A constant to track the file chooser intent
+    /**
+     * A constant to track the file chooser intent
+     */
     private static final int PICK_IMAGE_REQUEST = 234;
 
+    /**
+     * A reference to the Firebase storage kept in order to upload images
+     */
     StorageReference storageReference;
 
-    // ImageView
-    private ImageView imageView;
-
-    // A Uri object to store file path
+    /**
+     * A Uri object to store the file path of the image
+     */
     private Uri filePath;
 
     @Override
@@ -88,26 +129,11 @@ public class SubmitActivity extends BaseDrawerActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        // Set up Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        // Set up toolbar at top of activity
+        createToolbar();
 
-        // Create drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        // Set profile name
-        View header = navigationView.getHeaderView(0);
-        user = mAuth.getCurrentUser();
-        TextView headerName = (TextView) header.findViewById(R.id.profileNameText);
-        assert user != null;
-        headerName.setText(user.getDisplayName());
+        // Create the navigation drawer
+        createDrawer();
 
         // Instantiate resources
         titleText = (EditText) findViewById(R.id.titleText);
@@ -141,6 +167,7 @@ public class SubmitActivity extends BaseDrawerActivity {
             }
         });
 
+        // Create a Google Places Client that will allow the user to search location for the art
         GoogleApiClient mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
@@ -154,6 +181,7 @@ public class SubmitActivity extends BaseDrawerActivity {
                 })
                 .build();
 
+        // When a user enters location take them to them to the Autocomplete Activity
         locationText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -187,10 +215,21 @@ public class SubmitActivity extends BaseDrawerActivity {
                 location, photoPath, rating, title);
 
         // Saving data to Firebase database
-        mDatabase.child("Art").child(photoPath).child("Artist").setValue(pieceOfArt.getArtist());
-        mDatabase.child("Art").child(photoPath).child("Location").setValue(pieceOfArt.getLocation());
-        mDatabase.child("Art").child(photoPath).child("Display Name").setValue(pieceOfArt.getDisplayName());
-        mDatabase.child("Art").child(photoPath).child("Rating").setValue(pieceOfArt.getRating());
+        // Artist
+        mDatabase.child("Art").child(photoPath)
+                .child("Artist").setValue(pieceOfArt.getArtist());
+
+        // Location
+        mDatabase.child("Art").child(photoPath)
+                .child("Location").setValue(pieceOfArt.getLocation());
+
+        // Display Name
+        mDatabase.child("Art").child(photoPath)
+                .child("Display Name").setValue(pieceOfArt.getDisplayName());
+
+        // Rating
+        mDatabase.child("Art").child(photoPath)
+                .child("Rating").setValue(pieceOfArt.getRating());
     }
 
     /**
@@ -259,7 +298,9 @@ public class SubmitActivity extends BaseDrawerActivity {
         }
     }
 
-    // Upload the file to Firebase
+    /**
+     * Uploads the file to Firebase storage
+     */
     public void uploadFile() {
         // If there is a file to upload
         if (filePath != null) {
@@ -307,8 +348,13 @@ public class SubmitActivity extends BaseDrawerActivity {
         }
     }
 
-    // Credits: http://stackoverflow.com/
-    // questions/15124179/resizing-a-bitmap-to-a-fixed-value-but-without-changing-the-aspect-ratio
+    /**
+     * Resizes the bitmap in order to constrain the image to the image view.
+     * Credits: http://stackoverflow.com/
+     * questions/15124179/resizing-a-bitmap-to-a-fixed-value-but-without-changing-the-aspect-ratio
+     * @param bm the bitmap to resize
+     * @return the resized bitmap image
+     */
     private Bitmap resizeImage(Bitmap bm) {
         if (bm != null) {
             int width = bm.getWidth();
@@ -344,7 +390,10 @@ public class SubmitActivity extends BaseDrawerActivity {
         return null;
     }
 
-    // Google Places API used to find a location and store it in the location text field
+    /**
+     * The Autocomplete intent from the Google Places API to choose the location of the art
+     * @param view the current view
+     */
     public void findPlace(View view) {
         try {
             Intent intent =
@@ -357,6 +406,10 @@ public class SubmitActivity extends BaseDrawerActivity {
         }
     }
 
+    /**
+     * Validates the form to ensure that no fields are left empty
+     * @return true if the form is ready to be submitted, false otherwise
+     */
     private boolean validateForm() {
         boolean valid = true;
 
@@ -386,6 +439,5 @@ public class SubmitActivity extends BaseDrawerActivity {
 
         return valid;
     }
-
 }
 

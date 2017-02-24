@@ -30,18 +30,44 @@ import comquintonj.github.atlantastreetartproject.R;
  */
 public class IntroActivity extends AppCompatActivity {
 
-    private ViewPager viewPager;
-    private MyViewPagerAdapter myViewPagerAdapter;
-    private LinearLayout dotsLayout;
-    private TextView[] dots;
-    private int[] layouts;
-    private Button gettingStartedButton;
-    private TextView logInText;
-    private Intent loginIntent;
-    private Intent registrationIntent;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+    /**
+     * Authentication instance of the FireabseAuth
+     */
     private FirebaseAuth mAuth;
+
+    /**
+     * AuthStateListener for Firebase to determine if a user is already signed in
+     */
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
+    /**
+     * The layouts that exist for the indicators
+     */
+    private int[] layouts;
+
+    /**
+     * Intent to go to the explore activity
+     */
     private Intent exploreIntent;
+
+    /**
+     * Intent to go to the login activity
+     */
+    private Intent loginIntent;
+
+    /**
+     * Intent to go to the registration activity
+     */
+    private Intent registrationIntent;
+
+    /**
+     * LinearLayout for the indicators
+     */
+    private LinearLayout dotsLayout;
+
+    /**
+     * TAG used for error messages
+     */
     private static final String TAG = "MyActivity";
 
     @Override
@@ -56,10 +82,10 @@ public class IntroActivity extends AppCompatActivity {
         }
 
         // Instantiate views
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
-        gettingStartedButton = (Button) findViewById(R.id.getting_started_button);
-        logInText = (TextView) findViewById(R.id.log_in_text);
+        Button gettingStartedButton = (Button) findViewById(R.id.getting_started_button);
+        TextView logInText = (TextView) findViewById(R.id.log_in_text);
 
         // Set up intents to use for later
         loginIntent = new Intent(this, LoginActivity.class);
@@ -97,7 +123,7 @@ public class IntroActivity extends AppCompatActivity {
         changeStatusBarColor();
 
         // Create an adapter for the intro screens
-        myViewPagerAdapter = new MyViewPagerAdapter();
+        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
@@ -123,7 +149,7 @@ public class IntroActivity extends AppCompatActivity {
      * @param currentPage The page that the slider is currently on.
      */
     private void addIndicators(int currentPage) {
-        dots = new TextView[layouts.length];
+        TextView[] dots = new TextView[layouts.length];
 
         int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
         int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
@@ -141,12 +167,9 @@ public class IntroActivity extends AppCompatActivity {
             dots[currentPage].setTextColor(colorsActive[currentPage]);
     }
 
-    private int getItem(int i) {
-        return viewPager.getCurrentItem() + i;
-    }
-
-    //  viewpager change listener
-    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+    // ViewPager ChangeListener to updates the indicators
+    ViewPager.OnPageChangeListener viewPagerPageChangeListener
+            = new ViewPager.OnPageChangeListener() {
 
         @Override
         public void onPageSelected(int position) {

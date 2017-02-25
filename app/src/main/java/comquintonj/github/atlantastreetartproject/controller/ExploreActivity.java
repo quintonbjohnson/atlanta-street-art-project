@@ -50,11 +50,8 @@ public class ExploreActivity extends BaseDrawerActivity {
         setContentView(R.layout.activity_explore);
         setTitle("Explore");
 
-        // Set up toolbar at top of activity
-        createToolbar();
-
         // Create the navigation drawer
-        createDrawer();
+        createNavigationDrawer();
 
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 

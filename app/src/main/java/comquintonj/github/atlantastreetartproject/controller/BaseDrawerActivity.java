@@ -42,11 +42,8 @@ public class BaseDrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_base_drawer);
         mAuth = FirebaseAuth.getInstance();
 
-        // Set up toolbar at top of activity
-        createToolbar();
-
         // Create the navigation drawer
-        createDrawer();
+        createNavigationDrawer();
     }
 
     @Override
@@ -102,18 +99,13 @@ public class BaseDrawerActivity extends AppCompatActivity
     }
 
     /**
-     * Creates the status bar at the top of the screen
+     * Creates and populates the navigation drawer
      */
-    public void createToolbar() {
+    public void createNavigationDrawer() {
         // Set up Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-    }
 
-    /**
-     * Creates and populates the navigation drawer
-     */
-    public void createDrawer() {
         // Create drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

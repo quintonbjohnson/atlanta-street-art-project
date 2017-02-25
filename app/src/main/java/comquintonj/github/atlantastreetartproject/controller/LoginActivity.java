@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordText;
 
     /**
-     * Authentication instance of the FireabseAuth
+     * Authentication instance of the FirebaseAuth
      */
     private FirebaseAuth mAuth;
 
@@ -66,7 +66,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
         setTitle("Log In");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         mAuth = FirebaseAuth.getInstance();
         exploreIntent = new Intent(this, ExploreActivity.class);
         introIntent = new Intent(this, IntroActivity.class);

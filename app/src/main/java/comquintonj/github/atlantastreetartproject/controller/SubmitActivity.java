@@ -7,7 +7,6 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -18,14 +17,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -74,7 +69,7 @@ public class SubmitActivity extends BaseDrawerActivity {
     private EditText artistText;
 
     /**
-     * Authentication instance of the FireabseAuth
+     * Authentication instance of the FirebaseAuth
      */
     private FirebaseAuth mAuth;
 
@@ -101,7 +96,7 @@ public class SubmitActivity extends BaseDrawerActivity {
     /**
      * A reference to the Firebase storage kept in order to upload images
      */
-    StorageReference storageReference;
+    private StorageReference storageReference;
 
     /**
      * The ID of the place the user selects as the location
@@ -164,26 +159,12 @@ public class SubmitActivity extends BaseDrawerActivity {
             }
         });
 
-        // Create a Google Places Client that will allow the user to search location for the art
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, new OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        Toast.makeText(SubmitActivity.this,
-                                "Please try again later.", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .build();
-
         // When a user enters location take them to them to the Autocomplete Activity
         locationText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(MotionEvent.ACTION_UP == event.getAction()) {
-                    findPlace(v);
+                    findPlace();
                 }
 
                 return true; // return is important...
@@ -232,7 +213,7 @@ public class SubmitActivity extends BaseDrawerActivity {
     /**
      * Shows the file chooser to select an image from the user's device.
      */
-    public void showFileChooser() {
+    private void showFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -271,6 +252,7 @@ public class SubmitActivity extends BaseDrawerActivity {
                 Log.e(TAG, "Error: Status = " + status.toString());
             } else if (resultCode == RESULT_CANCELED) {
                 // User left search intent
+                Log.i(TAG, "User left intent");
             }
         }
 
@@ -298,7 +280,7 @@ public class SubmitActivity extends BaseDrawerActivity {
     /**
      * Uploads the file to Firebase storage
      */
-    public void uploadFile() {
+    private void uploadFile() {
         // If there is a file to upload
         if (filePath != null) {
             // Displaying a progress dialog while upload is going on
@@ -346,7 +328,7 @@ public class SubmitActivity extends BaseDrawerActivity {
     }
 
     /**
-     * Resizes the bitmap in order to constrain the image to the image view.
+     * Resize the bitmap in order to constrain the image to the image view.
      * Credits: http://stackoverflow.com/
      * questions/15124179/resizing-a-bitmap-to-a-fixed-value-but-without-changing-the-aspect-ratio
      * @param bm the bitmap to resize
@@ -389,9 +371,8 @@ public class SubmitActivity extends BaseDrawerActivity {
 
     /**
      * The Autocomplete intent from the Google Places API to choose the location of the art
-     * @param view the current view
      */
-    public void findPlace(View view) {
+    private void findPlace() {
         try {
             Intent intent =
                     new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)

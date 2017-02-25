@@ -31,7 +31,7 @@ import comquintonj.github.atlantastreetartproject.R;
 public class IntroActivity extends AppCompatActivity {
 
     /**
-     * Authentication instance of the FireabseAuth
+     * Authentication instance of the FirebaseAuth
      */
     private FirebaseAuth mAuth;
 
@@ -168,7 +168,7 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     // ViewPager ChangeListener to updates the indicators
-    ViewPager.OnPageChangeListener viewPagerPageChangeListener
+    private ViewPager.OnPageChangeListener viewPagerPageChangeListener
             = new ViewPager.OnPageChangeListener() {
 
         @Override

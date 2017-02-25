@@ -26,7 +26,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
     /**
      * The current context of the application
      */
-    private Context mContext;
+    final private Context mContext;
 
     /**
      * The HashMap that stores the path to the image and data
@@ -76,7 +76,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
         for (String pathName : imagePaths) {
             StorageReference pathReference = storageRef.child(pathName);
             images.add(pathReference);
-        };
+        }
 
         // Retrieve images from references
         StorageReference pieceOfArt = images.get(position);

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -57,7 +56,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText usernameInfo;
 
     /**
-     * Authentication instance of the FireabseAuth
+     * Authentication instance of the FirebaseAuth
      */
     private FirebaseAuth mAuth;
 
@@ -92,8 +91,9 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         setTitle("Registration");
-        Toolbar appbar = (Toolbar) findViewById(R.id.toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -196,7 +196,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
         // Allow text view for guest to send user to explore screen
         TextView guestView = (TextView) findViewById(R.id.guest_text_view);
-        final Intent guestIntent = new Intent(this, ExploreActivity.class);
         guestView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

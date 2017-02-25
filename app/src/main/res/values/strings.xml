@@ -4,11 +4,11 @@
     <string name="password">Password</string>
     <string name="continue_as_guest">Continue as guest</string>
     <string name="username">Username</string>
-    <string name="login">Login</string>
+    <string name="login">Log In</string>
     <string name="email">Email</string>
     <string name="emailRegister">Email</string>
     <string name="passwordRegister">Password</string>
-    <string name="confirm_password">Confirm password</string>
+    <string name="confirm_password">Confirm Password</string>
     <string name="register">Register</string>
     <string name="sign_out">Sign Out</string>
     <string name="submit">Submit</string>

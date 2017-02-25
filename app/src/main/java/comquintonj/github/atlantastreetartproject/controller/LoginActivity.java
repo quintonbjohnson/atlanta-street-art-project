@@ -26,26 +26,6 @@ import comquintonj.github.atlantastreetartproject.R;
 public class LoginActivity extends AppCompatActivity {
 
     /**
-     * Authentication instance of the FireabseAuth
-     */
-    private FirebaseAuth mAuth;
-
-    /**
-     * TAG used for error messages
-     */
-    private static final String TAG = "MyActivity";
-
-    /**
-     * Intent to go to the explore activity
-     */
-    private Intent exploreIntent;
-
-    /**
-     * AuthStateListener for Firebase to determine if a user is already signed in
-     */
-    private FirebaseAuth.AuthStateListener mAuthListener;
-
-    /**
      * EditText for the email field
      */
     private EditText emailText;
@@ -56,16 +36,36 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordText;
 
     /**
+     * Authentication instance of the FireabseAuth
+     */
+    private FirebaseAuth mAuth;
+
+    /**
+     * AuthStateListener for Firebase to determine if a user is already signed in
+     */
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
+    /**
+     * Intent to go to the explore activity
+     */
+    private Intent exploreIntent;
+
+    /**
      * Intent to go to the intro screen
      */
     private Intent introIntent;
+
+    /**
+     * TAG used for error messages
+     */
+    private static final String TAG = "MyActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Create layout
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
-        setTitle("Login");
+        setTitle("Log In");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mAuth = FirebaseAuth.getInstance();
         exploreIntent = new Intent(this, ExploreActivity.class);

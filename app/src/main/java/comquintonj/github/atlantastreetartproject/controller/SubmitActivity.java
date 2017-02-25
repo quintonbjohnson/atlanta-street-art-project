@@ -49,6 +49,11 @@ import comquintonj.github.atlantastreetartproject.model.ArtInformation;
 public class SubmitActivity extends BaseDrawerActivity {
 
     /**
+     * The submit Button
+     */
+    private Button submitButton;
+
+    /**
      * A reference to the Firebase database to store information about the art
      */
     private DatabaseReference mDatabase;
@@ -69,34 +74,9 @@ public class SubmitActivity extends BaseDrawerActivity {
     private EditText artistText;
 
     /**
-     * The submit Button
-     */
-    private Button submitButton;
-
-    /**
-     * The ImageButton that takes the user to the image picker
-     */
-    private ImageButton imageSelectButton;
-
-    /**
      * Authentication instance of the FireabseAuth
      */
     private FirebaseAuth mAuth;
-
-    /**
-     * Request code to decide where to take the user upon an action
-     */
-    private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
-
-    /**
-     * TAG used for error messages
-     */
-    private static final String TAG = "MyActivity";
-
-    /**
-     * The ID of the place the user selects as the location
-     */
-    private String placeId;
 
     /**
      * The current user
@@ -104,14 +84,34 @@ public class SubmitActivity extends BaseDrawerActivity {
     private FirebaseUser user;
 
     /**
+     * The ImageButton that takes the user to the image picker
+     */
+    private ImageButton imageSelectButton;
+
+    /**
      * A constant to track the file chooser intent
      */
     private static final int PICK_IMAGE_REQUEST = 234;
 
     /**
+     * Request code to decide where to take the user upon an action
+     */
+    private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
+
+    /**
      * A reference to the Firebase storage kept in order to upload images
      */
     StorageReference storageReference;
+
+    /**
+     * The ID of the place the user selects as the location
+     */
+    private String placeId;
+
+    /**
+     * TAG used for error messages
+     */
+    private static final String TAG = "MyActivity";
 
     /**
      * A Uri object to store the file path of the image
@@ -321,7 +321,7 @@ public class SubmitActivity extends BaseDrawerActivity {
                             progressDialog.dismiss();
 
                             //and displaying a success toast
-                            Toast.makeText(getApplicationContext(), "File Uploaded ",
+                            Toast.makeText(getApplicationContext(), "Art Uploaded",
                                     Toast.LENGTH_LONG).show();
                             Intent exploreIntent = new Intent(SubmitActivity.this,
                                     ExploreActivity.class);

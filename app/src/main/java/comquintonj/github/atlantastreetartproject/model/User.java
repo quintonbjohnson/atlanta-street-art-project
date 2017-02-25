@@ -3,14 +3,14 @@ package comquintonj.github.atlantastreetartproject.model;
 public class User {
 
     /**
-     * Profile name for the user
-     */
-    private String profileName;
-
-    /**
      * The email of the user
      */
     private String email;
+
+    /**
+     * Profile name for the user
+     */
+    private String profileName;
 
     /**
      * No args constructor.

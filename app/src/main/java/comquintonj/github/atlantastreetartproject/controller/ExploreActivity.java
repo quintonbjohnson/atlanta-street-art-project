@@ -68,7 +68,7 @@ public class ExploreActivity extends BaseDrawerActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 pathAndDataMap =
-                        new HashMap<String, ArrayList<String>>();
+                        new HashMap<>();
 
                 // Get the data of the art from each individual piece of art
                 for (DataSnapshot dsp : dataSnapshot.child("Art").getChildren()) {
@@ -81,7 +81,7 @@ public class ExploreActivity extends BaseDrawerActivity {
                     String rating = String.valueOf(dsp.child("Rating").getValue());
 
                     // Create an array list to hold the data for an individual piece of art
-                    ArrayList<String> imageData = new ArrayList<String>();
+                    ArrayList<String> imageData = new ArrayList<>();
                     imageData.add(artist);
                     imageData.add(displayName);
                     imageData.add(location);
@@ -123,10 +123,10 @@ public class ExploreActivity extends BaseDrawerActivity {
 
             // Get the array lists of data from the hash map
             ArrayList<ArrayList<String>> dataList =
-                    new ArrayList<ArrayList<String>>(pathAndDataMap.values());
+                    new ArrayList<>(pathAndDataMap.values());
 
             // Create a list that will hold ArtInformation objects
-            ArrayList<ArtInformation> art = new ArrayList<ArtInformation>();
+            ArrayList<ArtInformation> art = new ArrayList<>();
 
             // Iterate through the data for each key from the hash map,
             // and create ArtInformation objects from that
@@ -155,7 +155,7 @@ public class ExploreActivity extends BaseDrawerActivity {
             // Prepare to put sorted art back into a hash map
             HashMap<String, ArrayList<String>> resultMap = new LinkedHashMap<>();
             for (ArtInformation product : art) {
-                ArrayList<String> resultData = new ArrayList<String>();
+                ArrayList<String> resultData = new ArrayList<>();
                 resultData.add(product.getArtist());
                 resultData.add(product.getDisplayName());
                 resultData.add(product.getLocation());
@@ -177,7 +177,7 @@ public class ExploreActivity extends BaseDrawerActivity {
      * Populates the adapter with art found in the pathAndDataMap.
      * @param pathAndDataMap the HashMap that contains the image path and data for all art
      */
-    public void populateAdapter(HashMap<String, ArrayList<String>> pathAndDataMap) {
+    private void populateAdapter(HashMap<String, ArrayList<String>> pathAndDataMap) {
         adapter = new ExploreAdapter(this.getApplicationContext(), pathAndDataMap);
         mRecyclerView.setAdapter(adapter);
     }

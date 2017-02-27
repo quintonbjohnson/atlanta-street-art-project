@@ -13,13 +13,6 @@ public class User {
     private String profileName;
 
     /**
-     * No args constructor.
-     */
-    public User() {
-
-    }
-
-    /**
      * Constructor for a user object.
      * @param profileName The username the user enters upon registering
      * @param email The email associated with the user's account

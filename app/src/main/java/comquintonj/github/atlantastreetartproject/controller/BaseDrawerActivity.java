@@ -27,14 +27,9 @@ public class BaseDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     /**
-     * Authentication instance of the FireabseAuth
+     * Authentication instance of the FirebaseAuth
      */
     private FirebaseAuth mAuth;
-
-    /**
-     * Status bar at the top of the Activity
-     */
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,43 +54,46 @@ public class BaseDrawerActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        if (mAuth.getCurrentUser() != null) {
+            // Handle navigation view item clicks here.
+            int id = item.getItemId();
 
-        // If Explore screen is chosen
-        if (id == R.id.nav_explore) {
-            // Check to make sure the user is not currently in the Explore Activity
-            if (this.getClass().equals(ExploreActivity.class)) {
-                onBackPressed();
-            } else {
-                Intent exploreIntent = new Intent(this, ExploreActivity.class);
-                startActivity(exploreIntent);
+            // If Explore screen is chosen
+            if (id == R.id.nav_explore) {
+                // Check to make sure the user is not currently in the Explore Activity
+                if (this.getClass().equals(ExploreActivity.class)) {
+                    onBackPressed();
+                } else {
+                    Intent exploreIntent = new Intent(this, ExploreActivity.class);
+                    startActivity(exploreIntent);
+                }
+            } else if (id == R.id.nav_map) {
+
+            } else if (id == R.id.nav_tour) {
+
+            } else if (id == R.id.nav_submit) {
+                // Check to make sure the user is not currently in the Submit Activity
+                if (this.getClass().equals(SubmitActivity.class)) {
+                    onBackPressed();
+                } else if (mAuth.getCurrentUser().getDisplayName() == null) {
+                    Toast.makeText(this, "Please create an account to use this feature.",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent submitIntent = new Intent(this, SubmitActivity.class);
+                    startActivity(submitIntent);
+                }
+            } else if (id == R.id.nav_sign_out) {
+                // Sign out the User
+                mAuth.signOut();
+                Intent introIntent = new Intent(this, IntroActivity.class);
+                startActivity(introIntent);
             }
-        } else if (id == R.id.nav_map) {
 
-        } else if (id == R.id.nav_tour) {
-
-        } else if (id == R.id.nav_submit) {
-            // Check to make sure the user is not currently in the Submit Activity
-            if (this.getClass().equals(SubmitActivity.class)) {
-                onBackPressed();
-            } else if (mAuth.getCurrentUser().getDisplayName() == null) {
-                Toast.makeText(this, "Please create an account to use this feature.",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                Intent submitIntent = new Intent(this, SubmitActivity.class);
-                startActivity(submitIntent);
-            }
-        } else if (id == R.id.nav_sign_out) {
-            // Sign out the User
-            mAuth.signOut();
-            Intent introIntent = new Intent(this, IntroActivity.class);
-            startActivity(introIntent);
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return false;
     }
 
     /**
@@ -103,7 +101,7 @@ public class BaseDrawerActivity extends AppCompatActivity
      */
     public void createNavigationDrawer() {
         // Set up Toolbar
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Create drawer

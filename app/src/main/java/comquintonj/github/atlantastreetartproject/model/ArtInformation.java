@@ -33,13 +33,6 @@ public class ArtInformation {
     private String title;
 
     /**
-     * No args constructor
-     */
-    public ArtInformation(){
-
-    }
-
-    /**
      * Constructor for a piece of art
      * @param artist the artist
      * @param displayName the display name of the user that submitted the art

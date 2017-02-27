@@ -129,11 +129,8 @@ public class SubmitActivity extends BaseDrawerActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        // Set up toolbar at top of activity
-        createToolbar();
-
         // Create the navigation drawer
-        createDrawer();
+        createNavigationDrawer();
 
         // Instantiate resources
         titleText = (EditText) findViewById(R.id.titleText);

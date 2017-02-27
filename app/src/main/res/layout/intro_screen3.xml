@@ -16,7 +16,7 @@
         <ImageView
             android:layout_width="@dimen/img_width_height"
             android:layout_height="@dimen/img_width_height"
-            android:src="@drawable/ic_boot_intro"
+            android:src="@drawable/ic_hiking_boot"
             android:layout_marginBottom="20dp" />
 
         <TextView

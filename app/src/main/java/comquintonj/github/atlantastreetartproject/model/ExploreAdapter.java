@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject;
+package comquintonj.github.atlantastreetartproject.model;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -16,9 +16,21 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import comquintonj.github.atlantastreetartproject.R;
+
+/**
+ * The adapter for the explore activity for the RecyclerView
+ */
 public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
 
-    private Context mContext;
+    /**
+     * The current context of the application
+     */
+    final private Context mContext;
+
+    /**
+     * The HashMap that stores the path to the image and data
+     */
     private HashMap<String, ArrayList<String>> pathAndDataMap;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -32,6 +44,11 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
         }
     }
 
+    /**
+     * Constructor for the adapter
+     * @param mContext the current context of the application
+     * @param pathAndDataMap the HashMap that stores the path to the image and data
+     */
     public ExploreAdapter(Context mContext,
                           HashMap<String, ArrayList<String>> pathAndDataMap) {
         this.mContext = mContext;
@@ -59,7 +76,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
         for (String pathName : imagePaths) {
             StorageReference pathReference = storageRef.child(pathName);
             images.add(pathReference);
-        };
+        }
 
         // Retrieve images from references
         StorageReference pieceOfArt = images.get(position);
@@ -69,8 +86,9 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
                 .into(holder.pictureOfArt);
 
         // Using same position, set proper artist name
-        String submitter = pathAndDataMap.get(imagePaths.get(position)).get(1);
-        holder.userSubmitted.setText(submitter);
+        String userOfArt = "Submitter: "
+                + pathAndDataMap.get(imagePaths.get(position)).get(1);
+        holder.userSubmitted.setText(userOfArt);
 
     }
 

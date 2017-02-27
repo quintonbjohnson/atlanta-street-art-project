@@ -6,4 +6,33 @@
     <color name="Them1">#d8d8d8</color>
     <color name="Theme2">#eeeeee</color>
 
+
+    <!-- Intro Screen Backgrounds -->
+    <color name="bg_intro1">#1CB1AF</color>
+    <color name="bg_intro2">#3395ff</color>
+    <color name="bg_intro3">#20d2bb</color>
+
+    <!-- Inactive Indicator Dots -->
+    <color name="dot_inactive_screen1">#0B9484</color>
+    <color name="dot_inactive_screen2">#2278d4</color>
+    <color name="dot_inactive_screen3">#14a895</color>
+
+    <!-- Active Indicator Dots -->
+    <color name="dot_active_screen1">#7CE2AD</color>
+    <color name="dot_active_screen2">#93c6fd</color>
+    <color name="dot_active_screen3">#8cf9eb</color>
+
+    <array name="array_dot_active">
+        <item>@color/dot_active_screen1</item>
+        <item>@color/dot_active_screen2</item>
+        <item>@color/dot_active_screen3</item>
+    </array>
+
+    <array name="array_dot_inactive">
+        <item>@color/dot_inactive_screen1</item>
+        <item>@color/dot_inactive_screen2</item>
+        <item>@color/dot_inactive_screen3</item>
+    </array>
+
+
 </resources>

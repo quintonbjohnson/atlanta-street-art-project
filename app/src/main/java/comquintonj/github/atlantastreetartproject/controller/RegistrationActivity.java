@@ -1,17 +1,16 @@
-package comquintonj.github.atlantastreetartproject.view;
+package comquintonj.github.atlantastreetartproject.controller;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,18 +30,60 @@ import comquintonj.github.atlantastreetartproject.model.User;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    // Instance variables
-    private static final String TAG = "MyActivity";
-    private EditText usernameInfo;
-    private EditText emailInfo;
-    private EditText passwordInfo;
-    private EditText confirmInfo;
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private Intent loginIntent;
-    private FirebaseUser user;
+    /**
+     * A reference to the Firebase database to store information about the user
+     */
     private DatabaseReference mDatabase;
-    private Toolbar appbar;
+
+    /**
+     * EditText for the confirm password field
+     */
+    private EditText confirmInfo;
+
+    /**
+     * EditText for the email field
+     */
+    private EditText emailInfo;
+
+    /**
+     * EditText for the password field
+     */
+    private EditText passwordInfo;
+
+    /**
+     * EditText for the username field
+     */
+    private EditText usernameInfo;
+
+    /**
+     * Authentication instance of the FirebaseAuth
+     */
+    private FirebaseAuth mAuth;
+
+    /**
+     * AuthStateListener for Firebase to determine if a user is already signed in
+     */
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
+    /**
+     * Intent to go to the intro activity
+     */
+    private Intent introIntent;
+
+    /**
+     * Intent to go to the login activity
+     */
+    private Intent loginIntent;
+
+    /**
+     * Intent to go to the explore activity
+     */
+    private Intent exploreIntent;
+
+    /**
+     * TAG used for error messages
+     */
+    private static final String TAG = "MyActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +91,9 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         setTitle("Registration");
-        appbar = (Toolbar) findViewById(R.id.toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -88,7 +130,9 @@ public class RegistrationActivity extends AppCompatActivity {
         };
 
         // Set up intent to go to login screen upon successful registration
-        loginIntent = new Intent(this,LoginActivity.class);
+        introIntent = new Intent(this, IntroActivity.class);
+        loginIntent = new Intent(this, LoginActivity.class);
+        exploreIntent = new Intent(this, ExploreActivity.class);
 
 
         // Set up registration button to add User with the edited text fields
@@ -109,6 +153,7 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
+        // Once a user has registered, input their profile display name into the Firebase database
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -118,25 +163,29 @@ public class RegistrationActivity extends AppCompatActivity {
 
                     // Update display name of the user that just registered to match username text
                     String displayName = usernameInfo.getText().toString();
-                    UserProfileChangeRequest profileUpdates =
-                            new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(displayName)
-                                    .build();
+                    if (displayName.equals("")) {
+                        startActivity(exploreIntent);
+                    } else {
+                        UserProfileChangeRequest profileUpdates =
+                                new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(displayName)
+                                        .build();
 
-                    user.updateProfile(profileUpdates)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Log.d(TAG, "User profile updated.");
-                                        mAuth.signOut();
-                                        startActivity(loginIntent);
+                        user.updateProfile(profileUpdates)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "User profile updated.");
+                                            mAuth.signOut();
+                                            startActivity(loginIntent);
+                                        }
                                     }
-                                }
-                            });
+                                });
 
-                    Toast.makeText(RegistrationActivity.this, "Account created",
-                            Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegistrationActivity.this, "Account created",
+                                Toast.LENGTH_SHORT).show();
+                    }
 
                 } else {
                     // User is signed out
@@ -145,7 +194,18 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         };
 
-
+        // Allow text view for guest to send user to explore screen
+        TextView guestView = (TextView) findViewById(R.id.guest_text_view);
+        guestView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signInAnonymously();
+                FirebaseUser user = mAuth.getCurrentUser();
+                if (user != null) {
+                    startActivity(exploreIntent);
+                }
+            }
+        });
     }
 
     @Override
@@ -162,37 +222,23 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
-    // Called when a user presses the "register" button. Creates an account
-    // using Firebase authorization.
-    private void checkDisplayName(final String email,
-                                  final String password, final String displayName) {
-        Log.d(TAG, "createAccount:" + email);
-        if (!validateForm()) {
-            return;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                introIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(introIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        // Check if display name is taken
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.child("Users").hasChild(displayName)) {
-                    Toast.makeText(RegistrationActivity.this,
-                            "Username is already in use",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    createAccount(email, password, displayName);
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
     }
 
-    // Taken from Firebase support
+    /**
+     * Validates the form to ensure that no fields are left empty
+     * @return true if the form is ready to be submitted, false otherwise
+     */
     private boolean validateForm() {
         boolean valid = true;
 
@@ -223,7 +269,12 @@ public class RegistrationActivity extends AppCompatActivity {
         return valid;
     }
 
-    // Create an account with the given email and password
+    /**
+     * Creates an account with the given information.
+     * @param email the email the user entered
+     * @param password the password the user entered
+     * @param displayName the display name the user entered
+     */
     private void createAccount(String email, String password, String displayName) {
         // Create a user object with the given email and password
         final User newUser = new User(displayName, email);
@@ -251,16 +302,57 @@ public class RegistrationActivity extends AppCompatActivity {
                 });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // app icon in action bar clicked; go home
-                loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(loginIntent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+    /**
+     * If a user decided to login anonymously, sign them in with an anonymous account
+     */
+    private void signInAnonymously() {
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInAnonymously", task.getException());
+                            Toast.makeText(RegistrationActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Ensures that the display name is not already in use.
+     * @param email the email of the user
+     * @param password the password of the user
+     * @param displayName the display name of the user
+     */
+    private void checkDisplayName(final String email,
+                                  final String password, final String displayName) {
+        Log.d(TAG, "createAccount:" + email);
+        if (!validateForm()) {
+            return;
         }
+        // Check if display name is taken
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.child("Users").hasChild(displayName)) {
+                    Toast.makeText(RegistrationActivity.this,
+                            "Username is already in use",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    createAccount(email, password, displayName);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

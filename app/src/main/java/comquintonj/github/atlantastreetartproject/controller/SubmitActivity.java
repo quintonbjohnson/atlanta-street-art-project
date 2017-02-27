@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject.view;
+package comquintonj.github.atlantastreetartproject.controller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -7,11 +7,7 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -19,18 +15,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,27 +38,79 @@ import java.util.Random;
 import comquintonj.github.atlantastreetartproject.R;
 import comquintonj.github.atlantastreetartproject.model.ArtInformation;
 
+/**
+ * Submission page used to submit pieces of art
+ */
 public class SubmitActivity extends BaseDrawerActivity {
 
-    private DatabaseReference mDatabase;
-    private EditText titleText, locationText, artistText, ratingText;
+    /**
+     * The submit Button
+     */
     private Button submitButton;
-    private ImageButton imageSelectButton;
+
+    /**
+     * A reference to the Firebase database to store information about the art
+     */
+    private DatabaseReference mDatabase;
+
+    /**
+     * EditText for the title field
+     */
+    private EditText titleText;
+
+    /**
+     * EditText for the location field
+     */
+    private EditText locationText;
+
+    /**
+     * EditText for the artist field
+     */
+    private EditText artistText;
+
+    /**
+     * Authentication instance of the FirebaseAuth
+     */
     private FirebaseAuth mAuth;
-    private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
-    private static final String TAG = "MyActivity";
-    private String placeId;
+
+    /**
+     * The current user
+     */
     private FirebaseUser user;
 
-    // A constant to track the file chooser intent
+    /**
+     * The ImageButton that takes the user to the image picker
+     */
+    private ImageButton imageSelectButton;
+
+    /**
+     * A constant to track the file chooser intent
+     */
     private static final int PICK_IMAGE_REQUEST = 234;
 
-    StorageReference storageReference;
+    /**
+     * Request code to decide where to take the user upon an action
+     */
+    private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
 
-    // ImageView
-    private ImageView imageView;
+    /**
+     * A reference to the Firebase storage kept in order to upload images
+     */
+    private StorageReference storageReference;
 
-    // A Uri object to store file path
+    /**
+     * The ID of the place the user selects as the location
+     */
+    private String placeId;
+
+    /**
+     * TAG used for error messages
+     */
+    private static final String TAG = "MyActivity";
+
+    /**
+     * A Uri object to store the file path of the image
+     */
     private Uri filePath;
 
     @Override
@@ -82,26 +124,8 @@ public class SubmitActivity extends BaseDrawerActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        // Set up Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // Create drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        // Set profile name
-        View header = navigationView.getHeaderView(0);
-        user = mAuth.getCurrentUser();
-        TextView headerName = (TextView) header.findViewById(R.id.profileNameText);
-        assert user != null;
-        headerName.setText(user.getDisplayName());
+        // Create the navigation drawer
+        createNavigationDrawer();
 
         // Instantiate resources
         titleText = (EditText) findViewById(R.id.titleText);
@@ -116,6 +140,9 @@ public class SubmitActivity extends BaseDrawerActivity {
             @Override
             public void onClick(View v) {
                 if (v == submitButton) {
+                    if (!validateForm()) {
+                        return;
+                    }
                     submitArtInformation();
                     uploadFile();
                 }
@@ -132,24 +159,12 @@ public class SubmitActivity extends BaseDrawerActivity {
             }
         });
 
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, new OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        Toast.makeText(SubmitActivity.this,
-                                "Please try again later.", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .build();
-
+        // When a user enters location take them to them to the Autocomplete Activity
         locationText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(MotionEvent.ACTION_UP == event.getAction()) {
-                    findPlace(v);
+                    findPlace();
                 }
 
                 return true; // return is important...
@@ -157,7 +172,9 @@ public class SubmitActivity extends BaseDrawerActivity {
         });
     }
 
-    // Submit art information to the database
+    /**
+     * Called when a user decides to submit the art.
+     */
     private void submitArtInformation() {
         // Get current user
         user = mAuth.getCurrentUser();
@@ -176,21 +193,40 @@ public class SubmitActivity extends BaseDrawerActivity {
                 location, photoPath, rating, title);
 
         // Saving data to Firebase database
-        mDatabase.child("Art").child(photoPath).child("Artist").setValue(pieceOfArt.getArtist());
-        mDatabase.child("Art").child(photoPath).child("Location").setValue(pieceOfArt.getLocation());
-        mDatabase.child("Art").child(photoPath).child("Display Name").setValue(pieceOfArt.getDisplayName());
-        mDatabase.child("Art").child(photoPath).child("Rating").setValue(pieceOfArt.getRating());
+        // Artist
+        mDatabase.child("Art").child(photoPath)
+                .child("Artist").setValue(pieceOfArt.getArtist());
+
+        // Location
+        mDatabase.child("Art").child(photoPath)
+                .child("Location").setValue(pieceOfArt.getLocation());
+
+        // Display Name
+        mDatabase.child("Art").child(photoPath)
+                .child("Display Name").setValue(pieceOfArt.getDisplayName());
+
+        // Rating
+        mDatabase.child("Art").child(photoPath)
+                .child("Rating").setValue(pieceOfArt.getRating());
     }
 
-    // Method to show file chooser
-    public void showFileChooser() {
+    /**
+     * Shows the file chooser to select an image from the user's device.
+     */
+    private void showFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
-    // Handling the image chooser activity result
+    /**
+     * On the result of the activity for the Google Places API location chooser
+     * and for the image selection screen.
+     * @param requestCode The request code used to decide which screen the user has completed.
+     * @param resultCode The result code to decide if there has been an error.
+     * @param data Data to include for the result.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -216,6 +252,7 @@ public class SubmitActivity extends BaseDrawerActivity {
                 Log.e(TAG, "Error: Status = " + status.toString());
             } else if (resultCode == RESULT_CANCELED) {
                 // User left search intent
+                Log.i(TAG, "User left intent");
             }
         }
 
@@ -229,8 +266,6 @@ public class SubmitActivity extends BaseDrawerActivity {
                 if (resizedImage != null) {
                     imageSelectButton.setImageBitmap(resizedImage);
                     imageSelectButton.setBackgroundColor(255);
-
-                    Toast.makeText(this, "Set", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Please try again with a different image.",
                             Toast.LENGTH_SHORT).show();
@@ -242,8 +277,10 @@ public class SubmitActivity extends BaseDrawerActivity {
         }
     }
 
-    // Upload the file to Firebase
-    public void uploadFile() {
+    /**
+     * Uploads the file to Firebase storage
+     */
+    private void uploadFile() {
         // If there is a file to upload
         if (filePath != null) {
             // Displaying a progress dialog while upload is going on
@@ -263,7 +300,7 @@ public class SubmitActivity extends BaseDrawerActivity {
                             progressDialog.dismiss();
 
                             //and displaying a success toast
-                            Toast.makeText(getApplicationContext(), "File Uploaded ",
+                            Toast.makeText(getApplicationContext(), "Art Uploaded",
                                     Toast.LENGTH_LONG).show();
                             Intent exploreIntent = new Intent(SubmitActivity.this,
                                     ExploreActivity.class);
@@ -290,8 +327,13 @@ public class SubmitActivity extends BaseDrawerActivity {
         }
     }
 
-    // Credits: http://stackoverflow.com/
-    // questions/15124179/resizing-a-bitmap-to-a-fixed-value-but-without-changing-the-aspect-ratio
+    /**
+     * Resize the bitmap in order to constrain the image to the image view.
+     * Credits: http://stackoverflow.com/
+     * questions/15124179/resizing-a-bitmap-to-a-fixed-value-but-without-changing-the-aspect-ratio
+     * @param bm the bitmap to resize
+     * @return the resized bitmap image
+     */
     private Bitmap resizeImage(Bitmap bm) {
         if (bm != null) {
             int width = bm.getWidth();
@@ -327,8 +369,10 @@ public class SubmitActivity extends BaseDrawerActivity {
         return null;
     }
 
-    // Google Places API used to find a location and store it in the location text field
-    public void findPlace(View view) {
+    /**
+     * The Autocomplete intent from the Google Places API to choose the location of the art
+     */
+    private void findPlace() {
         try {
             Intent intent =
                     new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
@@ -340,18 +384,38 @@ public class SubmitActivity extends BaseDrawerActivity {
         }
     }
 
-    // Gets the first part of a user's email; ignores everything starting at '@'
-    private String getUserName(String email) {
-        String returnValue = "";
-        for (char ch : email.toCharArray()) {
-            if (ch == '@') {
-                return returnValue;
-            } else {
-                returnValue = returnValue + ch;
-            }
-        }
-        return returnValue;
-    }
+    /**
+     * Validates the form to ensure that no fields are left empty
+     * @return true if the form is ready to be submitted, false otherwise
+     */
+    private boolean validateForm() {
+        boolean valid = true;
 
+        String title = titleText.getText().toString();
+        if (TextUtils.isEmpty(title)) {
+            titleText.setError("Required.");
+            valid = false;
+        } else {
+            titleText.setError(null);
+        }
+
+        String artist = artistText.getText().toString();
+        if (TextUtils.isEmpty(artist)) {
+            artistText.setError("Required.");
+            valid = false;
+        } else {
+            artistText.setError(null);
+        }
+
+        String location = locationText.getText().toString();
+        if (TextUtils.isEmpty(location)) {
+            locationText.setError("Required.");
+            valid = false;
+        } else {
+            locationText.setError(null);
+        }
+
+        return valid;
+    }
 }
 

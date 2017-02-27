@@ -10,68 +10,63 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="comquintonj.github.atlantastreetartproject.view.LoginActivity">
+    tools:context="comquintonj.github.atlantastreetartproject.controller.LoginActivity">
 
-    <TextView
-        android:text="@string/not_a_member_register_now"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/loginButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:id="@+id/registerView"
-        android:textSize="16sp"
-        android:fontFamily="sans-serif" />
-
-    <TextView
-        android:text="@string/continue_as_guest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
-        android:id="@+id/guestTextView"
-        android:layout_below="@+id/registerView"
-        android:layout_centerHorizontal="true"
-        android:fontFamily="sans-serif"
-        android:textSize="16sp" />
-
-    <Button
-        android:text="@string/login"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/loginButton"
-        android:background="@color/colorAccent"
-        android:textColor="@android:color/background_light"
-        android:layout_marginTop="42dp"
-        android:textSize="16sp"
-        android:layout_below="@+id/loginPassword"
-        android:layout_alignParentStart="true"
-        android:fontFamily="sans-serif-medium" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/loginPassword"
-        android:hint="@string/password"
-        android:layout_marginTop="39dp"
-        android:textSize="20sp"
-        android:layout_below="@+id/loginUsername"
-        android:layout_alignParentStart="true"
-        android:fontFamily="sans-serif" />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/loginUsername"
+                android:hint="@string/email"
+                android:textAlignment="viewStart"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
+        </android.support.design.widget.TextInputLayout>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/loginUsername"
-        android:hint="@string/email"
-        android:textAlignment="viewStart"
-        android:fontFamily="sans-serif"
-        android:textSize="20sp"
-        android:layout_marginTop="61dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/loginPassword"
+                android:hint="@string/password"
+                android:textSize="18sp"
+                android:layout_below="@+id/loginUsername"
+                android:layout_alignParentStart="true"
+                android:fontFamily="sans-serif" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:text="@string/login"
+            android:layout_height="wrap_content"
+            android:id="@+id/loginButton"
+            android:background="@color/colorAccent"
+            android:textColor="@android:color/background_light"
+            android:layout_marginTop="50dp"
+            android:textSize="16sp"
+            android:layout_below="@+id/loginPassword"
+            android:layout_alignParentStart="true"
+            android:fontFamily="sans-serif-medium"
+            android:layout_width="match_parent" />
+    </LinearLayout>
 
 </RelativeLayout>

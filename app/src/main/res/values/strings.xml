@@ -4,20 +4,38 @@
     <string name="password">Password</string>
     <string name="continue_as_guest">Continue as guest</string>
     <string name="username">Username</string>
-    <string name="login">Login</string>
+    <string name="login">Log In</string>
     <string name="email">Email</string>
     <string name="emailRegister">Email</string>
     <string name="passwordRegister">Password</string>
-    <string name="confirm_password">Confirm password</string>
+    <string name="confirm_password">Confirm Password</string>
     <string name="register">Register</string>
     <string name="sign_out">Sign Out</string>
     <string name="submit">Submit</string>
     <string name="chooseFile">Choose File</string>
     <string name="title_activity_base_drawer">BaseDrawerActivity</string>
     <string name="submitted_by">Submitted by:</string>
+    <string name="get_started">Get Started</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="title_activity_welcome">Home Screen</string>
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">DONE</string>
+    <string name="log_in">Log in</string>
+
+    <string name="intro_1_title">Explore</string>
+    <string name="intro_1_tag">Find street art around Atlanta.</string>
+
+    <string name="intro_2_title">Submit</string>
+    <string name="intro_2_tag">Upload photos of art that you find on your adventures.</string>
+
+    <string name="intro_3_title">Tour</string>
+    <string name="intro_3_tag">Take an urban hike and see street art around you.</string>
+
+    <string name="play_again">Play Again</string>
 
     <string name="action_settings">Settings</string>
 </resources>

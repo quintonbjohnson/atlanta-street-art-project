@@ -13,7 +13,14 @@ public class User {
     private String profileName;
 
     /**
-     * Constructor for a user object.
+     * No-args constructor for a User object for Firebase.
+     */
+    public User() {
+
+    }
+
+    /**
+     * Constructor for a User object.
      * @param profileName The username the user enters upon registering
      * @param email The email associated with the user's account
      */

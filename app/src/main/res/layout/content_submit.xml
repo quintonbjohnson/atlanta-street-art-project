@@ -28,7 +28,7 @@
 
     <ImageButton
         app:srcCompat="@drawable/ic_placeholder_black"
-        android:id="@+id/imageSelect"
+        android:id="@+id/art_image_view"
         android:layout_weight="1"
         android:layout_gravity="center"
         android:layout_alignParentTop="true"
@@ -36,13 +36,15 @@
         android:layout_marginTop="55dp"
         android:layout_height="200dp"
         android:layout_width="match_parent"
-        android:background="@color/Them1" />
+        android:background="@color/Them1"
+        android:cropToPadding="false"
+        android:adjustViewBounds="false" />
 
 
 
     <android.support.v7.widget.CardView
         android:layout_weight="0.40"
-        android:layout_below="@+id/imageSelect"
+        android:layout_below="@+id/art_image_view"
         android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="400dp"

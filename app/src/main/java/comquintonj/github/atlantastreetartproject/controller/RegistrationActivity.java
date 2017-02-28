@@ -291,7 +291,6 @@ public class RegistrationActivity extends AppCompatActivity {
                             Toast.makeText(RegistrationActivity.this, "Please check fields",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-
                             // Saving data to Firebase database
                             mDatabase.child("Users").child(newUser.getProfileName())
                                     .setValue(newUser.getProfileName());

@@ -33,7 +33,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.util.Random;
 
 import comquintonj.github.atlantastreetartproject.R;
 import comquintonj.github.atlantastreetartproject.model.ArtInformation;
@@ -132,7 +131,7 @@ public class SubmitActivity extends BaseDrawerActivity {
         locationText = (EditText) findViewById(R.id.locationTextView);
         artistText = (EditText) findViewById(R.id.artistTag);
         submitButton = (Button) findViewById(R.id.submitButton);
-        imageSelectButton = (ImageButton) findViewById(R.id.imageSelect);
+        imageSelectButton = (ImageButton) findViewById(R.id.art_image_view);
         storageReference = FirebaseStorage.getInstance().getReference();
 
         // Set on click listener for the submit button
@@ -180,34 +179,23 @@ public class SubmitActivity extends BaseDrawerActivity {
         user = mAuth.getCurrentUser();
 
         // Getting values from database
+        String photoPath = "";
+        String displayName = "";
         final String title = titleText.getText().toString().trim();
         String artist = artistText.getText().toString().trim();
         String location = placeId;
-        assert user != null;
-        String photoPath = titleText.getText().toString().trim() + user.getDisplayName();
-        String displayName = user.getDisplayName();
-        Random rand = new Random();
-        String rating = String.valueOf(rand.nextInt(100));
+        if (user != null) {
+            photoPath = titleText.getText().toString().trim() + user.getDisplayName();
+            displayName = user.getDisplayName();
+        }
+        String upvotes = String.valueOf(0);
+        String downvotes = String.valueOf(0);
 
         ArtInformation pieceOfArt = new ArtInformation(artist, displayName,
-                location, photoPath, rating, title);
+                location, photoPath, upvotes, downvotes, title);
 
         // Saving data to Firebase database
-        // Artist
-        mDatabase.child("Art").child(photoPath)
-                .child("Artist").setValue(pieceOfArt.getArtist());
-
-        // Location
-        mDatabase.child("Art").child(photoPath)
-                .child("Location").setValue(pieceOfArt.getLocation());
-
-        // Display Name
-        mDatabase.child("Art").child(photoPath)
-                .child("Display Name").setValue(pieceOfArt.getDisplayName());
-
-        // Rating
-        mDatabase.child("Art").child(photoPath)
-                .child("Rating").setValue(pieceOfArt.getRating());
+        mDatabase.child("Art").child(photoPath).setValue(pieceOfArt);
     }
 
     /**

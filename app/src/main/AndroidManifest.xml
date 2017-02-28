@@ -11,20 +11,20 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCO3GOTKGg-mU_DZrI4lwJ5Bbj_1DekNuA" />
-        <activity android:name=".controller.IntroActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+
+        <activity
+            android:name=".controller.IntroActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".controller.LoginActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".controller.RegistrationActivity"
             android:screenOrientation="portrait"
@@ -42,6 +42,7 @@
             android:name=".controller.ExploreActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".controller.ArtPageActivity"></activity>
     </application>
 
 </manifest>

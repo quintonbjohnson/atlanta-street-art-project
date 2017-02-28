@@ -33,6 +33,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
      */
     private HashMap<String, ArrayList<String>> pathAndDataMap;
 
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView pictureOfArt;
         public TextView userSubmitted;
@@ -64,7 +65,8 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
         // Initiate Firebase storage reference to retrieve images
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
@@ -72,7 +74,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
         ArrayList<String> imagePaths = new ArrayList<>(pathAndDataMap.keySet());
 
         // Grab the file paths and store them as StorageReferences
-        ArrayList<StorageReference> images = new ArrayList<>();
+        final ArrayList<StorageReference> images = new ArrayList<>();
         for (String pathName : imagePaths) {
             StorageReference pathReference = storageRef.child(pathName);
             images.add(pathReference);
@@ -80,7 +82,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
 
         // Retrieve images from references
         StorageReference pieceOfArt = images.get(position);
-        Glide.with(mContext)
+        Glide.with(mContext.getApplicationContext())
                 .using(new FirebaseImageLoader())
                 .load(pieceOfArt)
                 .into(holder.pictureOfArt);
@@ -90,10 +92,13 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
                 + pathAndDataMap.get(imagePaths.get(position)).get(1);
         holder.userSubmitted.setText(userOfArt);
 
+
+
     }
 
     @Override
     public int getItemCount() {
         return pathAndDataMap.size();
     }
+
 }

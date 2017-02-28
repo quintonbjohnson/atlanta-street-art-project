@@ -23,9 +23,14 @@ public class ArtInformation {
     private String photoPath;
 
     /**
-     * The rating of the art
+     * The downvotes of the art
      */
-    private String rating;
+    private String ratingDownvotes;
+
+    /**
+     * The upvotes of the art
+     */
+    private String ratingUpvotes;
 
     /**
      * The title of the art
@@ -33,21 +38,31 @@ public class ArtInformation {
     private String title;
 
     /**
+     * No-args constructor for an Art object for Firebase.
+     */
+    public ArtInformation() {
+
+    }
+
+    /**
      * Constructor for a piece of art
      * @param artist the artist
      * @param displayName the display name of the user that submitted the art
      * @param location the location of the art
      * @param photoPath the path to the image of the art
-     * @param rating the rating of the ar
+     * @param ratingDownvotes the downvotes of the art
+     * @param ratingUpvotes the upvotes of the art
      * @param title the title of the art
      */
     public ArtInformation(String artist, String displayName, String location,
-                          String photoPath, String rating, String title) {
+                          String photoPath, String ratingDownvotes, String ratingUpvotes,
+                          String title) {
         this.artist = artist;
         this.displayName = displayName;
         this.location = location;
         this.photoPath = photoPath;
-        this.rating = rating;
+        this.ratingDownvotes = ratingDownvotes;
+        this.ratingUpvotes = ratingUpvotes;
         this.title = title;
     }
 
@@ -92,11 +107,27 @@ public class ArtInformation {
     }
 
     /**
-     * The rating of the art.
-     * @return the rating
+     * Get the normalized rating of the piece of art
+     * @return the number of upvotes minus the number of downvotes
      */
-    public String getRating() {
-        return rating;
+    public int getRating() {
+        return Integer.parseInt(ratingUpvotes) - Integer.parseInt(ratingDownvotes);
+    }
+
+    /**
+     * The downvotes of the art.
+     * @return the number of downvotes
+     */
+    public String getRatingDownvotes() {
+        return ratingDownvotes;
+    }
+
+    /**
+     * The upvotes of the art.
+     * @return the number of upvotes
+     */
+    public String getRatingUpvotes() {
+        return ratingUpvotes;
     }
 
 

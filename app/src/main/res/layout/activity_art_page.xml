@@ -5,13 +5,31 @@
     android:id="@+id/activity_art_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="comquintonj.github.atlantastreetartproject.controller.ArtPageActivity">
 
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/art_artist_text"
+        android:layout_alignBaseline="@+id/art_submitter_text"
+        android:layout_alignBottom="@+id/art_submitter_text"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="60dp" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/art_submitter_text"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/art_image_view"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="60dp" />
+
     <ImageView
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         app:srcCompat="@drawable/com_facebook_auth_dialog_background"
@@ -20,11 +38,38 @@
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:text="TextView"
+        android:text="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="25dp"
-        android:id="@+id/art_artist_text" />
+        android:id="@+id/downvote_text"
+        android:layout_alignTop="@+id/downvote_button"
+        android:layout_marginLeft="340dp" />
+
+    <TextView
+        android:text="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/upvote_text"
+        android:layout_alignBottom="@+id/upvote_button"
+        android:layout_marginLeft="270dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_thumbs_up"
+        android:layout_marginTop="20dp"
+        android:id="@+id/upvote_button"
+        android:background="@color/tw__transparent"
+        android:layout_below="@+id/art_submitter_text"
+        android:layout_marginLeft="230dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_thumbs_down"
+        android:id="@+id/downvote_button"
+        android:background="@color/tw__transparent"
+        android:layout_alignTop="@+id/upvote_text"
+        android:layout_marginLeft="300dp" />
+
 </RelativeLayout>

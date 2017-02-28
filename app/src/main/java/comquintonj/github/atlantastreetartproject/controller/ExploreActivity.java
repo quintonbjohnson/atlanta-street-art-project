@@ -145,7 +145,8 @@ public class ExploreActivity extends BaseDrawerActivity {
             adapter.notifyDataSetChanged();
         } else if (id == R.id.popularity_setting) {
             // Sort by popularity
-            populateAdapter(sortByPopularity());
+            sortByPopularity();
+            populateAdapter(pathAndDataMap);
             adapter.notifyDataSetChanged();
         }
         return super.onOptionsItemSelected(item);
@@ -164,7 +165,7 @@ public class ExploreActivity extends BaseDrawerActivity {
      * Sort the art found in the RecyclerView by popularity
      * @return the newly sorted art hash map
      */
-    private LinkedHashMap<String, ArrayList<String>> sortByPopularity() {
+    private void sortByPopularity() {
         // Sort by popularity
 
         // Get the array lists of data from the hash map
@@ -209,8 +210,8 @@ public class ExploreActivity extends BaseDrawerActivity {
             resultData.add(product.getRatingDownvotes());
             resultData.add(product.getRatingUpvotes());
             resultData.add(product.getTitle());
-            resultMap.put(product.getPhotoPath(), resultData);
+            resultMap.put("image/" + product.getPhotoPath(), resultData);
         }
-        return resultMap;
+        pathAndDataMap = resultMap;
     }
 }

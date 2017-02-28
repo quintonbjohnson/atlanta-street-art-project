@@ -130,5 +130,19 @@ public class ArtInformation {
         return ratingUpvotes;
     }
 
+    /**
+     * Add one additional upvote to the art.
+     */
+    public void addUpvote() {
+        this.ratingUpvotes = String.valueOf(Integer.parseInt(ratingUpvotes) + 1);
+    }
+
+    /**
+     * Add one additional downvote to the art.
+     */
+    public void addDownvote() {
+        this.ratingDownvotes = String.valueOf(Integer.parseInt(ratingDownvotes) + 1);
+    }
+
 
 }

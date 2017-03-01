@@ -133,15 +133,29 @@ public class ArtInformation {
     /**
      * Add one additional upvote to the art.
      */
-    public void addUpvote() {
+    public void incUpvote() {
         this.ratingUpvotes = String.valueOf(Integer.parseInt(ratingUpvotes) + 1);
     }
 
     /**
      * Add one additional downvote to the art.
      */
-    public void addDownvote() {
+    public void incDownvote() {
         this.ratingDownvotes = String.valueOf(Integer.parseInt(ratingDownvotes) + 1);
+    }
+
+    /**
+     * Remove one upvote to the art.
+     */
+    public void decUpvote() {
+        this.ratingUpvotes = String.valueOf(Integer.parseInt(ratingUpvotes) - 1);
+    }
+
+    /**
+     * Remove one downvote to the art.
+     */
+    public void decDownvote() {
+        this.ratingDownvotes = String.valueOf(Integer.parseInt(ratingDownvotes) - 1);
     }
 
 

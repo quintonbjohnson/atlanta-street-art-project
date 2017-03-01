@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 import comquintonj.github.atlantastreetartproject.R;
 import comquintonj.github.atlantastreetartproject.model.User;
 
@@ -277,7 +279,7 @@ public class RegistrationActivity extends AppCompatActivity {
      */
     private void createAccount(String email, String password, String displayName) {
         // Create a user object with the given email and password
-        final User newUser = new User(displayName, email);
+        final User newUser = new User(displayName, email, new HashMap<String, String>());
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -293,9 +295,11 @@ public class RegistrationActivity extends AppCompatActivity {
                         } else {
                             // Saving data to Firebase database
                             mDatabase.child("Users").child(newUser.getProfileName())
-                                    .setValue(newUser.getProfileName());
+                                    .child("email").setValue(newUser.getEmail());
+                            HashMap<String, String> artRated = new HashMap<String, String>();
+                            artRated.put("First", "First");
                             mDatabase.child("Users").child(newUser.getProfileName())
-                                    .child("Email").setValue(newUser.getEmail());
+                                    .child("rated").setValue(artRated);
                         }
                     }
                 });

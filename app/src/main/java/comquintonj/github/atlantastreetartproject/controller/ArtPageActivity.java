@@ -236,16 +236,26 @@ public class ArtPageActivity extends AppCompatActivity {
             // Check to see if user has already rated this piece of art
             if (artRated.containsKey(pieceOfArt.getPhotoPath())) {
                 String rated = (String) artRated.get(pieceOfArt.getPhotoPath());
-                if (rated.equals("Upvoted")) {
-                    // If the user has already upvoted the art, highlight the upvote button
-                    turnOffDownvote();
-                    setUpvoteButton();
-                    upvoteSet = true;
-                } else if (rated.equals("Downvoted")){
-                    // If the user has already downvoted the art, highlight the downvote button
-                    turnOffUpvote();
-                    setDownvoteButton();
-                    downvoteSet = true;
+                switch (rated) {
+                    case "Upvoted":
+                        // If the user has already upvoted the art, highlight the upvote button
+                        turnOffDownvote();
+                        setUpvoteButton();
+                        upvoteSet = true;
+                        break;
+                    case "Downvoted":
+                        // If the user has already downvoted the art, highlight the downvote button
+                        turnOffUpvote();
+                        setDownvoteButton();
+                        downvoteSet = true;
+                        break;
+                    default:
+                        // The user hasn't rated the art yet
+                        downvoteSet = false;
+                        upvoteSet = false;
+                        turnOffDownvote();
+                        turnOffUpvote();
+                        break;
                 }
             }
         }
@@ -256,8 +266,12 @@ public class ArtPageActivity extends AppCompatActivity {
         downvoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String setting = "Downvoted";
                 if (downvoteSet) {
-                    // Do nothing
+                    downvoteSet = false;
+                    turnOffDownvote();
+                    pieceOfArt.decDownvote();
+                    setting = "";
                 } else if (upvoteSet) {
                     // The user has already upvoted this art
                     upvoteSet = false;
@@ -275,7 +289,7 @@ public class ArtPageActivity extends AppCompatActivity {
 
                 // Store changes in Firebase database
                 mDatabase.child("Users").child(user.getDisplayName())
-                        .child("rated").child(pieceOfArt.getPhotoPath()).setValue("Downvoted");
+                        .child("rated").child(pieceOfArt.getPhotoPath()).setValue(setting);
                 mDatabase.child("Art").child(pieceOfArt.getPhotoPath()).setValue(pieceOfArt);
 
                 // Update TextView to reflect increased downvote
@@ -287,8 +301,12 @@ public class ArtPageActivity extends AppCompatActivity {
         upvoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String setting = "Upvoted";
                 if (upvoteSet) {
-                    // Do nothing
+                    upvoteSet = false;
+                    turnOffUpvote();
+                    pieceOfArt.decUpvote();
+                    setting = "";
                 } else if (downvoteSet) {
                     // The user has already downvoted this art
                     downvoteSet = false;
@@ -306,7 +324,7 @@ public class ArtPageActivity extends AppCompatActivity {
 
                 // Store changes in Firebase database
                 mDatabase.child("Users").child(user.getDisplayName())
-                        .child("rated").child(pieceOfArt.getPhotoPath()).setValue("Upvoted");
+                        .child("rated").child(pieceOfArt.getPhotoPath()).setValue(setting);
                 mDatabase.child("Art").child(pieceOfArt.getPhotoPath()).setValue(pieceOfArt);
 
                 // Update TextView to reflect increased upvote

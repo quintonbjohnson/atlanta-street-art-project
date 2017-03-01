@@ -148,14 +148,18 @@ public class ArtInformation {
      * Remove one upvote to the art.
      */
     public void decUpvote() {
-        this.ratingUpvotes = String.valueOf(Integer.parseInt(ratingUpvotes) - 1);
+        if (Integer.parseInt(ratingUpvotes) > 0) {
+            this.ratingUpvotes = String.valueOf(Integer.parseInt(ratingUpvotes) - 1);
+        }
     }
 
     /**
      * Remove one downvote to the art.
      */
     public void decDownvote() {
-        this.ratingDownvotes = String.valueOf(Integer.parseInt(ratingDownvotes) - 1);
+        if (Integer.parseInt(ratingDownvotes) > 0) {
+            this.ratingDownvotes = String.valueOf(Integer.parseInt(ratingDownvotes) - 1);
+        }
     }
 
 

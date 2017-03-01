@@ -3,6 +3,7 @@ package comquintonj.github.atlantastreetartproject.controller;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -65,7 +66,9 @@ public class ExploreActivity extends BaseDrawerActivity {
         context = this;
 
         // Create the navigation drawer
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         createNavigationDrawer();
+        navigationView.getMenu().getItem(0).setChecked(true);
 
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 

@@ -117,6 +117,7 @@ public class BaseDrawerActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
 
+
         // Set profile name in navigation drawer
         TextView headerName = (TextView)header.findViewById(R.id.profileNameText);
         FirebaseUser user = mAuth.getCurrentUser();

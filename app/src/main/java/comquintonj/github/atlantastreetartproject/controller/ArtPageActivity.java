@@ -70,6 +70,11 @@ public class ArtPageActivity extends AppCompatActivity {
     private FirebaseUser user;
 
     /**
+     * The art that has been rated by the user
+     */
+    private HashMap<String, String> artRated;
+
+    /**
      * Image of the art
      */
     private ImageView imageOfArt;
@@ -114,8 +119,6 @@ public class ArtPageActivity extends AppCompatActivity {
      * The TextView to show the number of upvotes the art has
      */
     private TextView upvoteText;
-
-    private HashMap<String, String> artRated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -359,7 +362,7 @@ public class ArtPageActivity extends AppCompatActivity {
      */
     public void turnOffUpvote() {
         DrawableCompat.setTint(upvoteButton.getDrawable(),
-                ContextCompat.getColor(context, R.color.tw__composer_black));
+                ContextCompat.getColor(context, R.color.Theme3));
     }
 
     /**
@@ -367,7 +370,7 @@ public class ArtPageActivity extends AppCompatActivity {
      */
     public void turnOffDownvote() {
         DrawableCompat.setTint(downvoteButton.getDrawable(),
-                ContextCompat.getColor(context, R.color.tw__composer_black));
+                ContextCompat.getColor(context, R.color.Theme3));
     }
 }
 

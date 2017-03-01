@@ -7,6 +7,7 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.NavigationView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -124,7 +125,9 @@ public class SubmitActivity extends BaseDrawerActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Create the navigation drawer
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         createNavigationDrawer();
+        navigationView.getMenu().getItem(3).setChecked(true);
 
         // Instantiate resources
         titleText = (EditText) findViewById(R.id.titleText);

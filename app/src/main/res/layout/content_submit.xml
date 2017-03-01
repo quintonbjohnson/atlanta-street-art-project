@@ -36,7 +36,7 @@
         android:layout_marginTop="55dp"
         android:layout_height="200dp"
         android:layout_width="match_parent"
-        android:background="@color/Them1"
+        android:background="@color/Theme1"
         android:cropToPadding="false"
         android:adjustViewBounds="true" />
 

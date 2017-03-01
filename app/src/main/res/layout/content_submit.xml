@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:background="@color/Them1"
         android:cropToPadding="false"
-        android:adjustViewBounds="false" />
+        android:adjustViewBounds="true" />
 
 
 

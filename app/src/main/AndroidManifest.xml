@@ -42,7 +42,9 @@
             android:name=".controller.ExploreActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".controller.ArtPageActivity"></activity>
+        <activity
+            android:name=".controller.ArtPageActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

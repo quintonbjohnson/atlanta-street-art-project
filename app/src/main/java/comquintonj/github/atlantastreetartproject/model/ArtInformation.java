@@ -130,5 +130,37 @@ public class ArtInformation {
         return ratingUpvotes;
     }
 
+    /**
+     * Add one additional upvote to the art.
+     */
+    public void incUpvote() {
+        this.ratingUpvotes = String.valueOf(Integer.parseInt(ratingUpvotes) + 1);
+    }
+
+    /**
+     * Add one additional downvote to the art.
+     */
+    public void incDownvote() {
+        this.ratingDownvotes = String.valueOf(Integer.parseInt(ratingDownvotes) + 1);
+    }
+
+    /**
+     * Remove one upvote to the art.
+     */
+    public void decUpvote() {
+        if (Integer.parseInt(ratingUpvotes) > 0) {
+            this.ratingUpvotes = String.valueOf(Integer.parseInt(ratingUpvotes) - 1);
+        }
+    }
+
+    /**
+     * Remove one downvote to the art.
+     */
+    public void decDownvote() {
+        if (Integer.parseInt(ratingDownvotes) > 0) {
+            this.ratingDownvotes = String.valueOf(Integer.parseInt(ratingDownvotes) - 1);
+        }
+    }
+
 
 }

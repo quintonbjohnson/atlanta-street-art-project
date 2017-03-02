@@ -3,6 +3,7 @@ package comquintonj.github.atlantastreetartproject.controller;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -65,7 +66,9 @@ public class ExploreActivity extends BaseDrawerActivity {
         context = this;
 
         // Create the navigation drawer
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         createNavigationDrawer();
+        navigationView.getMenu().getItem(0).setChecked(true);
 
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
@@ -145,7 +148,8 @@ public class ExploreActivity extends BaseDrawerActivity {
             adapter.notifyDataSetChanged();
         } else if (id == R.id.popularity_setting) {
             // Sort by popularity
-            populateAdapter(sortByPopularity());
+            sortByPopularity();
+            populateAdapter(pathAndDataMap);
             adapter.notifyDataSetChanged();
         }
         return super.onOptionsItemSelected(item);
@@ -164,7 +168,7 @@ public class ExploreActivity extends BaseDrawerActivity {
      * Sort the art found in the RecyclerView by popularity
      * @return the newly sorted art hash map
      */
-    private LinkedHashMap<String, ArrayList<String>> sortByPopularity() {
+    private void sortByPopularity() {
         // Sort by popularity
 
         // Get the array lists of data from the hash map
@@ -209,8 +213,8 @@ public class ExploreActivity extends BaseDrawerActivity {
             resultData.add(product.getRatingDownvotes());
             resultData.add(product.getRatingUpvotes());
             resultData.add(product.getTitle());
-            resultMap.put(product.getPhotoPath(), resultData);
+            resultMap.put("image/" + product.getPhotoPath(), resultData);
         }
-        return resultMap;
+        pathAndDataMap = resultMap;
     }
 }

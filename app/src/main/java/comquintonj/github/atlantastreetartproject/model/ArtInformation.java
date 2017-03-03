@@ -13,9 +13,14 @@ public class ArtInformation {
     private String displayName;
 
     /**
-     * The location of the art
+     * The latitude of the art
      */
-    private String location;
+    private String latitude;
+
+    /**
+     * The longitude of the art
+     */
+    private String longitude;
 
     /**
      * The path of the image of the art
@@ -48,18 +53,20 @@ public class ArtInformation {
      * Constructor for a piece of art
      * @param artist the artist
      * @param displayName the display name of the user that submitted the art
-     * @param location the location of the art
+     * @param latitude the latitude of the art
+     * @param longitude the longitude of the art
      * @param photoPath the path to the image of the art
      * @param ratingDownvotes the downvotes of the art
      * @param ratingUpvotes the upvotes of the art
      * @param title the title of the art
      */
-    public ArtInformation(String artist, String displayName, String location,
+    public ArtInformation(String artist, String displayName, String latitude, String longitude,
                           String photoPath, String ratingDownvotes, String ratingUpvotes,
                           String title) {
         this.artist = artist;
         this.displayName = displayName;
-        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.photoPath = photoPath;
         this.ratingDownvotes = ratingDownvotes;
         this.ratingUpvotes = ratingUpvotes;
@@ -83,11 +90,19 @@ public class ArtInformation {
     }
 
     /**
-     * The location of the art.
-     * @return the location
+     * Get the latitude of the art
+     * @return the latitude
      */
-    public String getLocation() {
-        return location;
+    public String getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * Get the longitude of the art
+     * @return the longitude
+     */
+    public String getLongitude() {
+        return longitude;
     }
 
     /**
@@ -161,6 +176,8 @@ public class ArtInformation {
             this.ratingDownvotes = String.valueOf(Integer.parseInt(ratingDownvotes) - 1);
         }
     }
+
+
 
 
 }

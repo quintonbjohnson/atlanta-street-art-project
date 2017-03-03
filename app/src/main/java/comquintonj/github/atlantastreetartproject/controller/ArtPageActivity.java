@@ -1,20 +1,22 @@
 package comquintonj.github.atlantastreetartproject.controller;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
@@ -84,7 +86,6 @@ public class ArtPageActivity extends AppCompatActivity {
      */
     private ImageButton upvoteButton;
 
-
     /**
      * Downvote button to rate art
      */
@@ -94,6 +95,37 @@ public class ArtPageActivity extends AppCompatActivity {
      * An intent to go back to the explore screen
      */
     private Intent exploreIntent;
+
+    /**
+     * The current location of the user
+     */
+    private Location userLocation;
+
+    /**
+     * A LocationListener to keep track of the user's location
+     */
+    private final LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(final Location location) {
+            
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+            Toast.makeText(context, "GPS not found", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+
+
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+            Toast.makeText(context, "Please enable GPS", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     /**
      * A reference to the Firebase storage kept in order to upload images
@@ -111,6 +143,11 @@ public class ArtPageActivity extends AppCompatActivity {
     private TextView submitterText;
 
     /**
+     * The TextView to show the distance to the art
+     */
+    private TextView distanceText;
+
+    /**
      * The TextView to show the number of downvotes the art has
      */
     private TextView downvoteText;
@@ -119,6 +156,7 @@ public class ArtPageActivity extends AppCompatActivity {
      * The TextView to show the number of upvotes the art has
      */
     private TextView upvoteText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +167,11 @@ public class ArtPageActivity extends AppCompatActivity {
         setTitle("");
 
         user = FirebaseAuth.getInstance().getCurrentUser();
+        LocationManager mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        checkLocationPermission();
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
+                0, mLocationListener);
+        userLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
         // Set up back button
         if (getSupportActionBar() != null) {
@@ -147,6 +190,7 @@ public class ArtPageActivity extends AppCompatActivity {
         upvoteText = (TextView) findViewById(R.id.upvote_text);
         downvoteButton = (ImageButton) findViewById(R.id.downvote_button);
         upvoteButton = (ImageButton) findViewById(R.id.upvote_button);
+        distanceText = (TextView) findViewById(R.id.distance_text);
 
         // Initialize Firebase references
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -164,6 +208,7 @@ public class ArtPageActivity extends AppCompatActivity {
                     pieceOfArt = dataSnapshot.child("Art")
                             .child(bundleExtra).getValue(ArtInformation.class);
                     updateArtView();
+                    updateDistanceView();
                 }
             }
 
@@ -235,6 +280,19 @@ public class ArtPageActivity extends AppCompatActivity {
     }
 
     /**
+     * Update the view that shows the distance away from the user
+     */
+    public void updateDistanceView() {
+        Location artLocation = new Location("");
+        artLocation.setLatitude(Double.valueOf(pieceOfArt.getLatitude()));
+        artLocation.setLongitude(Double.valueOf(pieceOfArt.getLongitude()));
+        double distanceInMeters = userLocation.distanceTo(artLocation);
+        double distanceInMiles = distanceInMeters / 1609.344;
+        String distanceValue = String.valueOf(String.format("%.2f", distanceInMiles)) + " mi";
+        distanceText.setText(distanceValue);
+    }
+
+    /**
      * Update the ratings of the art
      */
     private void updateRatingView() {
@@ -269,6 +327,9 @@ public class ArtPageActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Add click listeners to the rating buttons
+     */
     private void addClickListeners() {
         // User has decided to give the art a downvote
         downvoteButton.setOnClickListener(new View.OnClickListener() {
@@ -371,6 +432,20 @@ public class ArtPageActivity extends AppCompatActivity {
     public void turnOffDownvote() {
         DrawableCompat.setTint(downvoteButton.getDrawable(),
                 ContextCompat.getColor(context, R.color.Theme3));
+    }
+
+    /**
+     * Check to see if the user has given permission to read external storage
+     * @return whether or not the user has given permission
+     */
+    public boolean checkLocationPermission() {
+        int result = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

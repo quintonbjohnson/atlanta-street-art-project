@@ -66,6 +66,7 @@
                     <ImageButton
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/ic_thumbs_up"
+                        android:tint="@color/Theme1"
                         android:id="@+id/upvote_button"
                         android:background="@color/tw__transparent"
                         android:layout_width="50dp"
@@ -81,6 +82,7 @@
                     <ImageButton
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/ic_thumbs_down"
+                        android:tint="@color/Theme1"
                         android:id="@+id/downvote_button"
                         android:background="@color/tw__transparent"
                         android:layout_alignTop="@+id/upvote_text"
@@ -107,6 +109,16 @@
                 android:layout_below="@+id/art_image_view"
                 android:layout_alignParentEnd="true"
                 android:layout_marginLeft="20dp"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/distance_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="0.10"
+                android:text="TextView"
                 android:textSize="16sp" />
 
         </LinearLayout>

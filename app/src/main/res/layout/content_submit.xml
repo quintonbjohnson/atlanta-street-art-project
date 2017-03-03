@@ -96,20 +96,6 @@
                 android:layout_marginLeft="35dp"
                 android:layout_marginRight="35dp" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine|textNoSuggestions"
-                android:ems="10"
-                android:id="@+id/locationTextView"
-                android:hint="Location"
-                android:maxLines="1"
-                android:layout_weight="0.40"
-                android:textSize="18sp"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp" />
-
             <Button
                 android:text="@string/submit"
                 android:layout_width="match_parent"

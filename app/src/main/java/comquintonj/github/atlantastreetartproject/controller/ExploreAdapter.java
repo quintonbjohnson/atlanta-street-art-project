@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject.model;
+package comquintonj.github.atlantastreetartproject.controller;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +34,9 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
     private HashMap<String, ArrayList<String>> pathAndDataMap;
 
 
+    /**
+     * ViewHolder for the RecyclerView in the Explore screen
+     */
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView pictureOfArt;
         public TextView userSubmitted;

@@ -25,7 +25,6 @@ import java.util.List;
 
 import comquintonj.github.atlantastreetartproject.R;
 import comquintonj.github.atlantastreetartproject.model.ArtInformation;
-import comquintonj.github.atlantastreetartproject.model.ExploreAdapter;
 import comquintonj.github.atlantastreetartproject.model.ItemClickSupport;
 
 /**
@@ -54,16 +53,16 @@ public class ExploreActivity extends BaseDrawerActivity {
      */
     private RecyclerView mRecyclerView;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Create layout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
         setTitle("Explore");
-
         context = this;
+
+        // Check if read and location permissions are permitted
+        checkPermission();
 
         // Create the navigation drawer
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -95,7 +94,8 @@ public class ExploreActivity extends BaseDrawerActivity {
                     ArrayList<String> imageData = new ArrayList<>();
                     imageData.add(pieceOfArt.getArtist());
                     imageData.add(pieceOfArt.getDisplayName());
-                    imageData.add(pieceOfArt.getLocation());
+                    imageData.add(pieceOfArt.getLatitude());
+                    imageData.add(pieceOfArt.getLongitude());
                     imageData.add(pieceOfArt.getPhotoPath());
                     imageData.add(pieceOfArt.getRatingDownvotes());
                     imageData.add(pieceOfArt.getRatingUpvotes());
@@ -119,7 +119,7 @@ public class ExploreActivity extends BaseDrawerActivity {
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         List<String> indexes = new ArrayList<String>(pathAndDataMap.keySet());
                         String index = indexes.get(position);
-                        String item = pathAndDataMap.get(index).get(3);
+                        String item = pathAndDataMap.get(index).get(4);
                         Intent artIntent = new Intent(context, ArtPageActivity.class);
                         artIntent.putExtra("ArtPath", item);
                         startActivity(artIntent);
@@ -166,7 +166,6 @@ public class ExploreActivity extends BaseDrawerActivity {
 
     /**
      * Sort the art found in the RecyclerView by popularity
-     * @return the newly sorted art hash map
      */
     private void sortByPopularity() {
         // Sort by popularity
@@ -182,7 +181,7 @@ public class ExploreActivity extends BaseDrawerActivity {
         // and create ArtInformation objects from that
         for (ArrayList<String> data : dataList) {
             art.add(new ArtInformation(data.get(0), data.get(1),
-                    data.get(2), data.get(3), data.get(4), data.get(5), data.get(6)));
+                    data.get(2), data.get(3), data.get(4), data.get(5), data.get(6), data.get(7)));
         }
 
         // Pass in custom comparator to sort based on rating
@@ -208,7 +207,8 @@ public class ExploreActivity extends BaseDrawerActivity {
             ArrayList<String> resultData = new ArrayList<>();
             resultData.add(product.getArtist());
             resultData.add(product.getDisplayName());
-            resultData.add(product.getLocation());
+            resultData.add(product.getLatitude());
+            resultData.add(product.getLongitude());
             resultData.add(product.getPhotoPath());
             resultData.add(product.getRatingDownvotes());
             resultData.add(product.getRatingUpvotes());

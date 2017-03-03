@@ -233,7 +233,7 @@ public class ArtPageActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (bundleExtra != null) {
                     // Using the path, find the piece of art in the database
-                    if (user != null) {
+                    if (user.getDisplayName() != null) {
                         artRated = (HashMap<String, String>) dataSnapshot.child("Users")
                                 .child(user.getDisplayName()).child("rated").getValue();
                         updateRatingView();

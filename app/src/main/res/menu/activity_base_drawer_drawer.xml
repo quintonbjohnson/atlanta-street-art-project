@@ -5,7 +5,7 @@
     <group android:id="@+id/main_group">
         <item
             android:id="@+id/nav_explore"
-            android:icon="@drawable/ic_search_black_48px"
+            android:icon="@drawable/ic_compass"
             android:title="Explore" />
         <item
             android:id="@+id/nav_map"

@@ -47,6 +47,11 @@ public class ArtPageActivity extends AppCompatActivity {
     private ArtInformation pieceOfArt;
 
     /**
+     * Keeps track of if user has allowed location permission
+     */
+    private boolean allowed;
+
+    /**
      * Keeps track of whether or not the art has been upvoted
      */
     private boolean upvoteSet = false;
@@ -112,7 +117,7 @@ public class ArtPageActivity extends AppCompatActivity {
 
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle) {
-            Toast.makeText(context, "GPS not found", Toast.LENGTH_SHORT).show();
+
         }
 
         @Override
@@ -168,10 +173,12 @@ public class ArtPageActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         LocationManager mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        checkLocationPermission();
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
-                0, mLocationListener);
-        userLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        allowed = checkLocationPermission();
+        if (allowed) {
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
+                    0, mLocationListener);
+            userLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
 
         // Set up back button
         if (getSupportActionBar() != null) {
@@ -208,7 +215,9 @@ public class ArtPageActivity extends AppCompatActivity {
                     pieceOfArt = dataSnapshot.child("Art")
                             .child(bundleExtra).getValue(ArtInformation.class);
                     updateArtView();
-                    updateDistanceView();
+                    if (allowed) {
+                        updateDistanceView();
+                    }
                 }
             }
 

@@ -1,12 +1,14 @@
 package comquintonj.github.atlantastreetartproject.controller;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -147,6 +149,8 @@ public class ExploreActivity extends BaseDrawerActivity {
                     }
                     pathAndDataMap.put(path, pieceOfArt);
                 }
+                // Sort by most recent by default
+                sortByMostRecent();
                 populateAdapter(pathAndDataMap);
             }
 
@@ -185,20 +189,37 @@ public class ExploreActivity extends BaseDrawerActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.distance_setting) {
-            // Sort by distance
-            if (allowed) {
-                sortByDistance();
-                populateAdapter(pathAndDataMap);
-                adapter.notifyDataSetChanged();
-            } else {
-                checkPermission();
-            }
-        } else if (id == R.id.popularity_setting) {
-            // Sort by popularity
-            sortByPopularity();
-            populateAdapter(pathAndDataMap);
-            adapter.notifyDataSetChanged();
+        if (id == R.id.sort_by) {
+            CharSequence options[] = new CharSequence[] {"Most Recent", "Distance", "Popularity"};
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Sort By:");
+            builder.setItems(options, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == 0) {
+                        // Sort by most recent art
+                        sortByMostRecent();
+                        populateAdapter(pathAndDataMap);
+                        adapter.notifyDataSetChanged();
+                    } else if (which == 1) {
+                        // Sort by distance
+                        if (allowed) {
+                            sortByDistance();
+                            populateAdapter(pathAndDataMap);
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            checkPermission();
+                        }
+                    } else if (which == 2) {
+                        // Sort by popularity
+                        sortByPopularity();
+                        populateAdapter(pathAndDataMap);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            });
+            builder.show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -266,12 +287,6 @@ public class ExploreActivity extends BaseDrawerActivity {
         ArrayList<ArtInformation> art = new ArrayList<>();
 
         for (ArtInformation data : dataList) {
-            Location artLocation = new Location("");
-            artLocation.setLatitude(data.getLatitude());
-            artLocation.setLongitude(data.getLongitude());
-            double distanceInMeters = userLocation.distanceTo(artLocation);
-            double distanceInMiles = distanceInMeters / 1609.344;
-            data.setDistance(distanceInMiles);
             art.add(data);
         }
 
@@ -282,6 +297,43 @@ public class ExploreActivity extends BaseDrawerActivity {
                 if (o1.getDistance() > o2.getDistance()) {
                     return 1;
                 } else if (o1.getDistance() < o2.getDistance()) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+
+        // Prepare to put sorted art back into a hash map
+        LinkedHashMap<String, ArtInformation> resultMap = new LinkedHashMap<>();
+        for (ArtInformation product : art) {
+            resultMap.put("image/" + product.getPhotoPath(), product);
+        }
+        pathAndDataMap = resultMap;
+    }
+
+    /**
+     * Sort art by most recently uploaded
+     */
+    private void sortByMostRecent() {
+        // Get the array lists of data from the hash map
+        ArrayList<ArtInformation> dataList =
+                new ArrayList<>(pathAndDataMap.values());
+
+        // Create a list that will hold ArtInformation objects
+        ArrayList<ArtInformation> art = new ArrayList<>();
+
+        for (ArtInformation data : dataList) {
+            art.add(data);
+        }
+
+        // Pass in custom comparator to sort based on distance
+        Collections.sort(art, new Comparator<ArtInformation>() {
+            @Override
+            public int compare(ArtInformation o1, ArtInformation o2) {
+                if (o1.getCreatedAt() > o2.getCreatedAt()) {
+                    return 1;
+                } else if (o1.getCreatedAt() < o2.getCreatedAt()) {
                     return -1;
                 } else {
                     return 0;

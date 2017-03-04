@@ -103,15 +103,16 @@ public class ExploreActivity extends BaseDrawerActivity {
         setTitle("Explore");
         context = this;
 
+        // Check permissions
         allowed = checkLocationPermission();
         LocationManager mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+        // If permissions are allowed, get the user's current location
         if (allowed) {
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
                     0, mLocationListener);
             userLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
-
 
         // Create the navigation drawer
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -128,6 +129,7 @@ public class ExploreActivity extends BaseDrawerActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+       // Pull in data from Firebase for art
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -160,6 +162,7 @@ public class ExploreActivity extends BaseDrawerActivity {
             }
         });
 
+        // Add item click responder
         ItemClickSupport.addTo(mRecyclerView)
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
@@ -190,6 +193,7 @@ public class ExploreActivity extends BaseDrawerActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.sort_by) {
+            // Open a dialog for choosing which criteria to sort by
             CharSequence options[] = new CharSequence[] {"Most Recent", "Distance", "Popularity"};
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

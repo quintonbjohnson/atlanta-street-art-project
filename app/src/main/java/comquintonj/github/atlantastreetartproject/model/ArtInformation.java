@@ -49,6 +49,9 @@ public class ArtInformation {
      */
     private String title;
 
+    /**
+     * The creation time of the art
+     */
     private long createdAt;
 
     /**

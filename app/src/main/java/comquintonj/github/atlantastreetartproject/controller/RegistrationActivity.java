@@ -167,6 +167,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     String displayName = usernameInfo.getText().toString();
                     if (displayName.equals("")) {
                         startActivity(exploreIntent);
+                        finish();
                     } else {
                         UserProfileChangeRequest profileUpdates =
                                 new UserProfileChangeRequest.Builder()
@@ -181,6 +182,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                             Log.d(TAG, "User profile updated.");
                                             mAuth.signOut();
                                             startActivity(loginIntent);
+                                            finish();
                                         }
                                     }
                                 });
@@ -205,6 +207,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 FirebaseUser user = mAuth.getCurrentUser();
                 if (user != null) {
                     startActivity(exploreIntent);
+                    finish();
                 }
             }
         });

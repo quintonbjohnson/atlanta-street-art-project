@@ -13,6 +13,11 @@ public class ArtInformation {
     private String displayName;
 
     /**
+     * The distance away from the art
+     */
+    private double distance;
+
+    /**
      * The latitude of the art
      */
     private String latitude;
@@ -177,7 +182,19 @@ public class ArtInformation {
         }
     }
 
+    /**
+     * Get the distance away from the art
+     * @return the distance away
+     */
+    public double getDistance() {
+        return distance;
+    }
 
-
-
+    /**
+     * Set the distance away from the art
+     * @param distance the distance away
+     */
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
 }

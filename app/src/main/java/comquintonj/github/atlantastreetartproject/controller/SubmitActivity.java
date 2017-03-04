@@ -94,11 +94,6 @@ public class SubmitActivity extends BaseDrawerActivity {
     private ImageButton imageSelectButton;
 
     /**
-     * Used to access permission requests
-     */
-    private static final int PERMISSION_REQUEST_CODE = 1;
-
-    /**
      * A constant to track the file chooser intent
      */
     private static final int PICK_IMAGE_REQUEST = 234;
@@ -135,9 +130,6 @@ public class SubmitActivity extends BaseDrawerActivity {
         setContentView(R.layout.activity_submit);
         setTitle("Submit");
         context = this;
-
-        // Check if read and location permissions are permitted
-        checkPermission();
 
         // Get Instance of Firebase
         mAuth = FirebaseAuth.getInstance();

@@ -46,6 +46,7 @@ public class BaseDrawerActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_drawer);
         mAuth = FirebaseAuth.getInstance();
+        checkPermission();
 
         // Create the navigation drawer
         createNavigationDrawer();
@@ -97,6 +98,7 @@ public class BaseDrawerActivity extends AppCompatActivity
                 mAuth.signOut();
                 Intent introIntent = new Intent(this, IntroActivity.class);
                 startActivity(introIntent);
+                finish();
             }
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -179,6 +181,20 @@ public class BaseDrawerActivity extends AppCompatActivity
     public boolean checkReadPermission() {
         int result = ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Check to see if the user has given permission to read external storage
+     * @return whether or not the user has given permission
+     */
+    public boolean checkLocationPermission() {
+        int result = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
         if (result == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {

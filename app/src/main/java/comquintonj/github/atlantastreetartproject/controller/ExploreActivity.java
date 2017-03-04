@@ -139,8 +139,8 @@ public class ExploreActivity extends BaseDrawerActivity {
                     String path = "image/" + String.valueOf(dsp.getKey());
                     if (allowed) {
                         Location artLocation = new Location("");
-                        artLocation.setLatitude(Double.valueOf(pieceOfArt.getLatitude()));
-                        artLocation.setLongitude(Double.valueOf(pieceOfArt.getLongitude()));
+                        artLocation.setLatitude(pieceOfArt.getLatitude());
+                        artLocation.setLongitude(pieceOfArt.getLongitude());
                         double distanceInMeters = userLocation.distanceTo(artLocation);
                         double distanceInMiles = distanceInMeters / 1609.344;
                         pieceOfArt.setDistance(distanceInMiles);
@@ -267,8 +267,8 @@ public class ExploreActivity extends BaseDrawerActivity {
 
         for (ArtInformation data : dataList) {
             Location artLocation = new Location("");
-            artLocation.setLatitude(Double.valueOf(data.getLatitude()));
-            artLocation.setLongitude(Double.valueOf(data.getLongitude()));
+            artLocation.setLatitude(data.getLatitude());
+            artLocation.setLongitude(data.getLongitude());
             double distanceInMeters = userLocation.distanceTo(artLocation);
             double distanceInMiles = distanceInMeters / 1609.344;
             data.setDistance(distanceInMiles);

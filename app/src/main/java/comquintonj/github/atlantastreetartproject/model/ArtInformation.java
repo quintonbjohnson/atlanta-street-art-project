@@ -20,12 +20,12 @@ public class ArtInformation {
     /**
      * The latitude of the art
      */
-    private String latitude;
+    private double latitude;
 
     /**
      * The longitude of the art
      */
-    private String longitude;
+    private double longitude;
 
     /**
      * The path of the image of the art
@@ -35,12 +35,12 @@ public class ArtInformation {
     /**
      * The downvotes of the art
      */
-    private String ratingDownvotes;
+    private int ratingDownvotes;
 
     /**
      * The upvotes of the art
      */
-    private String ratingUpvotes;
+    private int ratingUpvotes;
 
     /**
      * The title of the art
@@ -65,8 +65,8 @@ public class ArtInformation {
      * @param ratingUpvotes the upvotes of the art
      * @param title the title of the art
      */
-    public ArtInformation(String artist, String displayName, String latitude, String longitude,
-                          String photoPath, String ratingDownvotes, String ratingUpvotes,
+    public ArtInformation(String artist, String displayName, double latitude, double longitude,
+                          String photoPath, int ratingDownvotes, int ratingUpvotes,
                           String title) {
         this.artist = artist;
         this.displayName = displayName;
@@ -98,7 +98,7 @@ public class ArtInformation {
      * Get the latitude of the art
      * @return the latitude
      */
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
@@ -106,7 +106,7 @@ public class ArtInformation {
      * Get the longitude of the art
      * @return the longitude
      */
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
@@ -131,14 +131,14 @@ public class ArtInformation {
      * @return the number of upvotes minus the number of downvotes
      */
     public int getRating() {
-        return Integer.parseInt(ratingUpvotes) - Integer.parseInt(ratingDownvotes);
+        return ratingUpvotes - ratingDownvotes;
     }
 
     /**
      * The downvotes of the art.
      * @return the number of downvotes
      */
-    public String getRatingDownvotes() {
+    public int getRatingDownvotes() {
         return ratingDownvotes;
     }
 
@@ -146,7 +146,7 @@ public class ArtInformation {
      * The upvotes of the art.
      * @return the number of upvotes
      */
-    public String getRatingUpvotes() {
+    public int getRatingUpvotes() {
         return ratingUpvotes;
     }
 
@@ -154,22 +154,22 @@ public class ArtInformation {
      * Add one additional upvote to the art.
      */
     public void incUpvote() {
-        this.ratingUpvotes = String.valueOf(Integer.parseInt(ratingUpvotes) + 1);
+        this.ratingUpvotes = ratingUpvotes + 1;
     }
 
     /**
      * Add one additional downvote to the art.
      */
     public void incDownvote() {
-        this.ratingDownvotes = String.valueOf(Integer.parseInt(ratingDownvotes) + 1);
+        this.ratingDownvotes = ratingDownvotes + 1;
     }
 
     /**
      * Remove one upvote to the art.
      */
     public void decUpvote() {
-        if (Integer.parseInt(ratingUpvotes) > 0) {
-            this.ratingUpvotes = String.valueOf(Integer.parseInt(ratingUpvotes) - 1);
+        if (ratingUpvotes > 0) {
+            this.ratingUpvotes = ratingUpvotes - 1;
         }
     }
 
@@ -177,8 +177,8 @@ public class ArtInformation {
      * Remove one downvote to the art.
      */
     public void decDownvote() {
-        if (Integer.parseInt(ratingDownvotes) > 0) {
-            this.ratingDownvotes = String.valueOf(Integer.parseInt(ratingDownvotes) - 1);
+        if (ratingDownvotes > 0) {
+            this.ratingDownvotes = ratingDownvotes - 1;
         }
     }
 

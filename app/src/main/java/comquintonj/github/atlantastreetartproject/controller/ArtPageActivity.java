@@ -293,8 +293,8 @@ public class ArtPageActivity extends AppCompatActivity {
      */
     public void updateDistanceView() {
         Location artLocation = new Location("");
-        artLocation.setLatitude(Double.valueOf(pieceOfArt.getLatitude()));
-        artLocation.setLongitude(Double.valueOf(pieceOfArt.getLongitude()));
+        artLocation.setLatitude(pieceOfArt.getLatitude());
+        artLocation.setLongitude(pieceOfArt.getLongitude());
         double distanceInMeters = userLocation.distanceTo(artLocation);
         double distanceInMiles = distanceInMeters / 1609.344;
         String distanceValue = String.valueOf(String.format("%.2f", distanceInMiles)) + " mi";
@@ -305,8 +305,8 @@ public class ArtPageActivity extends AppCompatActivity {
      * Update the ratings of the art
      */
     private void updateRatingView() {
-        upvoteText.setText(pieceOfArt.getRatingUpvotes());
-        downvoteText.setText(pieceOfArt.getRatingDownvotes());
+        upvoteText.setText(String.valueOf(pieceOfArt.getRatingUpvotes()));
+        downvoteText.setText(String.valueOf(pieceOfArt.getRatingDownvotes()));
         if (artRated != null) {
             // Check to see if user has already rated this piece of art
             if (artRated.containsKey(pieceOfArt.getPhotoPath())) {
@@ -344,34 +344,36 @@ public class ArtPageActivity extends AppCompatActivity {
         downvoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String setting = "Downvoted";
-                if (downvoteSet) {
-                    downvoteSet = false;
-                    turnOffDownvote();
-                    pieceOfArt.decDownvote();
-                    setting = "";
-                } else if (upvoteSet) {
-                    // The user has already upvoted this art
-                    upvoteSet = false;
-                    turnOffUpvote();
-                    setDownvoteButton();
-                    pieceOfArt.decUpvote();
-                    pieceOfArt.incDownvote();
-                    downvoteSet = true;
-                } else {
-                    // The user hasn't voted on this art
-                    downvoteSet = true;
-                    setDownvoteButton();
-                    pieceOfArt.incDownvote();
+                if (user.getDisplayName() != null) {
+                    String setting = "Downvoted";
+                    if (downvoteSet) {
+                        downvoteSet = false;
+                        turnOffDownvote();
+                        pieceOfArt.decDownvote();
+                        setting = "";
+                    } else if (upvoteSet) {
+                        // The user has already upvoted this art
+                        upvoteSet = false;
+                        turnOffUpvote();
+                        setDownvoteButton();
+                        pieceOfArt.decUpvote();
+                        pieceOfArt.incDownvote();
+                        downvoteSet = true;
+                    } else {
+                        // The user hasn't voted on this art
+                        downvoteSet = true;
+                        setDownvoteButton();
+                        pieceOfArt.incDownvote();
+                    }
+
+                    // Store changes in Firebase database
+                    mDatabase.child("Users").child(user.getDisplayName())
+                            .child("rated").child(pieceOfArt.getPhotoPath()).setValue(setting);
+                    mDatabase.child("Art").child(pieceOfArt.getPhotoPath()).setValue(pieceOfArt);
+
+                    // Update TextView to reflect increased downvote
+                    downvoteText.setText(String.valueOf(pieceOfArt.getRatingDownvotes()));
                 }
-
-                // Store changes in Firebase database
-                mDatabase.child("Users").child(user.getDisplayName())
-                        .child("rated").child(pieceOfArt.getPhotoPath()).setValue(setting);
-                mDatabase.child("Art").child(pieceOfArt.getPhotoPath()).setValue(pieceOfArt);
-
-                // Update TextView to reflect increased downvote
-                downvoteText.setText(pieceOfArt.getRatingDownvotes());
             }
         });
 
@@ -379,34 +381,36 @@ public class ArtPageActivity extends AppCompatActivity {
         upvoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String setting = "Upvoted";
-                if (upvoteSet) {
-                    upvoteSet = false;
-                    turnOffUpvote();
-                    pieceOfArt.decUpvote();
-                    setting = "";
-                } else if (downvoteSet) {
-                    // The user has already downvoted this art
-                    downvoteSet = false;
-                    turnOffDownvote();
-                    setUpvoteButton();
-                    pieceOfArt.decDownvote();
-                    pieceOfArt.incUpvote();
-                    upvoteSet = true;
-                } else {
-                    // The user hasn't voted on this art
-                    upvoteSet = true;
-                    setUpvoteButton();
-                    pieceOfArt.incUpvote();
+                if (user.getDisplayName() != null) {
+                    String setting = "Upvoted";
+                    if (upvoteSet) {
+                        upvoteSet = false;
+                        turnOffUpvote();
+                        pieceOfArt.decUpvote();
+                        setting = "";
+                    } else if (downvoteSet) {
+                        // The user has already downvoted this art
+                        downvoteSet = false;
+                        turnOffDownvote();
+                        setUpvoteButton();
+                        pieceOfArt.decDownvote();
+                        pieceOfArt.incUpvote();
+                        upvoteSet = true;
+                    } else {
+                        // The user hasn't voted on this art
+                        upvoteSet = true;
+                        setUpvoteButton();
+                        pieceOfArt.incUpvote();
+                    }
+
+                    // Store changes in Firebase database
+                    mDatabase.child("Users").child(user.getDisplayName())
+                            .child("rated").child(pieceOfArt.getPhotoPath()).setValue(setting);
+                    mDatabase.child("Art").child(pieceOfArt.getPhotoPath()).setValue(pieceOfArt);
+
+                    // Update TextView to reflect increased upvote
+                    upvoteText.setText(String.valueOf(pieceOfArt.getRatingUpvotes()));
                 }
-
-                // Store changes in Firebase database
-                mDatabase.child("Users").child(user.getDisplayName())
-                        .child("rated").child(pieceOfArt.getPhotoPath()).setValue(setting);
-                mDatabase.child("Art").child(pieceOfArt.getPhotoPath()).setValue(pieceOfArt);
-
-                // Update TextView to reflect increased upvote
-                upvoteText.setText(pieceOfArt.getRatingUpvotes());
             }
         });
     }

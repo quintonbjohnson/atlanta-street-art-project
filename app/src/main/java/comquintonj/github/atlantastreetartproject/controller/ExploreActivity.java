@@ -345,6 +345,9 @@ public class ExploreActivity extends BaseDrawerActivity {
             }
         });
 
+        // Reverse array list to put data into the new LinkedHashMap in correct order
+        Collections.reverse(art);
+
         // Prepare to put sorted art back into a hash map
         LinkedHashMap<String, ArtInformation> resultMap = new LinkedHashMap<>();
         for (ArtInformation product : art) {

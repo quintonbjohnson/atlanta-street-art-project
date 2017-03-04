@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -31,6 +32,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 import comquintonj.github.atlantastreetartproject.R;
 import comquintonj.github.atlantastreetartproject.model.ArtInformation;
@@ -162,6 +164,10 @@ public class ArtPageActivity extends AppCompatActivity {
      */
     private TextView upvoteText;
 
+    /**
+     * The TextView that used to navigate to the art
+     */
+    private TextView navigateText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,6 +204,9 @@ public class ArtPageActivity extends AppCompatActivity {
         downvoteButton = (ImageButton) findViewById(R.id.downvote_button);
         upvoteButton = (ImageButton) findViewById(R.id.upvote_button);
         distanceText = (TextView) findViewById(R.id.distance_text);
+        navigateText = (TextView) findViewById(R.id.navigateText);
+        turnOffDownvote();
+        turnOffUpvote();
 
         // Initialize Firebase references
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -411,6 +420,21 @@ public class ArtPageActivity extends AppCompatActivity {
                     // Update TextView to reflect increased upvote
                     upvoteText.setText(String.valueOf(pieceOfArt.getRatingUpvotes()));
                 }
+            }
+        });
+
+        // User has decided to navigate to the art
+        navigateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "http://maps.google.com/maps?saddr="
+                        + userLocation.getLatitude() + "," + userLocation.getLongitude()
+                        + "&daddr="
+                        + pieceOfArt.getLatitude() + "," + pieceOfArt.getLongitude()
+                        + "&mode=walking";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                context.startActivity(intent);
+
             }
         });
     }

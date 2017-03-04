@@ -424,7 +424,6 @@ public class SubmitActivity extends BaseDrawerActivity {
 
     /**
      * Validates the form to ensure that no fields are left empty
-     *
      * @return true if the form is ready to be submitted, false otherwise
      */
     private boolean validateForm() {
@@ -445,7 +444,6 @@ public class SubmitActivity extends BaseDrawerActivity {
         } else {
             artistText.setError(null);
         }
-
         return valid;
     }
 

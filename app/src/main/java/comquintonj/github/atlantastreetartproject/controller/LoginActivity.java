@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         introIntent = new Intent(this, IntroActivity.class);
 
         // Instantiate resources
-        emailText = (EditText) findViewById(R.id.loginUsername);
+        emailText = (EditText) findViewById(R.id.loginEmail);
         passwordText = (EditText) findViewById(R.id.loginPassword);
 
         // Listener to check when the user signs in. If the user signs in, the user object will

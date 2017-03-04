@@ -1,5 +1,7 @@
 package comquintonj.github.atlantastreetartproject.model;
 
+import java.util.Date;
+
 public class ArtInformation {
 
     /**
@@ -47,6 +49,8 @@ public class ArtInformation {
      */
     private String title;
 
+    private long createdAt;
+
     /**
      * No-args constructor for an Art object for Firebase.
      */
@@ -76,6 +80,19 @@ public class ArtInformation {
         this.ratingDownvotes = ratingDownvotes;
         this.ratingUpvotes = ratingUpvotes;
         this.title = title;
+        this.createdAt = new Date().getTime();
+    }
+
+    /**
+     * The creation time of the art.
+     * @return the creation time
+     */
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date creationDate() {
+        return new Date(createdAt);
     }
 
     /**

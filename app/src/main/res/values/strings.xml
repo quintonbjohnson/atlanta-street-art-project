@@ -38,4 +38,7 @@
     <string name="play_again">Play Again</string>
 
     <string name="action_settings">Settings</string>
+
+    <string name="permissions">Giving GPS and Read permissions
+        is required to see distance from art</string>
 </resources>

@@ -21,18 +21,15 @@
             android:id="@+id/input_layout_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <EditText
+                android:id="@+id/loginEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
+                android:layout_weight="1"
                 android:ems="10"
-                android:id="@+id/loginUsername"
-                android:hint="@string/email"
-                android:textAlignment="viewStart"
-                android:fontFamily="sans-serif"
-                android:textSize="18sp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout

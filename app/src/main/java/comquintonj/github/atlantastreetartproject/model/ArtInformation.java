@@ -1,5 +1,7 @@
 package comquintonj.github.atlantastreetartproject.model;
 
+import java.util.Date;
+
 public class ArtInformation {
 
     /**
@@ -13,9 +15,19 @@ public class ArtInformation {
     private String displayName;
 
     /**
-     * The location of the art
+     * The distance away from the art
      */
-    private String location;
+    private double distance;
+
+    /**
+     * The latitude of the art
+     */
+    private double latitude;
+
+    /**
+     * The longitude of the art
+     */
+    private double longitude;
 
     /**
      * The path of the image of the art
@@ -25,17 +37,22 @@ public class ArtInformation {
     /**
      * The downvotes of the art
      */
-    private String ratingDownvotes;
+    private int ratingDownvotes;
 
     /**
      * The upvotes of the art
      */
-    private String ratingUpvotes;
+    private int ratingUpvotes;
 
     /**
      * The title of the art
      */
     private String title;
+
+    /**
+     * The creation time of the art
+     */
+    private long createdAt;
 
     /**
      * No-args constructor for an Art object for Firebase.
@@ -48,22 +65,37 @@ public class ArtInformation {
      * Constructor for a piece of art
      * @param artist the artist
      * @param displayName the display name of the user that submitted the art
-     * @param location the location of the art
+     * @param latitude the latitude of the art
+     * @param longitude the longitude of the art
      * @param photoPath the path to the image of the art
      * @param ratingDownvotes the downvotes of the art
      * @param ratingUpvotes the upvotes of the art
      * @param title the title of the art
      */
-    public ArtInformation(String artist, String displayName, String location,
-                          String photoPath, String ratingDownvotes, String ratingUpvotes,
+    public ArtInformation(String artist, String displayName, double latitude, double longitude,
+                          String photoPath, int ratingDownvotes, int ratingUpvotes,
                           String title) {
         this.artist = artist;
         this.displayName = displayName;
-        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.photoPath = photoPath;
         this.ratingDownvotes = ratingDownvotes;
         this.ratingUpvotes = ratingUpvotes;
         this.title = title;
+        this.createdAt = new Date().getTime();
+    }
+
+    /**
+     * The creation time of the art.
+     * @return the creation time
+     */
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date creationDate() {
+        return new Date(createdAt);
     }
 
     /**
@@ -83,11 +115,19 @@ public class ArtInformation {
     }
 
     /**
-     * The location of the art.
-     * @return the location
+     * Get the latitude of the art
+     * @return the latitude
      */
-    public String getLocation() {
-        return location;
+    public double getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * Get the longitude of the art
+     * @return the longitude
+     */
+    public double getLongitude() {
+        return longitude;
     }
 
     /**
@@ -111,14 +151,14 @@ public class ArtInformation {
      * @return the number of upvotes minus the number of downvotes
      */
     public int getRating() {
-        return Integer.parseInt(ratingUpvotes) - Integer.parseInt(ratingDownvotes);
+        return ratingUpvotes - ratingDownvotes;
     }
 
     /**
      * The downvotes of the art.
      * @return the number of downvotes
      */
-    public String getRatingDownvotes() {
+    public int getRatingDownvotes() {
         return ratingDownvotes;
     }
 
@@ -126,7 +166,7 @@ public class ArtInformation {
      * The upvotes of the art.
      * @return the number of upvotes
      */
-    public String getRatingUpvotes() {
+    public int getRatingUpvotes() {
         return ratingUpvotes;
     }
 
@@ -134,22 +174,22 @@ public class ArtInformation {
      * Add one additional upvote to the art.
      */
     public void incUpvote() {
-        this.ratingUpvotes = String.valueOf(Integer.parseInt(ratingUpvotes) + 1);
+        this.ratingUpvotes = ratingUpvotes + 1;
     }
 
     /**
      * Add one additional downvote to the art.
      */
     public void incDownvote() {
-        this.ratingDownvotes = String.valueOf(Integer.parseInt(ratingDownvotes) + 1);
+        this.ratingDownvotes = ratingDownvotes + 1;
     }
 
     /**
      * Remove one upvote to the art.
      */
     public void decUpvote() {
-        if (Integer.parseInt(ratingUpvotes) > 0) {
-            this.ratingUpvotes = String.valueOf(Integer.parseInt(ratingUpvotes) - 1);
+        if (ratingUpvotes > 0) {
+            this.ratingUpvotes = ratingUpvotes - 1;
         }
     }
 
@@ -157,10 +197,24 @@ public class ArtInformation {
      * Remove one downvote to the art.
      */
     public void decDownvote() {
-        if (Integer.parseInt(ratingDownvotes) > 0) {
-            this.ratingDownvotes = String.valueOf(Integer.parseInt(ratingDownvotes) - 1);
+        if (ratingDownvotes > 0) {
+            this.ratingDownvotes = ratingDownvotes - 1;
         }
     }
 
+    /**
+     * Get the distance away from the art
+     * @return the distance away
+     */
+    public double getDistance() {
+        return distance;
+    }
 
+    /**
+     * Set the distance away from the art
+     * @param distance the distance away
+     */
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
 }

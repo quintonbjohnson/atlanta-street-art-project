@@ -45,6 +45,14 @@
                 android:id="@+id/user_submitted"
                 android:layout_marginLeft="15dp" />
 
+            <TextView
+                android:id="@+id/distance_card_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/user_submitted"
+                android:layout_marginEnd="15dp" />
+
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

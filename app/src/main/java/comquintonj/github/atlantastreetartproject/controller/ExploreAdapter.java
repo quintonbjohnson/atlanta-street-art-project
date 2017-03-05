@@ -1,4 +1,4 @@
-package comquintonj.github.atlantastreetartproject.model;
+package comquintonj.github.atlantastreetartproject.controller;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import comquintonj.github.atlantastreetartproject.R;
+import comquintonj.github.atlantastreetartproject.model.ArtInformation;
 
 /**
  * The adapter for the explore activity for the RecyclerView
@@ -31,17 +34,21 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
     /**
      * The HashMap that stores the path to the image and data
      */
-    private HashMap<String, ArrayList<String>> pathAndDataMap;
+    private HashMap<String, ArtInformation> pathAndDataMap;
 
-
+    /**
+     * ViewHolder for the RecyclerView in the Explore screen
+     */
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView pictureOfArt;
         public TextView userSubmitted;
+        public TextView distanceText;
 
         public MyViewHolder(View view) {
             super(view);
             pictureOfArt = (ImageView) view.findViewById(R.id.artPicture);
             userSubmitted = (TextView) view.findViewById(R.id.user_submitted);
+            distanceText = (TextView) view.findViewById(R.id.distance_card_text);
         }
     }
 
@@ -51,7 +58,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
      * @param pathAndDataMap the HashMap that stores the path to the image and data
      */
     public ExploreAdapter(Context mContext,
-                          HashMap<String, ArrayList<String>> pathAndDataMap) {
+                          HashMap<String, ArtInformation> pathAndDataMap) {
         this.mContext = mContext;
         this.pathAndDataMap = pathAndDataMap;
     }
@@ -88,12 +95,13 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
                 .into(holder.pictureOfArt);
 
         // Using same position, set proper artist name
-        String userOfArt = "Submitter: "
-                + pathAndDataMap.get(imagePaths.get(position)).get(1);
+        String userOfArt = pathAndDataMap.get(imagePaths.get(position)).getDisplayName();
         holder.userSubmitted.setText(userOfArt);
-
-
-
+        double distance = pathAndDataMap.get(imagePaths.get(position)).getDistance();
+        if (!(distance == 0.00)) {
+            String distanceValue = String.valueOf(String.format("%.2f", distance)) + " mi";
+            holder.distanceText.setText(distanceValue);
+        }
     }
 
     @Override

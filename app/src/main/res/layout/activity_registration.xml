@@ -21,7 +21,9 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/focusDummy"
+        android:layout_alignParentStart="true">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_username"
@@ -43,14 +45,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp">
+
             <EditText
+                android:id="@+id/emailInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
                 android:ems="10"
-                android:id="@+id/emailInput"
-                android:hint="@string/emailRegister"
-                android:fontFamily="sans-serif" />
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout

@@ -9,105 +9,140 @@
     android:background="@color/Theme2">
 
     <ImageView
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
-        android:layout_width="match_parent"
-        app:srcCompat="@drawable/com_facebook_auth_dialog_background"
         android:id="@+id/art_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:layout_alignParentStart="true"
-        android:layout_height="300dp" />
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/com_facebook_auth_dialog_background" />
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_below="@+id/art_image_view"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/art_image_view"
-        android:layout_height="400dp"
         android:background="@color/cardview_light_background">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="191dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             android:weightSum="1">
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_weight="0.10">
+                android:layout_weight="0.10"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:text="TextView"
+                    android:id="@+id/art_artist_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/art_artist_text"
                     android:layout_alignBaseline="@+id/art_submitter_text"
                     android:layout_alignBottom="@+id/art_submitter_text"
                     android:layout_alignParentStart="true"
                     android:layout_marginLeft="20dp"
-                    android:textStyle="normal|bold"
-                    android:textSize="20sp"
+                    android:layout_marginTop="10dp"
                     android:layout_weight="1"
-                    android:layout_marginTop="10dp" />
+                    android:text="TextView"
+                    android:textSize="20sp"
+                    android:textStyle="normal|bold" />
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
                     android:weightSum="1">
 
                     <ImageButton
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_thumbs_up"
                         android:id="@+id/upvote_button"
-                        android:background="@color/tw__transparent"
                         android:layout_width="50dp"
-                        android:layout_marginLeft="30dp" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:background="@color/tw__transparent"
+                        android:tint="@color/Theme1"
+                        app:srcCompat="@drawable/ic_thumbs_up" />
 
                     <TextView
-                        android:text="0"
-                        android:layout_height="wrap_content"
                         android:id="@+id/upvote_text"
+                        android:layout_width="25dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:layout_width="25dp" />
+                        android:text="0" />
 
                     <ImageButton
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_thumbs_down"
                         android:id="@+id/downvote_button"
-                        android:background="@color/tw__transparent"
-                        android:layout_alignTop="@+id/upvote_text"
                         android:layout_width="50dp"
-                        android:layout_marginTop="5dp" />
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/upvote_text"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/tw__transparent"
+                        android:tint="@color/Theme1"
+                        app:srcCompat="@drawable/ic_thumbs_down" />
 
                     <TextView
-                        android:text="0"
-                        android:layout_height="wrap_content"
                         android:id="@+id/downvote_text"
-                        android:layout_alignTop="@+id/upvote_button"
                         android:layout_width="25dp"
-                        android:layout_marginTop="5dp" />
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/upvote_button"
+                        android:layout_marginTop="5dp"
+                        android:text="0" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
             <TextView
-                android:text="TextView"
+                android:id="@+id/art_submitter_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/art_submitter_text"
-                android:layout_below="@+id/art_image_view"
                 android:layout_alignParentEnd="true"
+                android:layout_below="@+id/art_image_view"
                 android:layout_marginLeft="20dp"
+                android:text="TextView"
                 android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="50dp"
+                android:layout_weight="0.02"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/distance_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="1"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/navigateImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp"
+                    app:srcCompat="@drawable/ic_navigation_black_24px" />
+
+                <TextView
+                    android:id="@+id/navigateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Navigate to" />
+            </LinearLayout>
 
         </LinearLayout>
 

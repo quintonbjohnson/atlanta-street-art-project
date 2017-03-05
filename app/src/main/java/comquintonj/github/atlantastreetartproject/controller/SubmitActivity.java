@@ -1,17 +1,21 @@
 package comquintonj.github.atlantastreetartproject.controller;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +27,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,20 +38,36 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import comquintonj.github.atlantastreetartproject.R;
 import comquintonj.github.atlantastreetartproject.model.ArtInformation;
+import comquintonj.github.atlantastreetartproject.model.GPSUtility;
 
 /**
+ * TODO: Store time of submission in database
+ * TODO: Add dialog for camera or image picker
  * Submission page used to submit pieces of art
  */
 public class SubmitActivity extends BaseDrawerActivity {
 
     /**
+     *
+     */
+    private ArtInformation pieceOfArt;
+
+    /**
      * The submit Button
      */
     private Button submitButton;
+
+    /**
+     * The context of the current screen
+     */
+    private Context context;
 
     /**
      * A reference to the Firebase database to store information about the art
@@ -59,14 +80,14 @@ public class SubmitActivity extends BaseDrawerActivity {
     private EditText titleText;
 
     /**
-     * EditText for the location field
-     */
-    private EditText locationText;
-
-    /**
      * EditText for the artist field
      */
     private EditText artistText;
+
+    /**
+     * EditText for the location field
+     */
+    private EditText locationText;
 
     /**
      * Authentication instance of the FirebaseAuth
@@ -84,24 +105,29 @@ public class SubmitActivity extends BaseDrawerActivity {
     private ImageButton imageSelectButton;
 
     /**
+     * A constant to track the autocomplete intent
+     */
+    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+
+    /**
      * A constant to track the file chooser intent
      */
     private static final int PICK_IMAGE_REQUEST = 234;
 
     /**
-     * Request code to decide where to take the user upon an action
+     * The latitude of the art
      */
-    private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
+    private double latitude;
+
+    /**
+     * The longitude of the art
+     */
+    private double longitude;
 
     /**
      * A reference to the Firebase storage kept in order to upload images
      */
     private StorageReference storageReference;
-
-    /**
-     * The ID of the place the user selects as the location
-     */
-    private String placeId;
 
     /**
      * TAG used for error messages
@@ -119,6 +145,7 @@ public class SubmitActivity extends BaseDrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit);
         setTitle("Submit");
+        context = this;
 
         // Get Instance of Firebase
         mAuth = FirebaseAuth.getInstance();
@@ -131,11 +158,16 @@ public class SubmitActivity extends BaseDrawerActivity {
 
         // Instantiate resources
         titleText = (EditText) findViewById(R.id.titleText);
-        locationText = (EditText) findViewById(R.id.locationTextView);
         artistText = (EditText) findViewById(R.id.artistTag);
+        locationText = (EditText) findViewById(R.id.locationText);
         submitButton = (Button) findViewById(R.id.submitButton);
         imageSelectButton = (ImageButton) findViewById(R.id.art_image_view);
         storageReference = FirebaseStorage.getInstance().getReference();
+
+        // Prevent view from being editable until the user has selected an image
+        titleText.setFocusable(false);
+        artistText.setFocusable(false);
+        locationText.setFocusable(false);
 
         // Set on click listener for the submit button
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -155,21 +187,12 @@ public class SubmitActivity extends BaseDrawerActivity {
         imageSelectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v == imageSelectButton) {
-                    showFileChooser();
+                boolean allowed = checkReadPermission();
+                if (allowed) {
+                    if (v == imageSelectButton) {
+                        showFileChooser();
+                    }
                 }
-            }
-        });
-
-        // When a user enters location take them to them to the Autocomplete Activity
-        locationText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(MotionEvent.ACTION_UP == event.getAction()) {
-                    findPlace();
-                }
-
-                return true; // return is important...
             }
         });
     }
@@ -186,16 +209,15 @@ public class SubmitActivity extends BaseDrawerActivity {
         String displayName = "";
         final String title = titleText.getText().toString().trim();
         String artist = artistText.getText().toString().trim();
-        String location = placeId;
         if (user != null) {
             photoPath = titleText.getText().toString().trim() + user.getDisplayName();
             displayName = user.getDisplayName();
         }
-        String upvotes = String.valueOf(0);
-        String downvotes = String.valueOf(0);
+        int upvotes = 0;
+        int downvotes = 0;
 
-        ArtInformation pieceOfArt = new ArtInformation(artist, displayName,
-                location, photoPath, upvotes, downvotes, title);
+        pieceOfArt = new ArtInformation(artist, displayName,
+                latitude, longitude, photoPath, upvotes, downvotes, title);
 
         // Saving data to Firebase database
         mDatabase.child("Art").child(photoPath).setValue(pieceOfArt);
@@ -208,62 +230,103 @@ public class SubmitActivity extends BaseDrawerActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent,
+                "Complete action using"), PICK_IMAGE_REQUEST);
     }
 
     /**
-     * On the result of the activity for the Google Places API location chooser
+     * On the result of the activity for the image picker
      * and for the image selection screen.
+     *
      * @param requestCode The request code used to decide which screen the user has completed.
-     * @param resultCode The result code to decide if there has been an error.
-     * @param data Data to include for the result.
+     * @param resultCode  The result code to decide if there has been an error.
+     * @param data        Data to include for the result.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // If user is trying to select a place
-        if (requestCode == REQUEST_CODE_AUTOCOMPLETE) {
+        // If user has to select a place from Google Places
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                // Get the user's selected place from the Intent.
-                final Place place = PlaceAutocomplete.getPlace(this, data);
-                placeId = place.getId();
-                final String placeName = place.getName().toString();
-                Log.i(TAG, "Place Selected: " + place.getName());
+                // Get the place the user has selected
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                locationText.setText(place.getName());
 
-                Runnable thRead = new Runnable(){
-                    public void run() {
-                        locationText.setText(placeName);
-                    }
-                };
-                runOnUiThread(thRead);
+                // Get the coordinates from the place
+                LatLng latLng = place.getLatLng();
+                latitude = latLng.latitude;
+                longitude = latLng.longitude;
 
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
-                Log.e(TAG, "Error: Status = " + status.toString());
+                Log.i(TAG, status.getStatusMessage());
             } else if (resultCode == RESULT_CANCELED) {
-                // User left search intent
-                Log.i(TAG, "User left intent");
+                // The user canceled the operation.
             }
         }
 
         // If user is trying to select an image
         if (requestCode == PICK_IMAGE_REQUEST
                 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            // Get the Uri for the image
             filePath = data.getData();
+
+            // Instantiate variables to be used
+            InputStream inputStreamBitmap = null;
+            Bitmap imageBitmap = null;
+            File finalFile = null;
+
+            // Retrieve the file from the actual file path of the image
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                Bitmap resizedImage = resizeImage(bitmap);
+                finalFile = new File(getRealPathFromURI(filePath));
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
+            // Read data from file
+            boolean success = false;
+            if (finalFile != null) {
+                // Use the file to read location data
+                success = readExif(finalFile.toString());
+            }
+
+            // Show bitmap in view
+            if (!success) {
+                locationText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        findPlace(view);
+                    }
+                });
+            }
+            try {
+                inputStreamBitmap = getContentResolver().openInputStream(filePath);
+                imageBitmap = BitmapFactory.decodeStream(inputStreamBitmap);
+                // Resize the image to fit to the view
+                Bitmap resizedImage = resizeImage(imageBitmap);
                 if (resizedImage != null) {
+                    // Set the ImageButton to be the photo the user has selected
                     imageSelectButton.setImageBitmap(resizedImage);
-                    imageSelectButton.setBackgroundColor(255);
+
+                    // Allow the view to be editable
+                    titleText.setFocusableInTouchMode(true);
+                    artistText.setFocusableInTouchMode(true);
                 } else {
-                    Toast.makeText(this, "Please try again with a different image.",
+                    Toast.makeText(this, "Please try again with a different image",
                             Toast.LENGTH_SHORT).show();
                 }
+            } catch (FileNotFoundException e) {
+                Toast.makeText(context, "File could not be found", Toast.LENGTH_SHORT).show();
+            } finally {
+                try {
+                    if (inputStreamBitmap != null) {
+                        inputStreamBitmap.close();
+                    }
+                } catch (IOException ignored) {
+                }
 
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -286,27 +349,25 @@ public class SubmitActivity extends BaseDrawerActivity {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            //if the upload is successful
-                            //hiding the progress dialog
+                            // If the upload is successful, hide the progress dialog
                             progressDialog.dismiss();
 
-                            //and displaying a success toast
-                            Toast.makeText(getApplicationContext(), "Art Uploaded",
-                                    Toast.LENGTH_LONG).show();
-                            Intent exploreIntent = new Intent(SubmitActivity.this,
-                                    ExploreActivity.class);
-                            startActivity(exploreIntent);
+                            // Take the user to the art page for the piece of art that was uploaded
+                            Intent artIntent = new Intent(context, ArtPageActivity.class);
+                            artIntent.putExtra("ArtPath", pieceOfArt.getPhotoPath());
+                            startActivity(artIntent);
                         }
                     })
 
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            //calculating progress percentage
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) /
+                            // Calculate the upload progress
+                            @SuppressWarnings("VisibleForTests")
+                            double progress = 100.0 * taskSnapshot.getBytesTransferred() /
                                     taskSnapshot.getTotalByteCount();
 
-                            //displaying percentage in progress dialog
+                            // Display the progress
                             progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
                         }
                     });
@@ -322,6 +383,7 @@ public class SubmitActivity extends BaseDrawerActivity {
      * Resize the bitmap in order to constrain the image to the image view.
      * Credits: http://stackoverflow.com/
      * questions/15124179/resizing-a-bitmap-to-a-fixed-value-but-without-changing-the-aspect-ratio
+     *
      * @param bm the bitmap to resize
      * @return the resized bitmap image
      */
@@ -361,21 +423,6 @@ public class SubmitActivity extends BaseDrawerActivity {
     }
 
     /**
-     * The Autocomplete intent from the Google Places API to choose the location of the art
-     */
-    private void findPlace() {
-        try {
-            Intent intent =
-                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                            .build(this);
-            startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
-        } catch (GooglePlayServicesRepairableException
-                | GooglePlayServicesNotAvailableException e) {
-            Log.d(TAG, "PlacesError");
-        }
-    }
-
-    /**
      * Validates the form to ensure that no fields are left empty
      * @return true if the form is ready to be submitted, false otherwise
      */
@@ -397,16 +444,82 @@ public class SubmitActivity extends BaseDrawerActivity {
         } else {
             artistText.setError(null);
         }
-
-        String location = locationText.getText().toString();
-        if (TextUtils.isEmpty(location)) {
-            locationText.setError("Required.");
-            valid = false;
-        } else {
-            locationText.setError(null);
-        }
-
         return valid;
+    }
+
+    /**
+     * Scrape coordinates from the image that the user chooses
+     * @param file the file to get the coordinates from
+     * @return whether or not the method was able to succeed
+     */
+    private boolean readExif(String file) {
+        try {
+            // Retrieve Exif information from the Bitmap
+            ExifInterface exifInterface = new ExifInterface(file);
+
+            // Create a new GPSUtility
+            GPSUtility gpsUtil = new GPSUtility(exifInterface);
+            if (gpsUtil.toString().equals("null, null")) {
+                return false;
+            } else {
+                // Transcribe the longitude and latitude to a String for submission
+                latitude = gpsUtil.getLatitudeE6();
+                longitude = gpsUtil.getLongitudeE6();
+                locationText.setOnClickListener(null);
+                String setString = "Location saved from photo";
+                locationText.setText(setString);
+                return true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(SubmitActivity.this,
+                    e.toString(),
+                    Toast.LENGTH_LONG).show();
+        }
+        return false;
+    }
+
+    /**
+     * Retrieve actual file path from a Uri object.
+     * @param uri the Uri input
+     * @return the actual file path
+     */
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            return cursor.getString(idx);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Google Places API autocomplete activity that allows users to select a location
+     * @param view the view that the activity takes place in
+     */
+    public void findPlace(View view) {
+        try {
+            Intent intent =
+                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                            .build(this);
+            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+        } catch (GooglePlayServicesRepairableException |
+                GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 }
 

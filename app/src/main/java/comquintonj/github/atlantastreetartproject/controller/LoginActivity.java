@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         introIntent = new Intent(this, IntroActivity.class);
 
         // Instantiate resources
-        emailText = (EditText) findViewById(R.id.loginUsername);
+        emailText = (EditText) findViewById(R.id.loginEmail);
         passwordText = (EditText) findViewById(R.id.loginPassword);
 
         // Listener to check when the user signs in. If the user signs in, the user object will
@@ -87,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     startActivity(exploreIntent);
+                    finish();
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");

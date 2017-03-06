@@ -39,7 +39,7 @@ public class BaseDrawerActivity extends AppCompatActivity
     /**
      * Used to access permission requests
      */
-    public  static final int PERMISSIONS_MULTIPLE_REQUEST = 123;
+    public static final int PERMISSIONS_MULTIPLE_REQUEST = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +131,7 @@ public class BaseDrawerActivity extends AppCompatActivity
 
 
         // Set profile name in navigation drawer
-        TextView headerName = (TextView)header.findViewById(R.id.profileNameText);
+        TextView headerName = (TextView) header.findViewById(R.id.profileNameText);
         FirebaseUser user = mAuth.getCurrentUser();
         assert user != null;
         headerName.setText(user.getDisplayName());
@@ -176,6 +176,7 @@ public class BaseDrawerActivity extends AppCompatActivity
 
     /**
      * Check to see if the user has given permission to read external storage
+     *
      * @return whether or not the user has given permission
      */
     public boolean checkReadPermission() {
@@ -190,6 +191,7 @@ public class BaseDrawerActivity extends AppCompatActivity
 
     /**
      * Check to see if the user has given permission to read external storage
+     *
      * @return whether or not the user has given permission
      */
     public boolean checkLocationPermission() {
@@ -199,42 +201,6 @@ public class BaseDrawerActivity extends AppCompatActivity
             return true;
         } else {
             return false;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-
-        switch (requestCode) {
-            case PERMISSIONS_MULTIPLE_REQUEST:
-                if (grantResults.length > 0) {
-                    boolean locationPermission
-                            = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    boolean readExternalFile = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-
-                    if(locationPermission && readExternalFile)
-                    {
-
-                    }
-                }
-                else {
-                    Snackbar.make(this.findViewById(android.R.id.content),
-                            "Please Grant Permissions to upload profile photo",
-                            Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
-                            new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    requestPermissions(
-                                            new String[]{Manifest.permission
-                                                    .READ_EXTERNAL_STORAGE,
-                                                    Manifest.permission.ACCESS_FINE_LOCATION},
-                                            PERMISSIONS_MULTIPLE_REQUEST);
-                                }
-                            }).show();
-                }
-                break;
         }
     }
 }

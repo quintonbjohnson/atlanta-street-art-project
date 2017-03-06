@@ -1,13 +1,17 @@
 package comquintonj.github.atlantastreetartproject.controller;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -151,8 +155,8 @@ public class ExploreActivity extends BaseDrawerActivity {
                     }
                     pathAndDataMap.put(path, pieceOfArt);
                 }
-                // Sort by most recent by default
-                sortByMostRecent();
+                // Sort by distance by default
+                sortByDistance();
                 populateAdapter(pathAndDataMap);
             }
 
@@ -361,4 +365,41 @@ public class ExploreActivity extends BaseDrawerActivity {
     public void onBackPressed() {
         this.finishAffinity();
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+            case PERMISSIONS_MULTIPLE_REQUEST:
+                if (grantResults.length > 0) {
+                    boolean locationPermission
+                            = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean readExternalFile = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+
+                    if(locationPermission && readExternalFile)
+                    {
+                        recreate();
+                    }
+                }
+                else {
+                    Snackbar.make(this.findViewById(android.R.id.content),
+                            "Please Grant Permissions to upload profile photo",
+                            Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    requestPermissions(
+                                            new String[]{Manifest.permission
+                                                    .READ_EXTERNAL_STORAGE,
+                                                    Manifest.permission.ACCESS_FINE_LOCATION},
+                                            PERMISSIONS_MULTIPLE_REQUEST);
+                                }
+                            }).show();
+                }
+                break;
+        }
+    }
 }
+

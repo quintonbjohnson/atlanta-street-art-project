@@ -264,8 +264,10 @@ public class ArtPageActivity extends AppCompatActivity {
             case android.R.id.home:
                 if (getIntent().hasExtra("Submit")) {
                     startActivity(exploreIntent);
+                    finish();
                 } else {
                     onBackPressed();
+                    finish();
                 }
                 return true;
             default:

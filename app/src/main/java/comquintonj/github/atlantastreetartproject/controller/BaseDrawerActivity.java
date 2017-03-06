@@ -32,9 +32,19 @@ public class BaseDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     /**
+     * The DrawerLayout for the navigation drawer
+     */
+    private DrawerLayout drawer;
+
+    /**
      * Authentication instance of the FirebaseAuth
      */
     private FirebaseAuth mAuth;
+
+    /**
+     * The NavigationView for the navigation drawer
+     */
+    private NavigationView navigationView;
 
     /**
      * Used to access permission requests
@@ -73,10 +83,11 @@ public class BaseDrawerActivity extends AppCompatActivity
             if (id == R.id.nav_explore) {
                 // Check to make sure the user is not currently in the Explore Activity
                 if (this.getClass().equals(ExploreActivity.class)) {
-                    onBackPressed();
+                    drawer.closeDrawer(navigationView);
                 } else {
                     Intent exploreIntent = new Intent(this, ExploreActivity.class);
                     startActivity(exploreIntent);
+                    finish();
                 }
             } else if (id == R.id.nav_map) {
 
@@ -85,7 +96,7 @@ public class BaseDrawerActivity extends AppCompatActivity
             } else if (id == R.id.nav_submit) {
                 // Check to make sure the user is not currently in the Submit Activity
                 if (this.getClass().equals(SubmitActivity.class)) {
-                    onBackPressed();
+                    drawer.closeDrawer(navigationView);
                 } else if (mAuth.getCurrentUser().getDisplayName() == null) {
                     Toast.makeText(this, "Please create an account to use this feature.",
                             Toast.LENGTH_SHORT).show();
@@ -117,7 +128,7 @@ public class BaseDrawerActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         // Create drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
@@ -125,7 +136,7 @@ public class BaseDrawerActivity extends AppCompatActivity
         toggle.syncState();
 
         // Set navigation drawer
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
 

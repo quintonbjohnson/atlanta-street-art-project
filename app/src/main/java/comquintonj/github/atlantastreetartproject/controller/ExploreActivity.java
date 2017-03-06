@@ -198,7 +198,7 @@ public class ExploreActivity extends BaseDrawerActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.sort_by) {
             // Open a dialog for choosing which criteria to sort by
-            CharSequence options[] = new CharSequence[] {"Most Recent", "Distance", "Popularity"};
+            CharSequence options[] = new CharSequence[] {"Distance", "Most Recent", "Popularity"};
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Sort By:");
@@ -206,11 +206,6 @@ public class ExploreActivity extends BaseDrawerActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (which == 0) {
-                        // Sort by most recent art
-                        sortByMostRecent();
-                        populateAdapter(pathAndDataMap);
-                        adapter.notifyDataSetChanged();
-                    } else if (which == 1) {
                         // Sort by distance
                         if (allowed) {
                             sortByDistance();
@@ -219,6 +214,11 @@ public class ExploreActivity extends BaseDrawerActivity {
                         } else {
                             checkPermission();
                         }
+                    } else if (which == 1) {
+                        // Sort by most recent art
+                        sortByMostRecent();
+                        populateAdapter(pathAndDataMap);
+                        adapter.notifyDataSetChanged();
                     } else if (which == 2) {
                         // Sort by popularity
                         sortByPopularity();

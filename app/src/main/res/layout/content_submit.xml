@@ -61,74 +61,93 @@
             android:weightSum="1"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:ems="10"
-                android:id="@+id/titleText"
-                android:hint="Title"
-                android:imeOptions="actionDone"
-                android:maxLines="1"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_title"
                 android:layout_width="match_parent"
-                android:layout_weight="0.40"
-                android:textSize="18sp"
-                android:layout_marginTop="45dp"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp">
 
-            <EditText
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine|textNoSuggestions"
-                android:ems="10"
-                android:id="@+id/artistTag"
-                android:hint="Artist"
-                android:maxLines="1"
-                android:imeOptions="actionDone"
-                android:layout_below="@+id/titleText"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_width="match_parent"
-                android:layout_weight="0.40"
-                android:textSize="18sp"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp" />
+                <EditText
+                    android:id="@+id/titleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_weight="0.40"
+                    android:ems="10"
+                    android:hint="Title"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:textSize="18sp" />
+            </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:id="@+id/locationText"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_artist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/titleText"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp"
-                android:layout_marginTop="30dp"
-                android:layout_weight="0.40"
-                android:ems="10"
-                android:hint="Location"
-                android:imeOptions="actionDone"
-                android:inputType="textMultiLine|textNoSuggestions"
-                android:maxLines="1"
-                android:textSize="18sp" />
+                android:layout_marginTop="30dp">
+
+                <EditText
+                    android:id="@+id/artistTag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/titleText"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_weight="0.40"
+                    android:ems="10"
+                    android:hint="Artist"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine|textNoSuggestions"
+                    android:maxLines="1"
+                    android:textSize="18sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp">
+
+                <EditText
+                    android:id="@+id/locationText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/titleText"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_weight="0.40"
+                    android:ems="10"
+                    android:hint="Location"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine|textNoSuggestions"
+                    android:maxLines="1"
+                    android:textSize="18sp" />
+            </android.support.design.widget.TextInputLayout>
+
 
             <Button
-                android:text="@string/submit"
+                android:id="@+id/submitButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/submitButton"
-                android:background="@color/colorAccent"
-                android:textColor="@android:color/background_light"
-                android:textSize="16sp"
-                android:fontFamily="sans-serif-medium"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
-                android:layout_weight="0.40"
                 android:layout_marginLeft="35dp"
                 android:layout_marginRight="35dp"
-                android:layout_marginTop="30dp" />
+                android:layout_marginTop="40dp"
+                android:layout_weight="0.40"
+                android:background="@color/colorAccent"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/submit"
+                android:textColor="@android:color/background_light"
+                android:textSize="16sp" />
 
         </LinearLayout>
 

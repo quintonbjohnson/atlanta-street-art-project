@@ -355,4 +355,10 @@ public class ExploreActivity extends BaseDrawerActivity {
         }
         pathAndDataMap = resultMap;
     }
+
+
+    @Override
+    public void onBackPressed() {
+        this.finishAffinity();
+    }
 }

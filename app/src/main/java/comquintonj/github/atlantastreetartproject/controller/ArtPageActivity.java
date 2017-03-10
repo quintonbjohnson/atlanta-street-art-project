@@ -308,10 +308,12 @@ public class ArtPageActivity extends AppCompatActivity {
         Location artLocation = new Location("");
         artLocation.setLatitude(pieceOfArt.getLatitude());
         artLocation.setLongitude(pieceOfArt.getLongitude());
-        double distanceInMeters = userLocation.distanceTo(artLocation);
-        double distanceInMiles = distanceInMeters / 1609.344;
-        String distanceValue = String.valueOf(String.format("%.2f", distanceInMiles)) + " mi";
-        distanceText.setText(distanceValue);
+        if (userLocation != null) {
+            double distanceInMeters = userLocation.distanceTo(artLocation);
+            double distanceInMiles = distanceInMeters / 1609.344;
+            String distanceValue = String.valueOf(String.format("%.2f", distanceInMiles)) + " mi";
+            distanceText.setText(distanceValue);
+        }
     }
 
     /**
@@ -431,13 +433,18 @@ public class ArtPageActivity extends AppCompatActivity {
         navigateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://maps.google.com/maps?saddr="
-                        + userLocation.getLatitude() + "," + userLocation.getLongitude()
-                        + "&daddr="
-                        + pieceOfArt.getLatitude() + "," + pieceOfArt.getLongitude()
-                        + "&mode=walking";
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                context.startActivity(intent);
+                if (userLocation != null) {
+                    String url = "http://maps.google.com/maps?saddr="
+                            + userLocation.getLatitude() + "," + userLocation.getLongitude()
+                            + "&daddr="
+                            + pieceOfArt.getLatitude() + "," + pieceOfArt.getLongitude()
+                            + "&mode=walking";
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    context.startActivity(intent);
+                } else {
+                    Toast.makeText(context, "Location could not be found, please try again later",
+                            Toast.LENGTH_SHORT).show();
+                }
 
             }
         });

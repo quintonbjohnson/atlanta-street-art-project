@@ -32,14 +32,24 @@ public class BaseDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     /**
+     * The DrawerLayout for the navigation drawer
+     */
+    private DrawerLayout drawer;
+
+    /**
      * Authentication instance of the FirebaseAuth
      */
     private FirebaseAuth mAuth;
 
     /**
+     * The NavigationView for the navigation drawer
+     */
+    private NavigationView navigationView;
+
+    /**
      * Used to access permission requests
      */
-    public  static final int PERMISSIONS_MULTIPLE_REQUEST = 123;
+    public static final int PERMISSIONS_MULTIPLE_REQUEST = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +83,11 @@ public class BaseDrawerActivity extends AppCompatActivity
             if (id == R.id.nav_explore) {
                 // Check to make sure the user is not currently in the Explore Activity
                 if (this.getClass().equals(ExploreActivity.class)) {
-                    onBackPressed();
+                    drawer.closeDrawer(navigationView);
                 } else {
                     Intent exploreIntent = new Intent(this, ExploreActivity.class);
                     startActivity(exploreIntent);
+                    finish();
                 }
             } else if (id == R.id.nav_map) {
 
@@ -85,7 +96,7 @@ public class BaseDrawerActivity extends AppCompatActivity
             } else if (id == R.id.nav_submit) {
                 // Check to make sure the user is not currently in the Submit Activity
                 if (this.getClass().equals(SubmitActivity.class)) {
-                    onBackPressed();
+                    drawer.closeDrawer(navigationView);
                 } else if (mAuth.getCurrentUser().getDisplayName() == null) {
                     Toast.makeText(this, "Please create an account to use this feature.",
                             Toast.LENGTH_SHORT).show();
@@ -117,7 +128,7 @@ public class BaseDrawerActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         // Create drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
@@ -125,13 +136,13 @@ public class BaseDrawerActivity extends AppCompatActivity
         toggle.syncState();
 
         // Set navigation drawer
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
 
 
         // Set profile name in navigation drawer
-        TextView headerName = (TextView)header.findViewById(R.id.profileNameText);
+        TextView headerName = (TextView) header.findViewById(R.id.profileNameText);
         FirebaseUser user = mAuth.getCurrentUser();
         assert user != null;
         headerName.setText(user.getDisplayName());
@@ -176,6 +187,7 @@ public class BaseDrawerActivity extends AppCompatActivity
 
     /**
      * Check to see if the user has given permission to read external storage
+     *
      * @return whether or not the user has given permission
      */
     public boolean checkReadPermission() {
@@ -190,6 +202,7 @@ public class BaseDrawerActivity extends AppCompatActivity
 
     /**
      * Check to see if the user has given permission to read external storage
+     *
      * @return whether or not the user has given permission
      */
     public boolean checkLocationPermission() {
@@ -199,42 +212,6 @@ public class BaseDrawerActivity extends AppCompatActivity
             return true;
         } else {
             return false;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-
-        switch (requestCode) {
-            case PERMISSIONS_MULTIPLE_REQUEST:
-                if (grantResults.length > 0) {
-                    boolean locationPermission
-                            = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    boolean readExternalFile = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-
-                    if(locationPermission && readExternalFile)
-                    {
-
-                    }
-                }
-                else {
-                    Snackbar.make(this.findViewById(android.R.id.content),
-                            "Please Grant Permissions to upload profile photo",
-                            Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
-                            new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    requestPermissions(
-                                            new String[]{Manifest.permission
-                                                    .READ_EXTERNAL_STORAGE,
-                                                    Manifest.permission.ACCESS_FINE_LOCATION},
-                                            PERMISSIONS_MULTIPLE_REQUEST);
-                                }
-                            }).show();
-                }
-                break;
         }
     }
 }

@@ -292,8 +292,9 @@ public class SubmitActivity extends BaseDrawerActivity {
                 success = readExif(finalFile.toString());
             }
 
-            // Show bitmap in view
+            // If the GPS data could not be found, allow the user to choose their own location
             if (!success) {
+                locationText.setText("");
                 locationText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -355,6 +356,7 @@ public class SubmitActivity extends BaseDrawerActivity {
                             // Take the user to the art page for the piece of art that was uploaded
                             Intent artIntent = new Intent(context, ArtPageActivity.class);
                             artIntent.putExtra("ArtPath", pieceOfArt.getPhotoPath());
+                            artIntent.putExtra("Submit", "Submit");
                             startActivity(artIntent);
                         }
                     })

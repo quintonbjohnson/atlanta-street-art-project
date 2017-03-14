@@ -262,9 +262,13 @@ public class ArtPageActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // app icon in action bar clicked; go home
-                exploreIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(exploreIntent);
+                if (getIntent().hasExtra("Submit")) {
+                    startActivity(exploreIntent);
+                    finish();
+                } else {
+                    onBackPressed();
+                    finish();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

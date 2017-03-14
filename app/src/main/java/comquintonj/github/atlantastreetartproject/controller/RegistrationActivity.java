@@ -232,8 +232,7 @@ public class RegistrationActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // app icon in action bar clicked; go home
-                introIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(introIntent);
+                onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

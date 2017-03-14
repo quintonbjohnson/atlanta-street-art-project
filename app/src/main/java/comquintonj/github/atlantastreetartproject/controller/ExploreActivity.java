@@ -252,9 +252,11 @@ public class ExploreActivity extends BaseDrawerActivity {
                         Location artLocation = new Location("");
                         artLocation.setLatitude(pieceOfArt.getLatitude());
                         artLocation.setLongitude(pieceOfArt.getLongitude());
-                        double distanceInMeters = userLocation.distanceTo(artLocation);
-                        double distanceInMiles = distanceInMeters / 1609.344;
-                        pieceOfArt.setDistance(distanceInMiles);
+                        if (userLocation != null) {
+                            double distanceInMeters = userLocation.distanceTo(artLocation);
+                            double distanceInMiles = distanceInMeters / 1609.344;
+                            pieceOfArt.setDistance(distanceInMiles);
+                        }
                     }
                     pathAndDataMap.put(path, pieceOfArt);
                 }
@@ -466,4 +468,6 @@ public class ExploreActivity extends BaseDrawerActivity {
             super.onBackPressed();
         }
     }
+
 }
+

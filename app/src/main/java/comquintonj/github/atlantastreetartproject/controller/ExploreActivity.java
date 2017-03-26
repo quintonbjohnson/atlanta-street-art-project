@@ -133,7 +133,7 @@ public class ExploreActivity extends BaseDrawerActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-       // Pull in data from Firebase for art
+        // Pull in data from Firebase for art
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

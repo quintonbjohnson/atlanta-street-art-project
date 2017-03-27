@@ -135,13 +135,27 @@
 
                 <TextView
                     android:id="@+id/navigateText"
-                    android:layout_width="match_parent"
+                    android:layout_width="130dp"
                     android:layout_height="26dp"
                     android:layout_above="@+id/cardView2"
                     android:layout_alignStart="@+id/cardView2"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="10dp"
                     android:gravity="center_vertical"
                     android:text="Navigate to" />
+
+                <ImageView
+                    android:id="@+id/tourImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_playlist_add_black_24px" />
+
+                <TextView
+                    android:id="@+id/tourText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="Add to tour" />
 
             </LinearLayout>
 

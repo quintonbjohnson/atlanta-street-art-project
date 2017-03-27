@@ -35,6 +35,7 @@ import java.util.HashMap;
 
 import comquintonj.github.atlantastreetartproject.R;
 import comquintonj.github.atlantastreetartproject.model.ArtInformation;
+import comquintonj.github.atlantastreetartproject.model.User;
 
 /**
  * The screen for an individual piece of art that the user is taken to after selecting an image
@@ -81,6 +82,16 @@ public class ArtPageActivity extends AppCompatActivity {
      * The art that has been rated by the user
      */
     private HashMap<String, String> artRated;
+
+    /**
+     * The navigate to button
+     */
+    private ImageView navigateImage;
+
+    /**
+     * The add to tour button
+     */
+    private ImageView tourImage;
 
     /**
      * Image of the art
@@ -164,7 +175,12 @@ public class ArtPageActivity extends AppCompatActivity {
     private TextView upvoteText;
 
     /**
-     * The TextView that used to navigate to the art
+     * The TextView to add the art to the user's tour
+     */
+    private TextView tourText;
+
+    /**
+     * The TextView that used to the art
      */
     private TextView navigateText;
 
@@ -204,8 +220,12 @@ public class ArtPageActivity extends AppCompatActivity {
         upvoteButton = (ImageButton) findViewById(R.id.upvote_button);
         distanceText = (TextView) findViewById(R.id.distance_text);
         navigateText = (TextView) findViewById(R.id.navigateText);
+        navigateImage = (ImageView) findViewById(R.id.navigateImage);
+        tourText = (TextView) findViewById(R.id.tourText);
+        tourImage = (ImageView) findViewById(R.id.tourImage);
         turnOffDownvote();
         turnOffUpvote();
+        setDrawable();
 
         // Initialize Firebase references
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -447,6 +467,20 @@ public class ArtPageActivity extends AppCompatActivity {
 
             }
         });
+
+        // User has decided to add the art to their tour
+        tourText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (User.tourArt.contains(pieceOfArt)) {
+                    User.tourArt.remove(pieceOfArt);
+                    Toast.makeText(context, "Removed from tour", Toast.LENGTH_SHORT).show();
+                } else {
+                    User.tourArt.add(pieceOfArt);
+                    Toast.makeText(context, "Added to tour", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     /**
@@ -479,6 +513,16 @@ public class ArtPageActivity extends AppCompatActivity {
     public void turnOffDownvote() {
         DrawableCompat.setTint(downvoteButton.getDrawable(),
                 ContextCompat.getColor(context, R.color.Theme3));
+    }
+
+    /**
+     * Changes the color of the drawables
+     */
+    public void setDrawable() {
+        DrawableCompat.setTint(navigateImage.getDrawable(),
+                ContextCompat.getColor(context, R.color.colorAccent));
+        DrawableCompat.setTint(tourImage.getDrawable(),
+                ContextCompat.getColor(context, R.color.colorAccent));
     }
 
     /**

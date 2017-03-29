@@ -82,22 +82,6 @@ public class User {
     public void addRatedArt(String title) {
         artRated.put(title, "");
     }
-
-    /**
-     * Add art to the user's tour.
-     * @param art the art to add to the tour
-     */
-    public void addTourArt(ArtInformation art) {
-        tourArt.add(art);
-    }
-
-    /**
-     * Remove the specific piece of art from the user's tour
-     * @param index the index of the art to remove
-     */
-    public void removeTourArt(int index) {
-        tourArt.remove(index);
-    }
 }
 
 

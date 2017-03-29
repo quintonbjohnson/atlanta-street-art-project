@@ -56,7 +56,7 @@ public class ExploreActivity extends BaseDrawerActivity {
     /**
      * Adapter for the recycler view that allows it to show the art
      */
-    private ExploreAdapter adapter;
+    private RecyclerAdapter adapter;
 
     /**
      * Hash map used to store where the art is located and information about the art
@@ -239,7 +239,7 @@ public class ExploreActivity extends BaseDrawerActivity {
      * @param pathAndDataMap the HashMap that contains the image path and data for all art
      */
     private void populateAdapter(HashMap<String, ArtInformation> pathAndDataMap) {
-        adapter = new ExploreAdapter(this.getApplicationContext(), pathAndDataMap);
+        adapter = new RecyclerAdapter(this.getApplicationContext(), pathAndDataMap);
         mRecyclerView.setAdapter(adapter);
     }
 

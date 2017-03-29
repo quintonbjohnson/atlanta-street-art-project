@@ -454,7 +454,7 @@ public class ArtPageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (userLocation != null) {
                     String url = "http://maps.google.com/maps?saddr="
-                            + userLocation.getLatitude() + "," + userLocation.getLongitude()
+                            + "My+Location"
                             + "&daddr="
                             + pieceOfArt.getLatitude() + "," + pieceOfArt.getLongitude()
                             + "&mode=walking";
@@ -472,12 +472,27 @@ public class ArtPageActivity extends AppCompatActivity {
         tourText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (User.tourArt.contains(pieceOfArt)) {
-                    User.tourArt.remove(pieceOfArt);
-                    Toast.makeText(context, "Removed from tour", Toast.LENGTH_SHORT).show();
-                } else {
-                    User.tourArt.add(pieceOfArt);
-                    Toast.makeText(context, "Added to tour", Toast.LENGTH_SHORT).show();
+                // Keep track if the art is already in the tour
+                boolean has = false;
+                for (int i = 0; i < User.tourArt.size(); i++) {
+                    ArtInformation current = User.tourArt.get(i);
+                    if (pieceOfArt.getPhotoPath() == current.getPhotoPath()) {
+                        // The art is already in the user's tour and should be removed
+                        has = true;
+                        User.tourArt.remove(i);
+                        Toast.makeText(context, "Removed from tour", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                if (!has) {
+                    // The art is not in the user's tour
+                    if (!(User.tourArt.size() <= 8)) {
+                        Toast.makeText(context, "You have reached" +
+                                "the maximum amount of tour stops", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Add the piece of art to the tour
+                        User.tourArt.add(pieceOfArt);
+                        Toast.makeText(context, "Added to tour", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

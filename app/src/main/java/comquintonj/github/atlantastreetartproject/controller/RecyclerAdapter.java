@@ -22,7 +22,7 @@ import comquintonj.github.atlantastreetartproject.model.ArtInformation;
 /**
  * The adapter for the explore activity for the RecyclerView
  */
-public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
 
     /**
      * The current context of the application
@@ -55,8 +55,8 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
      * @param mContext the current context of the application
      * @param pathAndDataMap the HashMap that stores the path to the image and data
      */
-    public ExploreAdapter(Context mContext,
-                          HashMap<String, ArtInformation> pathAndDataMap) {
+    public RecyclerAdapter(Context mContext,
+                           HashMap<String, ArtInformation> pathAndDataMap) {
         this.mContext = mContext;
         this.pathAndDataMap = pathAndDataMap;
     }

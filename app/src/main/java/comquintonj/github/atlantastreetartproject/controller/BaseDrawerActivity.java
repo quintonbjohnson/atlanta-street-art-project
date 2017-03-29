@@ -93,9 +93,10 @@ public class BaseDrawerActivity extends AppCompatActivity
                 Intent exploreIntent = new Intent(this, MapActivity.class);
                 startActivity(exploreIntent);
                 finish();
-
             } else if (id == R.id.nav_tour) {
-
+                Intent tourIntent = new Intent(this, TourActivity.class);
+                startActivity(tourIntent);
+                finish();
             } else if (id == R.id.nav_submit) {
                 // Check to make sure the user is not currently in the Submit Activity
                 if (this.getClass().equals(SubmitActivity.class)) {

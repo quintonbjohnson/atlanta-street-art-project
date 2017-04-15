@@ -2,6 +2,7 @@ package comquintonj.github.atlantastreetartproject.controller;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -99,6 +101,11 @@ public class ArtPageActivity extends AppCompatActivity {
     private ImageView imageOfArt;
 
     /**
+     * Image of the flag button
+     */
+    private ImageView flagImage;
+
+    /**
      * Upvote button to rate art
      */
     private ImageButton upvoteButton;
@@ -180,9 +187,14 @@ public class ArtPageActivity extends AppCompatActivity {
     private TextView tourText;
 
     /**
-     * The TextView that used to the art
+     * The TextView that is used to navigate to the art
      */
     private TextView navigateText;
+
+    /**
+     * The TextView that is used to flag the art
+     */
+    private TextView flagText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,6 +235,8 @@ public class ArtPageActivity extends AppCompatActivity {
         navigateImage = (ImageView) findViewById(R.id.navigateImage);
         tourText = (TextView) findViewById(R.id.tourText);
         tourImage = (ImageView) findViewById(R.id.tourImage);
+        flagImage = (ImageView) findViewById(R.id.flagView);
+        flagText = (TextView) findViewById(R.id.flagText);
         turnOffDownvote();
         turnOffUpvote();
         setDrawable();
@@ -496,6 +510,51 @@ public class ArtPageActivity extends AppCompatActivity {
                 }
             }
         });
+
+        flagText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Open a dialog for choosing which criteria to sort by
+                CharSequence options[] = new CharSequence[] {"Inappropriate", "Not street art",
+                        "Other reason"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Report Art:");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            // Inappropriate art
+                            sendFeedback("Inappropriate art");
+                        } else if (which == 1) {
+                            // Not street art
+                            sendFeedback("Not street art");
+                        } else if (which == 2) {
+                            // Other reason
+                            sendFeedback("Other reason");
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
+    }
+
+    /**
+     * Opens an email with the given feedback entered
+     * @param typeOfFeedback the type of feedback the user chose to report
+     */
+    public void sendFeedback(String typeOfFeedback) {
+        Intent Email = new Intent(Intent.ACTION_SEND);
+        Email.setType("message/rfc822");
+        Email.putExtra(Intent.EXTRA_EMAIL, new String[] { "theatlantastreetartproject@gmail.com" });
+        Email.putExtra(Intent.EXTRA_SUBJECT, "Report Art");
+        String bodyText = "Reasoning: " + typeOfFeedback + "\n\n"
+                + "Art Title: " + pieceOfArt.getTitle() + "\n\n"
+                + "Art ID: " + pieceOfArt.getPhotoPath() + "\n\n"
+                + "Additional information: ";
+        Email.putExtra(Intent.EXTRA_TEXT, bodyText);
+        startActivity(Intent.createChooser(Email, "Send Feedback:"));
     }
 
     /**
@@ -537,6 +596,8 @@ public class ArtPageActivity extends AppCompatActivity {
         DrawableCompat.setTint(navigateImage.getDrawable(),
                 ContextCompat.getColor(context, R.color.colorAccent));
         DrawableCompat.setTint(tourImage.getDrawable(),
+                ContextCompat.getColor(context, R.color.colorAccent));
+        DrawableCompat.setTint(flagImage.getDrawable(),
                 ContextCompat.getColor(context, R.color.colorAccent));
     }
 

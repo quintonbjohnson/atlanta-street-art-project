@@ -41,31 +41,30 @@
         android:adjustViewBounds="true" />
 
 
-
     <android.support.v7.widget.CardView
-        android:layout_weight="0.40"
-        android:layout_below="@+id/art_image_view"
-        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="400dp"
+        android:layout_below="@+id/art_image_view"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.40">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_alignParentTop="true"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:weightSum="1"
-            android:layout_height="wrap_content">
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:weightSum="1">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/input_layout_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="15dp">
 
                 <EditText
                     android:id="@+id/titleText"
@@ -88,7 +87,7 @@
                 android:id="@+id/input_layout_artist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp">
+                android:layout_marginTop="15dp">
 
                 <EditText
                     android:id="@+id/artistTag"
@@ -106,13 +105,14 @@
                     android:inputType="textMultiLine|textNoSuggestions"
                     android:maxLines="1"
                     android:textSize="18sp" />
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/input_layout_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp">
+                android:layout_marginTop="15dp">
 
                 <EditText
                     android:id="@+id/locationText"
@@ -130,8 +130,20 @@
                     android:inputType="textMultiLine|textNoSuggestions"
                     android:maxLines="1"
                     android:textSize="18sp" />
+
             </android.support.design.widget.TextInputLayout>
 
+
+            <CheckBox
+                android:id="@+id/artistCheckbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginTop="25dp"
+                android:layout_weight="0.40"
+                android:hint="This is my art"
+                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/submitButton"
@@ -141,7 +153,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="35dp"
                 android:layout_marginRight="35dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="25dp"
                 android:layout_weight="0.40"
                 android:background="@color/colorAccent"
                 android:fontFamily="sans-serif-medium"

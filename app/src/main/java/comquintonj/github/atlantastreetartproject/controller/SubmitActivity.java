@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -46,22 +48,37 @@ import comquintonj.github.atlantastreetartproject.R;
 import comquintonj.github.atlantastreetartproject.model.ArtInformation;
 import comquintonj.github.atlantastreetartproject.model.GPSUtility;
 
+import static java.security.AccessController.getContext;
+
 /**
- * TODO: Store time of submission in database
- * TODO: Add dialog for camera or image picker
  * Submission page used to submit pieces of art
  */
 public class SubmitActivity extends BaseDrawerActivity {
 
     /**
-     *
+     * An object to hold information about the art being submitted
      */
     private ArtInformation pieceOfArt;
+
+    /**
+     * Keeps track of whether or not the artist box has been clicked;
+     */
+    private boolean clicked = false;
+
+    /**
+     * Keeps track of whether or not the atist is coming back from submitting an artist request
+     */
+    private boolean mailClientOpened = false;
 
     /**
      * The submit Button
      */
     private Button submitButton;
+
+    /**
+     * The artist CheckBox
+     */
+    private CheckBox artistCheck;
 
     /**
      * The context of the current screen
@@ -114,6 +131,11 @@ public class SubmitActivity extends BaseDrawerActivity {
     private static final int PICK_IMAGE_REQUEST = 234;
 
     /**
+     * A constant to track the email intent
+     */
+    private static final int CODE_SEND = 568;
+
+    /**
      * The latitude of the art
      */
     private double latitude;
@@ -162,11 +184,13 @@ public class SubmitActivity extends BaseDrawerActivity {
         submitButton = (Button) findViewById(R.id.submitButton);
         imageSelectButton = (ImageButton) findViewById(R.id.art_image_view);
         storageReference = FirebaseStorage.getInstance().getReference();
+        artistCheck = (CheckBox) findViewById(R.id.artistCheckbox);
 
         // Prevent view from being editable until the user has selected an image
         titleText.setFocusable(false);
         artistText.setFocusable(false);
         locationText.setFocusable(false);
+        artistCheck.setEnabled(false);
 
         // Set on click listener for the submit button
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -177,7 +201,29 @@ public class SubmitActivity extends BaseDrawerActivity {
                         return;
                     }
                     submitArtInformation();
-                    uploadFile();
+                    if (!clicked) {
+                        // The user is not the artists and can be uploaded straight to the database
+                        // Saving data to Firebase database
+                        mDatabase.child("Art").child(pieceOfArt
+                                .getPhotoPath()).setValue(pieceOfArt);
+                        uploadFile();
+                    } else {
+                        // The user is the artist of the art and needs to submit a request
+                        final Intent email = new Intent(android.content.Intent.ACTION_SEND);
+                        email.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        email.putExtra(Intent.EXTRA_STREAM, filePath);
+                        email.setType("message/rfc822");
+                        email.putExtra(Intent.EXTRA_EMAIL,
+                                new String[]{"theatlantastreetartproject@gmail.com"});
+                        email.putExtra(Intent.EXTRA_SUBJECT, "Submit Artist Request");
+                        String bodyText = "Art Title: " + pieceOfArt.getTitle() + "\n\n"
+                                + "Art ID: " + pieceOfArt.getPhotoPath() + "\n\n"
+                                + "Artist: " + pieceOfArt.getArtist() + "\n\n"
+                                + "Additional information you wold like us to know: ";
+                        email.putExtra(Intent.EXTRA_TEXT, bodyText);
+                        startActivityForResult(Intent.createChooser(email, "Send Feedback:"),
+                                    CODE_SEND);
+                    }
                 }
             }
         });
@@ -191,6 +237,20 @@ public class SubmitActivity extends BaseDrawerActivity {
                     if (v == imageSelectButton) {
                         showFileChooser();
                     }
+                }
+            }
+        });
+
+        artistCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String submit = "Submit";
+                String submitRequest = "Submit Request for Upload";
+                clicked = !clicked;
+                if (clicked) {
+                    submitButton.setText(submitRequest);
+                } else {
+                    submitButton.setText(submit);
                 }
             }
         });
@@ -217,9 +277,6 @@ public class SubmitActivity extends BaseDrawerActivity {
 
         pieceOfArt = new ArtInformation(artist, displayName,
                 latitude, longitude, photoPath, upvotes, downvotes, title);
-
-        // Saving data to Firebase database
-        mDatabase.child("Art").child(photoPath).setValue(pieceOfArt);
     }
 
     /**
@@ -305,14 +362,15 @@ public class SubmitActivity extends BaseDrawerActivity {
                 inputStreamBitmap = getContentResolver().openInputStream(filePath);
                 imageBitmap = BitmapFactory.decodeStream(inputStreamBitmap);
                 // Resize the image to fit to the view
-                Bitmap resizedImage = resizeImage(imageBitmap);
-                if (resizedImage != null) {
+                Bitmap artBitmap = resizeImage(imageBitmap);
+                if (artBitmap != null) {
                     // Set the ImageButton to be the photo the user has selected
-                    imageSelectButton.setImageBitmap(resizedImage);
+                    imageSelectButton.setImageBitmap(artBitmap);
 
                     // Allow the view to be editable
                     titleText.setFocusableInTouchMode(true);
                     artistText.setFocusableInTouchMode(true);
+                    artistCheck.setEnabled(true);
                 } else {
                     Toast.makeText(this, "Please try again with a different image",
                             Toast.LENGTH_SHORT).show();
@@ -325,9 +383,14 @@ public class SubmitActivity extends BaseDrawerActivity {
                         inputStreamBitmap.close();
                     }
                 } catch (IOException ignored) {
-                }
 
+                }
             }
+        }
+
+        // If user has come back from submitting an artist request
+        if(requestCode == CODE_SEND && mailClientOpened) {
+            finish();
         }
     }
 
@@ -357,6 +420,7 @@ public class SubmitActivity extends BaseDrawerActivity {
                             artIntent.putExtra("ArtPath", pieceOfArt.getPhotoPath());
                             artIntent.putExtra("Submit", "Submit");
                             startActivity(artIntent);
+                            finish();
                         }
                     })
 
@@ -519,8 +583,15 @@ public class SubmitActivity extends BaseDrawerActivity {
     }
 
     @Override
-    public void onStop() {
+    protected void onResume() {
+        super.onResume();
+        mailClientOpened = false;
+    }
+
+    @Override
+    protected void onStop() {
         super.onStop();
+        mailClientOpened = true;
     }
 }
 

@@ -13,6 +13,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -207,5 +209,35 @@ public class TourActivity extends BaseDrawerActivity {
         Intent resume = getIntent();
         finish();
         startActivity(resume);
+    }
+
+    /**
+     * Create the options menu found in the top right of the activity
+     * @param menu the menu to be added
+     * @return if the menu has been successfully added
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.tour, menu);
+        return true;
+    }
+
+    /**
+     * When a user selects an option in the menu
+     * @param item the item the user has selected
+     * @return if the user has successfully used an item
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.clear:
+                User.tourArt.clear();
+                recreate();
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

@@ -54,6 +54,6 @@
         android:layout_marginTop="77dp"
         android:text="@string/log_in"
         android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
 
 </RelativeLayout>

@@ -187,10 +187,7 @@ public class SubmitActivity extends BaseDrawerActivity {
         artistCheck = (CheckBox) findViewById(R.id.artistCheckbox);
 
         // Prevent view from being editable until the user has selected an image
-        titleText.setFocusable(false);
-        artistText.setFocusable(false);
         locationText.setFocusable(false);
-        artistCheck.setEnabled(false);
 
         // Set on click listener for the submit button
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -366,11 +363,6 @@ public class SubmitActivity extends BaseDrawerActivity {
                 if (artBitmap != null) {
                     // Set the ImageButton to be the photo the user has selected
                     imageSelectButton.setImageBitmap(artBitmap);
-
-                    // Allow the view to be editable
-                    titleText.setFocusableInTouchMode(true);
-                    artistText.setFocusableInTouchMode(true);
-                    artistCheck.setEnabled(true);
                 } else {
                     Toast.makeText(this, "Please try again with a different image",
                             Toast.LENGTH_SHORT).show();

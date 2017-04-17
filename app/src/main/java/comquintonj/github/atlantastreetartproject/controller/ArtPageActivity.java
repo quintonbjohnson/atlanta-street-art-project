@@ -34,6 +34,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import comquintonj.github.atlantastreetartproject.R;
 import comquintonj.github.atlantastreetartproject.model.ArtInformation;
@@ -54,6 +55,11 @@ public class ArtPageActivity extends AppCompatActivity {
      * Keeps track of if user has allowed location permission
      */
     private boolean allowed;
+
+    /**
+     * Keeps track of whether or not the art is in the user's tour
+     */
+    private boolean hasInTour = false;
 
     /**
      * Keeps track of whether or not the art has been upvoted
@@ -114,6 +120,11 @@ public class ArtPageActivity extends AppCompatActivity {
      * Downvote button to rate art
      */
     private ImageButton downvoteButton;
+
+    /**
+     * The index of the art in the User's tour
+     */
+    private int tourIndex = 0;
 
     /**
      * An intent to go back to the explore screen
@@ -332,6 +343,16 @@ public class ArtPageActivity extends AppCompatActivity {
                 .using(new FirebaseImageLoader())
                 .load(pathReference)
                 .into(imageOfArt);
+        for (int i = 0; i < User.tourArt.size(); i++) {
+            ArtInformation current = User.tourArt.get(i);
+            if (Objects.equals(pieceOfArt.getPhotoPath(), current.getPhotoPath())) {
+                // The art is already in the user's tour and should be removed
+                hasInTour = true;
+                tourIndex = i;
+                String remove = "Remove from tour";
+                tourText.setText(remove);
+            }
+        }
     }
 
     /**
@@ -486,18 +507,14 @@ public class ArtPageActivity extends AppCompatActivity {
         tourText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Keep track if the art is already in the tour
-                boolean has = false;
-                for (int i = 0; i < User.tourArt.size(); i++) {
-                    ArtInformation current = User.tourArt.get(i);
-                    if (pieceOfArt.getPhotoPath() == current.getPhotoPath()) {
-                        // The art is already in the user's tour and should be removed
-                        has = true;
-                        User.tourArt.remove(i);
-                        Toast.makeText(context, "Removed from tour", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                if (!has) {
+                if (hasInTour) {
+                    hasInTour = false;
+                    User.tourArt.remove(tourIndex);
+                    Toast.makeText(context, "Removed from tour", Toast.LENGTH_SHORT).show();
+                    String add = "Add to tour";
+                    tourText.setText(add);
+                } else {
+                    hasInTour = true;
                     // The art is not in the user's tour
                     if (!(User.tourArt.size() <= 8)) {
                         Toast.makeText(context, "You have reached" +
@@ -505,6 +522,8 @@ public class ArtPageActivity extends AppCompatActivity {
                     } else {
                         // Add the piece of art to the tour
                         User.tourArt.add(pieceOfArt);
+                        String remove = "Remove from tour";
+                        tourText.setText(remove);
                         Toast.makeText(context, "Added to tour", Toast.LENGTH_SHORT).show();
                     }
                 }

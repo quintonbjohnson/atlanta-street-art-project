@@ -34,3 +34,11 @@ N/A
 3. In the top toolbar, edit the Run Configuration and ensure that the module is set to “app” and the launch activity is set to “Default Activity”
 4. Run the application by pressing the green arrow and select the emulator or Android phone that you are using
 
+### Troubleshooting
+#### I can’t get the app to run
+Ensure that the application’s run configuration is set correctly, as stated above in the Build instructions. If it is still causing issues, view any errors shown and consult the repository owner.
+
+#### I don’t see any options to run the app on when I press the green arrow
+Ensure that you have correctly set up an emulator within Android Studio or make sure that the phone you are using is connected properly. If the problem persists, restart Android Studio or your computer.
+
+

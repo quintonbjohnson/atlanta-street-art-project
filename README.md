@@ -10,7 +10,8 @@ Current Version: 1.0
 
 ### Bug Fixes
 * Fixed bug that doesn’t change the “Add to tour” text when a piece of art is added to the user’s tour
-Known Bugs
+
+### Known Bugs
 * Once art has been submitted, the Explore screen needs to be refreshed before the user can see it in the list
 * There is no limit to the amount of art that is pulled in on startup
 * There can be a slight delay when first opening the app to load the art

@@ -25,7 +25,7 @@ Known Bugs
 N/A
 
 ### Download Instructions
-* Download the zip from the repository: https://github.com/quintonj/AtlantaStreetArtProject
+* Download the zip from the [repository](https://github.com/quintonj/AtlantaStreetArtProject) 
   * __Note:__ in the event the application is accepted to the Google Play Store, this link will be updated and the application will be able to be installed directly onto an Android phone from the store
 
 ### Build / Installation / Run Instructions 

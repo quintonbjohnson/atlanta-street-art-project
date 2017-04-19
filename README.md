@@ -36,7 +36,7 @@ N/A
 
 ### Troubleshooting
 #### I can’t get the app to run
-Ensure that the application’s run configuration is set correctly, as stated above in the Build instructions. If it is still causing issues, view any errors shown and consult the repository owner.
+Ensure that the application’s run configuration is set correctly, as stated above in the Build Instructions. The module should be set to "app", the launch activity should be set to "Default Activity".
 
 #### I don’t see any available devices to run the app on when I press the green arrow
 Ensure that you have correctly set up an emulator within Android Studio or make sure that the phone you are using is connected properly. If the problem persists, restart Android Studio or your computer.

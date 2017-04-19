@@ -29,7 +29,7 @@ N/A
   * __Note:__ in the event the application is accepted to the Google Play Store, this link will be updated and the application will be able to be installed directly onto an Android phone from the store
 
 ### Build / Installation / Run Instructions 
-1. Open Android Studio
+1. Open [Android Studio](https://developer.android.com/studio/index.html)
 2. Direct Android Studio to the folder that contains the repository you have downloaded
 3. In the top toolbar, edit the Run Configuration and ensure that the module is set to “app” and the launch activity is set to “Default Activity”
 4. Run the application by pressing the green arrow and select the emulator or Android phone that you are using

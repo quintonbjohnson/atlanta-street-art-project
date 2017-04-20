@@ -1,6 +1,8 @@
 # AtlantaStreetArtProject
 An Android application that allows users to view, find, and navigate to street art throughout Atlanta.
 
+![photo](http://i.imgur.com/Bz2O5zJ.png)
+
 ## Release Notes
 Current Version: 1.0
 

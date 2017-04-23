@@ -2,7 +2,7 @@
 An Android application that allows users to view, find, and navigate to street art throughout Atlanta.
 
 <p align="center">
-  <img src ="http://i.imgur.com/Bz2O5zJ.png"/>
+  <img src ="http://i.imgur.com/Y2WZpMN.png/>
 </p>
 
 ## Release Notes

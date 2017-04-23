@@ -40,15 +40,12 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import comquintonj.github.atlantastreetartproject.R;
 import comquintonj.github.atlantastreetartproject.model.ArtInformation;
 import comquintonj.github.atlantastreetartproject.model.GPSUtility;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Submission page used to submit pieces of art

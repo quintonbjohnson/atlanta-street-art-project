@@ -262,6 +262,9 @@ public class SubmitActivity extends BaseDrawerActivity {
         String displayName = "";
         final String title = titleText.getText().toString().trim();
         String artist = artistText.getText().toString().trim();
+        if (artist.equals("")) {
+            artist = "Unknown";
+        }
         if (user != null) {
             photoPath = titleText.getText().toString().trim() + user.getDisplayName();
             displayName = user.getDisplayName();
@@ -489,14 +492,6 @@ public class SubmitActivity extends BaseDrawerActivity {
             valid = false;
         } else {
             titleText.setError(null);
-        }
-
-        String artist = artistText.getText().toString();
-        if (TextUtils.isEmpty(artist)) {
-            artistText.setError("Required.");
-            valid = false;
-        } else {
-            artistText.setError(null);
         }
         return valid;
     }

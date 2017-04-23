@@ -39,13 +39,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
      */
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView pictureOfArt;
-        public TextView userSubmitted;
+        public TextView artistText;
         public TextView distanceText;
 
         public MyViewHolder(View view) {
             super(view);
             pictureOfArt = (ImageView) view.findViewById(R.id.artPicture);
-            userSubmitted = (TextView) view.findViewById(R.id.user_submitted);
+            artistText = (TextView) view.findViewById(R.id.arist_card_text);
             distanceText = (TextView) view.findViewById(R.id.distance_card_text);
         }
     }
@@ -93,8 +93,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 .into(holder.pictureOfArt);
 
         // Using same position, set proper artist name
-        String userOfArt = pathAndDataMap.get(imagePaths.get(position)).getDisplayName();
-        holder.userSubmitted.setText(userOfArt);
+        String artistOfArt = pathAndDataMap.get(imagePaths.get(position)).getArtist();
+        holder.artistText.setText(artistOfArt);
         double distance = pathAndDataMap.get(imagePaths.get(position)).getDistance();
         if (!(distance == 0.00)) {
             String distanceValue = String.valueOf(String.format("%.2f", distance)) + " mi";

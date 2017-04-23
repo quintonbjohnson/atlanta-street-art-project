@@ -2,6 +2,7 @@ package comquintonj.github.atlantastreetartproject.controller;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,10 +34,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
-import java.util.Locale;
+import java.util.Objects;
 
 import comquintonj.github.atlantastreetartproject.R;
 import comquintonj.github.atlantastreetartproject.model.ArtInformation;
+import comquintonj.github.atlantastreetartproject.model.User;
 
 /**
  * The screen for an individual piece of art that the user is taken to after selecting an image
@@ -52,6 +55,11 @@ public class ArtPageActivity extends AppCompatActivity {
      * Keeps track of if user has allowed location permission
      */
     private boolean allowed;
+
+    /**
+     * Keeps track of whether or not the art is in the user's tour
+     */
+    private boolean hasInTour = false;
 
     /**
      * Keeps track of whether or not the art has been upvoted
@@ -84,9 +92,24 @@ public class ArtPageActivity extends AppCompatActivity {
     private HashMap<String, String> artRated;
 
     /**
+     * The navigate to button
+     */
+    private ImageView navigateImage;
+
+    /**
+     * The add to tour button
+     */
+    private ImageView tourImage;
+
+    /**
      * Image of the art
      */
     private ImageView imageOfArt;
+
+    /**
+     * Image of the flag button
+     */
+    private ImageView flagImage;
 
     /**
      * Upvote button to rate art
@@ -97,6 +120,11 @@ public class ArtPageActivity extends AppCompatActivity {
      * Downvote button to rate art
      */
     private ImageButton downvoteButton;
+
+    /**
+     * The index of the art in the User's tour
+     */
+    private int tourIndex = 0;
 
     /**
      * An intent to go back to the explore screen
@@ -165,9 +193,19 @@ public class ArtPageActivity extends AppCompatActivity {
     private TextView upvoteText;
 
     /**
-     * The TextView that used to navigate to the art
+     * The TextView to add the art to the user's tour
+     */
+    private TextView tourText;
+
+    /**
+     * The TextView that is used to navigate to the art
      */
     private TextView navigateText;
+
+    /**
+     * The TextView that is used to flag the art
+     */
+    private TextView flagText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,8 +243,14 @@ public class ArtPageActivity extends AppCompatActivity {
         upvoteButton = (ImageButton) findViewById(R.id.upvote_button);
         distanceText = (TextView) findViewById(R.id.distance_text);
         navigateText = (TextView) findViewById(R.id.navigateText);
+        navigateImage = (ImageView) findViewById(R.id.navigateImage);
+        tourText = (TextView) findViewById(R.id.tourText);
+        tourImage = (ImageView) findViewById(R.id.tourImage);
+        flagImage = (ImageView) findViewById(R.id.flagView);
+        flagText = (TextView) findViewById(R.id.flagText);
         turnOffDownvote();
         turnOffUpvote();
+        setDrawable();
 
         // Initialize Firebase references
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -299,6 +343,16 @@ public class ArtPageActivity extends AppCompatActivity {
                 .using(new FirebaseImageLoader())
                 .load(pathReference)
                 .into(imageOfArt);
+        for (int i = 0; i < User.tourArt.size(); i++) {
+            ArtInformation current = User.tourArt.get(i);
+            if (Objects.equals(pieceOfArt.getPhotoPath(), current.getPhotoPath())) {
+                // The art is already in the user's tour and should be removed
+                hasInTour = true;
+                tourIndex = i;
+                String remove = "Remove from tour";
+                tourText.setText(remove);
+            }
+        }
     }
 
     /**
@@ -435,7 +489,7 @@ public class ArtPageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (userLocation != null) {
                     String url = "http://maps.google.com/maps?saddr="
-                            + userLocation.getLatitude() + "," + userLocation.getLongitude()
+                            + "My+Location"
                             + "&daddr="
                             + pieceOfArt.getLatitude() + "," + pieceOfArt.getLongitude()
                             + "&mode=walking";
@@ -448,6 +502,78 @@ public class ArtPageActivity extends AppCompatActivity {
 
             }
         });
+
+        // User has decided to add the art to their tour
+        tourText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (hasInTour) {
+                    hasInTour = false;
+                    User.tourArt.remove(tourIndex);
+                    Toast.makeText(context, "Removed from tour", Toast.LENGTH_SHORT).show();
+                    String add = "Add to tour";
+                    tourText.setText(add);
+                } else {
+                    hasInTour = true;
+                    // The art is not in the user's tour
+                    if (!(User.tourArt.size() <= 8)) {
+                        Toast.makeText(context, "You have reached" +
+                                "the maximum amount of tour stops", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Add the piece of art to the tour
+                        User.tourArt.add(pieceOfArt);
+                        String remove = "Remove from tour";
+                        tourText.setText(remove);
+                        Toast.makeText(context, "Added to tour", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+        flagText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Open a dialog for choosing which criteria to sort by
+                CharSequence options[] = new CharSequence[] {"Inappropriate", "Not street art",
+                        "Other reason"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Report Art:");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            // Inappropriate art
+                            sendFeedback("Inappropriate art");
+                        } else if (which == 1) {
+                            // Not street art
+                            sendFeedback("Not street art");
+                        } else if (which == 2) {
+                            // Other reason
+                            sendFeedback("Other reason");
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
+    }
+
+    /**
+     * Opens an email with the given feedback entered
+     * @param typeOfFeedback the type of feedback the user chose to report
+     */
+    public void sendFeedback(String typeOfFeedback) {
+        Intent Email = new Intent(Intent.ACTION_SEND);
+        Email.setType("message/rfc822");
+        Email.putExtra(Intent.EXTRA_EMAIL, new String[] { "theatlantastreetartproject@gmail.com" });
+        Email.putExtra(Intent.EXTRA_SUBJECT, "Report Art");
+        String bodyText = "Reasoning: " + typeOfFeedback + "\n\n"
+                + "Art Title: " + pieceOfArt.getTitle() + "\n\n"
+                + "Art ID: " + pieceOfArt.getPhotoPath() + "\n\n"
+                + "Additional information: ";
+        Email.putExtra(Intent.EXTRA_TEXT, bodyText);
+        startActivity(Intent.createChooser(Email, "Send Feedback:"));
     }
 
     /**
@@ -480,6 +606,18 @@ public class ArtPageActivity extends AppCompatActivity {
     public void turnOffDownvote() {
         DrawableCompat.setTint(downvoteButton.getDrawable(),
                 ContextCompat.getColor(context, R.color.Theme3));
+    }
+
+    /**
+     * Changes the color of the drawables
+     */
+    public void setDrawable() {
+        DrawableCompat.setTint(navigateImage.getDrawable(),
+                ContextCompat.getColor(context, R.color.colorAccent));
+        DrawableCompat.setTint(tourImage.getDrawable(),
+                ContextCompat.getColor(context, R.color.colorAccent));
+        DrawableCompat.setTint(flagImage.getDrawable(),
+                ContextCompat.getColor(context, R.color.colorAccent));
     }
 
     /**

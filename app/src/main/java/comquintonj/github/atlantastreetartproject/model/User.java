@@ -1,5 +1,6 @@
 package comquintonj.github.atlantastreetartproject.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class User {
@@ -13,6 +14,11 @@ public class User {
      * Profile name for the user
      */
     private String profileName;
+
+    /**
+     * Art that the user has added to their tour
+     */
+    public static ArrayList<ArtInformation> tourArt = new ArrayList<>();
 
     /**
      * A list of titles that the user has rated
@@ -55,10 +61,18 @@ public class User {
 
     /**
      * Get the art the user has voted on.
-     * @return the HashSet containing titles the user has voted for.
+     * @return the HashSet containing titles the user has voted for
      */
     public HashMap<String, String> getArtRated() {
         return artRated;
+    }
+
+    /**
+     * Get the art the user has added to their tour.
+     * @return the ArrayList containing art in tour
+     */
+    public static ArrayList<ArtInformation> getTourArt() {
+        return tourArt;
     }
 
     /**

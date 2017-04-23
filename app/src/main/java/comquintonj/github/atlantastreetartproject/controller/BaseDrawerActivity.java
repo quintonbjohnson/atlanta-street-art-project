@@ -57,7 +57,6 @@ public class BaseDrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_base_drawer);
         mAuth = FirebaseAuth.getInstance();
         checkPermission();
-
         // Create the navigation drawer
         createNavigationDrawer();
     }
@@ -90,9 +89,21 @@ public class BaseDrawerActivity extends AppCompatActivity
                     finish();
                 }
             } else if (id == R.id.nav_map) {
-
+                if (this.getClass().equals(MapActivity.class)) {
+                    drawer.closeDrawer(navigationView);
+                } else {
+                    Intent exploreIntent = new Intent(this, MapActivity.class);
+                    startActivity(exploreIntent);
+                    finish();
+                }
             } else if (id == R.id.nav_tour) {
-
+                if (this.getClass().equals(TourActivity.class)) {
+                    drawer.closeDrawer(navigationView);
+                } else {
+                    Intent tourIntent = new Intent(this, TourActivity.class);
+                    startActivity(tourIntent);
+                    finish();
+                }
             } else if (id == R.id.nav_submit) {
                 // Check to make sure the user is not currently in the Submit Activity
                 if (this.getClass().equals(SubmitActivity.class)) {

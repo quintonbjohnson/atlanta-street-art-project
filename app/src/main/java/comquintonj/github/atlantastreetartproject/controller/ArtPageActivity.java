@@ -267,9 +267,13 @@ public class ArtPageActivity extends AppCompatActivity {
                     // Using the path, find the piece of art in the database
                     pieceOfArt = dataSnapshot.child("Art")
                             .child(bundleExtra).getValue(ArtInformation.class);
-                    updateArtView();
-                    if (allowed) {
-                        updateDistanceView();
+                    if (pieceOfArt != null) {
+                        updateArtView();
+                        if (allowed) {
+                            updateDistanceView();
+                        }
+                    } else {
+                        startActivity(exploreIntent);
                     }
                 }
             }
@@ -289,8 +293,12 @@ public class ArtPageActivity extends AppCompatActivity {
                     if (user.getDisplayName() != null) {
                         artRated = (HashMap<String, String>) dataSnapshot.child("Users")
                                 .child(user.getDisplayName()).child("rated").getValue();
-                        updateRatingView();
-                        addClickListeners();
+                        if (pieceOfArt != null) {
+                            updateRatingView();
+                            addClickListeners();
+                        } else {
+                            startActivity(exploreIntent);
+                        }
                     }
                 }
             }

@@ -6,164 +6,162 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_submit"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="comquintonj.github.atlantastreetartproject.controller.SubmitActivity"
-    android:layout_marginTop="50dp">
+    android:layout_height="match_parent"
+    tools:context="comquintonj.github.atlantastreetartproject.controller.SubmitActivity">
+
+    <LinearLayout
+        android:id="@+id/focusDummy"
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"></LinearLayout>
+
+    <ImageButton
+        android:id="@+id/art_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="55dp"
+        android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:background="@color/Theme1"
+        android:cropToPadding="false"
+        app:srcCompat="@drawable/ic_placeholder_black" />
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="@color/Theme2">
+        android:layout_below="@+id/art_image_view">
 
-    </RelativeLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_width="0px"
-        android:layout_height="0px"
-        android:id="@+id/focusDummy" >
-    </LinearLayout>
-
-    <ImageButton
-        app:srcCompat="@drawable/ic_placeholder_black"
-        android:id="@+id/art_image_view"
-        android:layout_weight="1"
-        android:layout_gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="55dp"
-        android:layout_height="200dp"
-        android:layout_width="match_parent"
-        android:background="@color/Theme1"
-        android:cropToPadding="false"
-        android:adjustViewBounds="true" />
-
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_below="@+id/art_image_view"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_weight="0.40">
-
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:orientation="vertical"
-            android:weightSum="1">
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.40">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_title"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
-
-                <EditText
-                    android:id="@+id/titleText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginLeft="35dp"
-                    android:layout_marginRight="35dp"
-                    android:layout_weight="0.40"
-                    android:ems="10"
-                    android:hint="Title"
-                    android:imeOptions="actionDone"
-                    android:inputType="textPersonName"
-                    android:maxLines="1"
-                    android:textSize="18sp" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_artist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
-
-                <EditText
-                    android:id="@+id/artistTag"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/titleText"
-                    android:layout_marginLeft="35dp"
-                    android:layout_marginRight="35dp"
-                    android:layout_weight="0.40"
-                    android:ems="10"
-                    android:hint="Artist"
-                    android:imeOptions="actionDone"
-                    android:inputType="textMultiLine|textNoSuggestions"
-                    android:maxLines="1"
-                    android:textSize="18sp" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
-
-                <EditText
-                    android:id="@+id/locationText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/titleText"
-                    android:layout_marginLeft="35dp"
-                    android:layout_marginRight="35dp"
-                    android:layout_weight="0.40"
-                    android:ems="10"
-                    android:hint="Location"
-                    android:imeOptions="actionDone"
-                    android:inputType="textMultiLine|textNoSuggestions"
-                    android:maxLines="1"
-                    android:textSize="18sp" />
-
-            </android.support.design.widget.TextInputLayout>
-
-
-            <CheckBox
-                android:id="@+id/artistCheckbox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp"
-                android:layout_marginTop="25dp"
-                android:layout_weight="0.40"
-                android:hint="This is my art"
-                android:textSize="18sp" />
-
-            <Button
-                android:id="@+id/submitButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp"
-                android:layout_marginTop="25dp"
-                android:layout_weight="0.40"
-                android:background="@color/colorAccent"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/submit"
-                android:textColor="@android:color/background_light"
-                android:textSize="16sp" />
+                android:layout_alignParentTop="true"
+                android:orientation="vertical"
+                android:weightSum="1">
 
-        </LinearLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp">
 
-    </android.support.v7.widget.CardView>
+                    <EditText
+                        android:id="@+id/titleText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp"
+                        android:layout_weight="0.40"
+                        android:ems="10"
+                        android:hint="Title"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPersonName"
+                        android:maxLines="1"
+                        android:textSize="18sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_artist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp">
+
+                    <EditText
+                        android:id="@+id/artistTag"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/titleText"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp"
+                        android:layout_weight="0.40"
+                        android:ems="10"
+                        android:hint="Artist"
+                        android:imeOptions="actionDone"
+                        android:inputType="textMultiLine|textNoSuggestions"
+                        android:maxLines="1"
+                        android:textSize="18sp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp">
+
+                    <EditText
+                        android:id="@+id/locationText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/titleText"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp"
+                        android:layout_weight="0.40"
+                        android:ems="10"
+                        android:hint="Location"
+                        android:imeOptions="actionDone"
+                        android:inputType="textMultiLine|textNoSuggestions"
+                        android:maxLines="1"
+                        android:textSize="18sp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+
+                <CheckBox
+                    android:id="@+id/artistCheckbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="0.40"
+                    android:hint="This is my art"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/submitButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="0.40"
+                    android:background="@color/colorAccent"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/submit"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
 
 
 </RelativeLayout>

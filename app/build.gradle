@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword 'mazie1'
+            storeFile file('/Users/quinton/Documents/GitHub/keystore.jks')
+            storePassword 'mazie123'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion '25.0.0'
     defaultConfig {

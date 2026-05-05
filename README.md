@@ -1,10 +1,7 @@
 # Atlanta Street Art Project
-An Android application that allows users to view, find, and navigate to street art throughout Atlanta.
+An Android application that allowed users to view, find, and navigate to street art throughout Atlanta.
 
-Available on [Google Play](https://play.google.com/store/apps/details?id=comquintonj.github.atlantastreetartproject&hl=en)
-<p align="center">
-  <img src ="https://raw.githubusercontent.com/quintonj/personal-portfolio/master/src/images/atlantastreetart.png"/>
-</p>
+Was released to the Google Play store, but is no longer maintained.
 
 ## Release Notes
 Current Version: 1.0
